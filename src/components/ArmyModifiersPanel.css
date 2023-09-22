@@ -1,17 +1,7 @@
 .army-modifiers-panel {
     display: grid;
-    /**
-    grid-template-areas: 
-    "mL   .     mI"
-    "dL   .     dI"
-    ".    dealt rcvd"
-    "fdL  frI   fdI"
-    "sdL  srI   sdI"
-    "mdL  mrI   mdI";
-    */
     grid-template-columns: 5fr 1fr 1fr;
     gap: 5px 5px;
-
 }
 
 .army-modifiers-panel input{

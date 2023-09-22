@@ -1,0 +1,9 @@
+.regiments-panel {
+    display: grid;
+    grid-template-columns: 6fr 1fr 2fr;
+    gap: 5px 5px;
+}
+
+.regiments-panel input{
+    width: 50px;
+}

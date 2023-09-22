@@ -5,6 +5,7 @@ import './App.css';
 import ArmyModifiersPanel from './components/ArmyModifiersPanel';
 import Modifiers from './model/data/Modifiers';
 import { ModifierNames } from './model/data/Modifiers';
+import RegimentsPanel from './components/RegimentsPanel';
  
 /**
  * 
@@ -52,27 +53,36 @@ function App() {
   const [dailyStrengths, setDailyStrengths] = useState<[number, number, number, number][]>([]);
   let attackerArmyModifierMap: Map<ModifierNames, number> = new Map();
   let defenderArmyModifierMap: Map<ModifierNames, number> = new Map();
+  let attackerRegiments: Map<String, number> = new Map();
+  let defenderRegiments: Map<String, number> = new Map();
 
   const handleSubmit: MouseEventHandler = () => {
     const attackerModifiers: Modifiers = Modifiers.createModifiersFromMap(attackerArmyModifierMap);
     const defenderModifiers: Modifiers = Modifiers.createModifiersFromMap(defenderArmyModifierMap);
-    const army1 = new Army(infantryCount.attacker, 0, attackerModifiers);
-    const army2 = new Army(infantryCount.defender, 0, defenderModifiers);
+    const army1 = new Army(attackerRegiments.get("infantry") as number, attackerRegiments.get("cavalry") as number, attackerModifiers);
+    const army2 = new Army(defenderRegiments.get("infantry") as number, defenderRegiments.get("cavalry") as number, defenderModifiers);
     setDailyStrengths(combat(army1, army2));
   }
 
-  const handleInput: ChangeEventHandler<HTMLInputElement> = (event) => {    
-    const name = event.currentTarget.name;
-    const value = parseInt(event.currentTarget.value);
-    setInfantryCount(values => ({...values, [name]:value}))
-  }
-
+  // const handleInput: ChangeEventHandler<HTMLInputElement> = (event) => {    
+  //   const name = event.currentTarget.name;
+  //   const value = parseInt(event.currentTarget.value);
+  //   setInfantryCount(values => ({...values, [name]:value}))
+  // }
 
   const updateArmyModifiers = (val: Map<ModifierNames, number>, isAttacker: boolean) => {
     if (isAttacker) {
       attackerArmyModifierMap = new Map(val.entries());
     } else {
       defenderArmyModifierMap = new Map(val.entries());
+    }
+  }
+
+  const updateRegiments = (val: Map<String, number>, isAttacker: boolean) => {
+    if (isAttacker) {
+      attackerRegiments = new Map(val.entries());
+    } else {
+      defenderRegiments = new Map(val.entries());
     }
   }
 
@@ -85,7 +95,7 @@ function App() {
       <h2 className="column-heading">Defender</h2>
       <div id="regiment-modifiers" className='collapsing-panel'>
         <h3 className='full-width'>Regiments and Regiment Modifiers</h3>
-        <div>
+        {/* <div>
           <label>Infantry:</label>
           <input type="number" name="attacker"
               value= {infantryCount.attacker}
@@ -96,7 +106,9 @@ function App() {
           <input type="number" name="defender"
               value= {infantryCount.defender}
               onChange={handleInput}/>
-        </div>
+        </div> */}
+        <RegimentsPanel update={updateRegiments} isAttacker={true}/>
+        <RegimentsPanel update={updateRegiments} isAttacker={false}/>
       </div>
       <div id="army-modifiers" className='collapsing-panel'>
         <h3 className='full-width'>Army Modifiers</h3>
