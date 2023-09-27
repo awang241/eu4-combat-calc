@@ -134,12 +134,10 @@ export default class Army {
   private fillFront(feedArray: Array<Regiment>, indexOrder: IterableIterator<number>, max?: number) {
     const limit = max === undefined || max > this.front.length ? this.front.length: max;
     let loops = 0;
-    let nextIndex: IteratorResult<number, number>;
-    let indicesFinished: boolean | undefined = false;
-    while (!indicesFinished && feedArray.length > 0 && loops < limit) {
-        nextIndex = indexOrder.next();
-        indicesFinished = nextIndex.done;
-        this.front[nextIndex.value] = feedArray.pop();
+    let index: IteratorResult<number, number> = indexOrder.next();
+    while (!index.done && feedArray.length > 0 && loops < limit) {
+        this.front[index.value] = feedArray.pop();
+        index = indexOrder.next();
         loops++;
     }
   }
@@ -262,8 +260,9 @@ export default class Army {
         while (this.reserves.length > 0 && (leftHalfIndex >= 0 || rightHalfIndex < this.front.length)) {
             const index = isLeftNext ? leftHalfIndex--: rightHalfIndex++;
             if (this.front[index] === undefined) {
-                if (this.reserves.pop() !== undefined) {
-                    this.front[index] = this.reserves.pop();
+                const replacement: Regiment | undefined = this.reserves.pop();
+                if (replacement !== undefined) {
+                    this.front[index] = replacement ;
                 }
                 updated = true;
             }
