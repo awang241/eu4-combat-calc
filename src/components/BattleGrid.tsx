@@ -20,7 +20,15 @@ function createRegimentCells(front: (Regiment | undefined)[]): Array<JSX.Element
             icon = cavIcon;
         }
         const iconOpacity: string = `${MIN_OPACITY + (100 - MIN_OPACITY) * (val.strength / Regiment.MAX_STRENGTH)}%`;
-        const barHeight: string = `${100 * (val.currentMorale / val.maxMorale)}%`;
+        const moralePercent: number = 100 * (val.currentMorale / val.maxMorale)
+        let barHeight: string;
+        if (moralePercent > 2) {
+            barHeight =  `${moralePercent}%`;
+        } else if (moralePercent > 0) {
+            barHeight = "2%"
+        } else {
+            barHeight = "0"
+        }
         return (
             <td className="cell" key={index}>
                 <div className="cell-grid">
