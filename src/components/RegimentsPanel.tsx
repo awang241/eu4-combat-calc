@@ -15,8 +15,12 @@ function createDefaultValues(): Map<String, number> {
     return map;
 }
 
-export default function RegimentsPanel(props: {update: Function, isAttacker: boolean}) {
+export default function RegimentsPanel(props: {
+            update: (val: Map<String, number>, isAttacker: boolean) => void,
+            isAttacker: boolean
+        }) {
     const [values, setValues] = useState(createDefaultValues())
+    props.update(values, props.isAttacker)
 
     const handleInput: ChangeEventHandler<HTMLInputElement> = (event) => {    
         const name = event.currentTarget.name;
@@ -27,7 +31,6 @@ export default function RegimentsPanel(props: {update: Function, isAttacker: boo
         props.update(updatedValues, props.isAttacker)
       }
 
-    props.update(createDefaultValues());
     return (
             <div className="regiments-panel">
                 <span/>

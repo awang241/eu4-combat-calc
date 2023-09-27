@@ -1,3 +1,4 @@
+import ArmySnapshot from "./ArmySnapshot";
 import Modifiers from "./data/Modifiers";
 import Regiment, { RegimentTypes } from "./Regiment";
 
@@ -10,8 +11,6 @@ export default class Army {
     private front: Array<Regiment | undefined>;
     private reserves: Array<Regiment>;
     private regiments: Array<Regiment>;
-    private infantry: number;
-    private cavalry: number;
 
     //The damage multipliers for each unit fot the fire/shock combat phases.
     readonly damage = {
@@ -34,9 +33,6 @@ export default class Army {
      * @param {number} modifiers The army-level modifiers (morale, discipline, etc...) for this army.
      */
     constructor(infantry: number, cavalry: number, modifiers: Modifiers) {
-        
-        this.infantry = infantry;
-        this.cavalry = cavalry;
         this.front = new Array<Regiment>();
         this.reserves = new Array<Regiment>();
         this.regiments =  new Array<Regiment>();
@@ -190,6 +186,10 @@ export default class Army {
 
   getRegimentDataAtIndex(index: number): Regiment | undefined {
     return this.front[index] === undefined ? undefined : this.front[index]?.unmodifiableCopy();
+  }
+
+  getSnapshot(): ArmySnapshot {
+    return new ArmySnapshot(this.front, this.reserves, this.regiments);
   }
 
   /**

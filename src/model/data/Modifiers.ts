@@ -37,7 +37,7 @@ export default class Modifiers {
         this._moraleDamageReceived = moraleDamageReceived ?? 0;
     }
 
-    public static createModifiersFromMap(modifierMap: Map<ModifierNames, number>): Modifiers {
+    public static createModifiersFromMap(modifierMap: Map<String, number>): Modifiers {
         return new Modifiers(
             modifierMap.get(ModifierNames.MORALE),
             modifierMap.get(ModifierNames.DISCIPLINE),
@@ -56,6 +56,8 @@ export default class Modifiers {
     }
 
     public get morale(): number {return this._morale}
+    public set morale(val: number) {this._morale = val}
+
     public discipline(asDecimal?: boolean): number {
         return Modifiers.format(this._discipline, asDecimal)
     }

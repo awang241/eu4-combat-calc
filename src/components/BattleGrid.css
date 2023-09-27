@@ -1,0 +1,74 @@
+.battle-grid .selector-panel {
+    margin: auto;
+    width: max-content;
+    text-align: center;
+}
+
+
+
+.battle-grid table {
+    table-layout: fixed;
+    border-spacing: 0px;
+    margin: auto;
+}
+
+.battle-grid table .grid-gap {
+    height: 15px;
+}
+
+.battle-grid tr .cell{
+    border: 1px solid black;
+    padding: 0;
+    background-color: white;
+}
+.battle-grid .cell-grid {
+    display: grid;
+    position: relative;
+} 
+
+.battle-grid img {
+    display: block;
+    margin: 0;
+    padding: 0;
+    padding: 0;
+    line-height: 0;
+    z-index: 1;
+ }
+
+ .battle-grid .cell, .battle-grid .regiment-placeholder {
+    width: 2.5vw;
+    height: 2.5vw;
+ }
+
+.battle-grid tr td .morale {
+    width: 100%;
+    background-color: #ffc966;
+    position: absolute;
+    bottom: 0;
+}
+
+.battle-grid .tooltip {
+    display: none;
+    width: auto;
+    position: absolute;
+    background-color: rgba(60, 60, 60, 0.5);
+    border: 1px solid black;
+    color: white;
+    border-radius: 5px;
+    padding: 5px;
+    text-wrap: nowrap;
+    text-align: left;
+    user-select: none;
+    font-size: small;
+    z-index: 15;
+}
+
+.battle-grid .cell:hover .tooltip {
+    display: block;
+}
+
+.battle-grid .tooltip ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}

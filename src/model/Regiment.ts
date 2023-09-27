@@ -1,7 +1,9 @@
 import Pips from "./data/Pips";
 
 export enum RegimentTypes {
-  INFANTRY, CAVALRY, ARTILLERY,
+  INFANTRY = "infantry",
+  CAVALRY = "cavalry",
+  ARTILLERY = "artillery",
 }
 
 export default class Regiment{
@@ -12,7 +14,6 @@ export default class Regiment{
   private _strength: number;
   private _targetIndex?: number;
   private _target?: Regiment;
-  private _flankingRange: number;
   private _pips: Pips;
   private _type: RegimentTypes;
 
@@ -23,7 +24,7 @@ export default class Regiment{
     this._currentMorale = morale;
     this._strength = Regiment.MAX_STRENGTH;
     this._targetIndex = undefined;
-    this._flankingRange = 1;
+
     this._type = type ?? RegimentTypes.INFANTRY;
     if (this._type === RegimentTypes.INFANTRY) {
       this._pips = new Pips(0, 0, 0, 0, 1, 1);

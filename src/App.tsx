@@ -1,18 +1,19 @@
-import React, { ChangeEventHandler, MouseEventHandler } from 'react';
+import React from 'react';
 import { useState } from 'react';
 import Army from './model/Army';
 import './App.css';
 import ArmyModifiersPanel from './components/ArmyModifiersPanel';
 import Modifiers from './model/data/Modifiers';
-import { ModifierNames } from './model/data/Modifiers';
 import RegimentsPanel from './components/RegimentsPanel';
+import BattleGrid from './components/BattleGrid';
+import ArmySnapshot from './model/ArmySnapshot';
  
 /**
  * 
  * @param {Army} attacker 
  * @param {Army} defender 
  */
-function combat(attacker: Army, defender: Army): Array<[number, number, number, number]> {
+function combat(attacker: Army, defender: Army): [ArmySnapshot, ArmySnapshot][] {
   let days = 1;
 
   const loopLimit:number = 100;
@@ -24,8 +25,8 @@ function combat(attacker: Army, defender: Army): Array<[number, number, number, 
   defender.deploy(combatWidth, attacker.frontlineRegimentCount());
   let isAttackerUpdated = true;
   let isDefenderUpdated = true;
-  const dailyStrengths: Array<[number, number, number, number]> = [];
-  dailyStrengths.push([attacker.strength(), attacker.totalMorale(), defender.strength(), defender.totalMorale()]);
+  const dailyStrengths: [ArmySnapshot, ArmySnapshot][] = [];
+  dailyStrengths.push([attacker.getSnapshot(), defender.getSnapshot()]);
   while (!attacker.isBroken() && !defender.isBroken() && days < loopLimit) {
     let isFirePhase = (days - dayOffset) % combatPhasePeriod < firePhaseCutoff;
     let roll = 5;
@@ -40,37 +41,32 @@ function combat(attacker: Army, defender: Army): Array<[number, number, number, 
     const attackerCasualties = defender.calculateCasualties(roll, isFirePhase, days, attacker.modifiers);
     attacker.applyCasualtiesAndMoraleDamage(attackerCasualties, defender.modifiers.morale);
     defender.applyCasualtiesAndMoraleDamage(defenderCasualties, attacker.modifiers.morale);
-    dailyStrengths.push([attacker.strength(), attacker.totalMorale(), defender.strength(), defender.totalMorale()]);
+    dailyStrengths.push([attacker.getSnapshot(), defender.getSnapshot()]);
     isAttackerUpdated = attacker.replaceRegiments();
     isDefenderUpdated = defender.replaceRegiments();
+
     days++;
   }
   return dailyStrengths;
 }
 
-function App() {
-  const [infantryCount, setInfantryCount] = useState({attacker: 1, defender: 1});
-  const [dailyStrengths, setDailyStrengths] = useState<[number, number, number, number][]>([]);
-  let attackerArmyModifierMap: Map<ModifierNames, number> = new Map();
-  let defenderArmyModifierMap: Map<ModifierNames, number> = new Map();
-  let attackerRegiments: Map<String, number> = new Map();
-  let defenderRegiments: Map<String, number> = new Map();
+let attackerArmyModifierMap: Map<String, number> = new Map();
+let defenderArmyModifierMap: Map<String, number> = new Map();
+let attackerRegiments: Map<String, number> = new Map();
+let defenderRegiments: Map<String, number> = new Map();
 
-  const handleSubmit: MouseEventHandler = () => {
+function App() {
+  const [results, setResults] = useState<[ArmySnapshot, ArmySnapshot][]>([]);
+
+  const handleSubmit = (event: React.MouseEvent<HTMLElement>) => {
     const attackerModifiers: Modifiers = Modifiers.createModifiersFromMap(attackerArmyModifierMap);
     const defenderModifiers: Modifiers = Modifiers.createModifiersFromMap(defenderArmyModifierMap);
     const army1 = new Army(attackerRegiments.get("infantry") as number, attackerRegiments.get("cavalry") as number, attackerModifiers);
     const army2 = new Army(defenderRegiments.get("infantry") as number, defenderRegiments.get("cavalry") as number, defenderModifiers);
-    setDailyStrengths(combat(army1, army2));
+    setResults(combat(army1, army2));
   }
 
-  // const handleInput: ChangeEventHandler<HTMLInputElement> = (event) => {    
-  //   const name = event.currentTarget.name;
-  //   const value = parseInt(event.currentTarget.value);
-  //   setInfantryCount(values => ({...values, [name]:value}))
-  // }
-
-  const updateArmyModifiers = (val: Map<ModifierNames, number>, isAttacker: boolean) => {
+  const updateArmyModifiers = (val: Map<String, number>, isAttacker: boolean) => {
     if (isAttacker) {
       attackerArmyModifierMap = new Map(val.entries());
     } else {
@@ -89,24 +85,13 @@ function App() {
   return (
     <div id="columns" className='App'>
       <div className="full-width">
+        <BattleGrid results={results}/>
         <input type='button' value={"Go!"} onClick={handleSubmit}/>
       </div>
       <h2 className="column-heading">Attacker</h2>
       <h2 className="column-heading">Defender</h2>
       <div id="regiment-modifiers" className='collapsing-panel'>
         <h3 className='full-width'>Regiments and Regiment Modifiers</h3>
-        {/* <div>
-          <label>Infantry:</label>
-          <input type="number" name="attacker"
-              value= {infantryCount.attacker}
-              onChange={handleInput}/>
-        </div>
-        <div>
-          <label>Infantry:</label>
-          <input type="number" name="defender"
-              value= {infantryCount.defender}
-              onChange={handleInput}/>
-        </div> */}
         <RegimentsPanel update={updateRegiments} isAttacker={true}/>
         <RegimentsPanel update={updateRegiments} isAttacker={false}/>
       </div>
@@ -119,26 +104,48 @@ function App() {
         <thead>
           <tr>
             <th rowSpan={2}>Day</th>
-            <th colSpan={2}>Army 1</th>
-            <th colSpan={2}>Army 2</th>
+            <th colSpan={4}>Army 1</th>
+            <th colSpan={4}>Army 2</th>
           </tr>
           <tr>
             <th>Strength</th>
+            <th>Casualties</th>
             <th>Total Morale</th>
+            <th>Morale Damage</th>
             <th>Strength</th>
+            <th>Casualties</th>
             <th>Total Morale</th>
+            <th>Morale Damage</th>
           </tr>
         </thead>
         <tbody>
-          {dailyStrengths.map((dailyResults: [number, number, number, number], index: number) => (
-            <tr key={index}>
-              <td>{index}</td>
-              <td>{dailyResults[0]}</td>
-              <td>{dailyResults[1].toFixed(2)}</td>
-              <td>{dailyResults[2]}</td>
-              <td>{dailyResults[3].toFixed(2)}</td>
-            </tr>
-          ))}
+          {
+            results.map((result, index) => {
+              let attackerCasualties: number = 0;
+              let attackerMoraleDamage: number = 0;
+              let defenderCasualties: number = 0;
+              let defenderMoraleDamage: number = 0;
+              if (index > 0) {
+                attackerCasualties = (results[index - 1][0].currentStrength - result[0].currentStrength);
+                attackerMoraleDamage = (results[index - 1][0].currentMorale - result[0].currentMorale);
+                defenderCasualties = (results[index - 1][1].currentStrength - result[1].currentStrength);
+                defenderMoraleDamage = (results[index - 1][1].currentMorale - result[1].currentMorale);
+              }
+              return (
+                <tr key={index}>
+                  <td>{index === 0 ? "-" : index}</td>
+                  <td>{result[0].currentStrength}</td>
+                  <td>{attackerCasualties}</td>
+                  <td>{result[0].currentMorale.toFixed(2)}</td>
+                  <td>{attackerMoraleDamage.toFixed(2)}</td>
+                  <td>{result[1].currentStrength}</td>
+                  <td>{defenderCasualties}</td>
+                  <td>{result[1].currentMorale.toFixed(2)}</td>
+                  <td>{defenderMoraleDamage.toFixed(2)}</td>
+                </tr>
+              )
+            })
+          }
         </tbody>
         
       </table>

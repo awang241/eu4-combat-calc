@@ -15,7 +15,10 @@ function createDefaultModifiersMap(): Map<String, number> {
     return defaultMap;
 }
 
-export default function ArmyModifiersPanel(props: {update: Function, isAttacker: boolean}) {
+export default function ArmyModifiersPanel(props: {
+            update: (val: Map<String, number>, isAttacker: boolean) => void,
+            isAttacker: boolean
+        }) {
     const [modifiers, setModifiers] = useState(createDefaultModifiersMap());
 
     const handleInput = (event: React.ChangeEvent<HTMLInputElement>) => {
