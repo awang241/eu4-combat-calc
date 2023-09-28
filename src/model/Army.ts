@@ -137,8 +137,12 @@ export default class Army {
     let index: IteratorResult<number, number> = indexOrder.next();
     while (!index.done && feedArray.length > 0 && loops < limit) {
         this.front[index.value] = feedArray.pop();
-        index = indexOrder.next();
         loops++;
+        if (feedArray.length <= 0 || loops >= limit) {
+            break;
+        }
+        index = indexOrder.next();
+        
     }
   }
 
@@ -257,12 +261,17 @@ export default class Army {
         let rightHalfIndex = Math.ceil(this.front.length / 2);
         let leftHalfIndex = rightHalfIndex - 1;
         let isLeftNext = true;
-        while (this.reserves.length > 0 && (leftHalfIndex >= 0 || rightHalfIndex < this.front.length)) {
+        let finished = false;
+        while (!finished && (leftHalfIndex >= 0 || rightHalfIndex < this.front.length)) {
             const index = isLeftNext ? leftHalfIndex--: rightHalfIndex++;
             if (this.front[index] === undefined) {
-                const replacement: Regiment | undefined = this.reserves.pop();
+                let replacement: Regiment | undefined = this.reserves.pop();
                 if (replacement !== undefined) {
                     this.front[index] = replacement ;
+                } else {
+                    /*
+                    pop outmost regiment and fill
+                    */
                 }
                 updated = true;
             }
