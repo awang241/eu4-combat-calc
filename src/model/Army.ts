@@ -1,6 +1,7 @@
 import ArmySnapshot from "./ArmySnapshot";
 import Modifiers from "./data/Modifiers";
 import Regiment, { RegimentTypes } from "./Regiment";
+import Row from "./Row";
 
 export default class Army {
     //The base maximum morale for this army.
@@ -8,7 +9,7 @@ export default class Army {
     private static readonly MORALE_DAMAGES_INDEX: number = 1;
 
     private _modifiers: Modifiers;
-    private front: Array<Regiment | undefined>;
+    private front: Row;
     private reserves: Array<Regiment>;
     private regiments: Array<Regiment>;
 
@@ -33,7 +34,7 @@ export default class Army {
      * @param {number} modifiers The army-level modifiers (morale, discipline, etc...) for this army.
      */
     constructor(infantry: number, cavalry: number, modifiers: Modifiers) {
-        this.front = new Array<Regiment>();
+        this.front = new Row(0)
         this.reserves = new Array<Regiment>();
         this.regiments =  new Array<Regiment>();
         for (let i = 0; i < infantry; i++) {
@@ -58,10 +59,10 @@ export default class Army {
             throw new Error("The frontline and casualty arrays have mismatched lengths.");
         }
         for (let i = 0; i < casualtiesAndDamages.length; i++) {
-            if (this.front[i] !== undefined) {
+            if (this.front.at(i) !== undefined) {
                 let totalMoraleDamage =  casualtiesAndDamages[i][Army.MORALE_DAMAGES_INDEX] + 0.01 * enemyMorale;
-                this.front[i]?.takeCasualties(Math.floor(casualtiesAndDamages[i][Army.STRENGTH_CASUALTIES_INDEX]));
-                this.front[i]?.takeMoraleDamage(totalMoraleDamage);
+                this.front.at(i)?.takeCasualties(Math.floor(casualtiesAndDamages[i][Army.STRENGTH_CASUALTIES_INDEX]));
+                this.front.at(i)?.takeMoraleDamage(totalMoraleDamage);
             }
         }
         for (const regiment of this.reserves) {
@@ -111,106 +112,89 @@ export default class Army {
                 frontDamages[regiment.targetIndex][Army.STRENGTH_CASUALTIES_INDEX] +=  baseCasualties * casualtyModifiers;
             }
         }
-    return frontDamages;
-  }
+        return frontDamages;
+    }
 
-  private getDeployIndexOrder(width: number): IterableIterator<number> {
-    let indices = Array.from({length: width}, (val, index) => (2 * index)).reverse();
-    indices.sort((a, b) => Math.abs(a - width + 1) - Math.abs(b - width + 1));
-    const i = indices.map(val => val / 2);
-    return i.values();
-  }
+    /**
+     * Sets the army's front row to the given combat width and deploys this army's regiments to it. Any excess regiments are 
+     * placed in the army's reserves.
+     * 
+     * If there are not enough regiments to fill the given width, all regiments are deployed from the centre outwards. If the 
+     * number of regiments does not split evenly (even number of regiments with odd width or vice versa), the extra regiment is
+     * placed on the right. 
+     * @param {number} maxWidth combat width.
+     * @param {number} enemyMaxWidth the total number of cavalry and infantry regiments of the enemy army.
+     */
+    deploy(maxWidth: number, enemyMaxWidth: number) {
+        this.front = new Row(maxWidth);
+        const infantry: Array<Regiment> = this.regiments.filter((val) => val.type === RegimentTypes.INFANTRY);
+        const cavalry: Array<Regiment> = this.regiments.filter((val) => val.type === RegimentTypes.CAVALRY);
+        let numCentreInfantry: number;
+        let numCavalry: number;
 
-  /**
-   * Removes regiment-index pairs from the given sources and places the regiment in the front line at 
-   * the given index. Each call will place regiments until the given maximum number is reached or 
-   * the indexes or regiments has run out.
-   * Note that regiments and indices are removed from the sources after the regiment is placed, and that
-   * regiments are removed from the end of the array (although order should not matter for regiments) 
-   * @param feedArray The source array regiments are being removed from.
-   * @param indexOrder An iterator providing the indices the regiments are to be placed at.
-   * @param max The maximum number of regiments to be placed. If not provided, defaults to the total number of regiments
-   */
-  private fillFront(feedArray: Array<Regiment>, indexOrder: IterableIterator<number>, max?: number) {
-    const limit = max === undefined || max > this.front.length ? this.front.length: max;
-    let loops = 0;
-    let index: IteratorResult<number, number> = indexOrder.next();
-    while (!index.done && feedArray.length > 0 && loops < limit) {
-        this.front[index.value] = feedArray.pop();
-        loops++;
-        if (feedArray.length <= 0 || loops >= limit) {
-            break;
+        const targetWidth: number = Math.min(maxWidth, enemyMaxWidth); 
+
+        if (infantry.length + cavalry.length <= targetWidth) {
+            numCentreInfantry = infantry.length;
+            numCavalry = cavalry.length;
+        } else if (enemyMaxWidth < maxWidth / 2 || infantry.length < maxWidth / 2) {
+            numCentreInfantry = Math.min(infantry.length, enemyMaxWidth);
+            numCavalry = Math.min(cavalry.length, maxWidth - numCentreInfantry);
+        } else {
+            numCavalry = Math.min(cavalry.length, Math.floor(maxWidth / 2));
+            numCentreInfantry = Math.min(infantry.length, enemyMaxWidth, maxWidth - numCavalry)
         }
-        index = indexOrder.next();
+        this.moveRegimentsToRow(infantry, numCentreInfantry);
+        this.moveRegimentsToRow(cavalry, numCavalry);
+        this.reserves = infantry.concat(cavalry);
+        this.moveRegimentsToRow(this.reserves);
+    }
+
+    frontlineRegimentCount(): number {
+        return this.regiments.filter((val) => val.type !== RegimentTypes.ARTILLERY).length;
+    }
+
+    getRegimentDataAtIndex(index: number): Regiment | undefined {
+        return this.front.at(index)?.unmodifiableCopy();
+    }
+
+    getSnapshot(): ArmySnapshot {
+        return new ArmySnapshot(this.front, this.reserves, this.regiments);
+    }
+
+    /**
+     * Returns true if morale or strength are at 0, otherwise returns true.
+     * @returns {boolean} true if morale or strength are at 0, otherwise returns true.
+     */
+    isBroken(): boolean {
+        return this.totalMorale() <= 0 || this.strength() <= 0;
+    }
+
+    /**
+     * Moves regiments from the given source array to the specified row. Regiments are
+     * moved until the source is empty, the row is 
+     * @param source 
+     * @param max The maximum number of regiments to be moved. If not provided, regiments 
+     *    are moved until the source is empty or the row is full.
+     * @param front If true or not provided, the front row is used; otherwise not supported yet.
+     * @returns The number of regiments moved to the row.
+     */
+    moveRegimentsToRow(source: Regiment[], max?: number, front?: boolean): number {
+        let moved: number;
+        moved = (front ?? true) ? this.front.addRegiments(source, max) : 0
+        source.splice(0, moved);
+        return moved;
+    }
         
+    /**
+     * Returns the total number of soldiers in the army.
+     * @returns {number} the total strength of all regiments in this army.
+     */
+    strength(): number {
+        return this.regiments.reduce((prev, curr) => prev + curr.strength, 0);
     }
-  }
 
-  /**
-   * Sets the army's front row to the given combat width and deploys this army's regiments to it. Any excess regiments are 
-   * placed in the army's reserves.
-   * 
-   * If there are not enough regiments to fill the given width, all regiments are deployed from the centre outwards. If the 
-   * number of regiments does not split evenly (even number of regiments with odd width or vice versa), the extra regiment is
-   * placed on the right. 
-   * @param {number} maxWidth combat width.
-   * @param {number} enemyMaxWidth the total number of cavalry and infantry regiments of the enemy army.
-   */
-  deploy(maxWidth: number, enemyMaxWidth: number) {
-    this.front = new Array<Regiment | undefined>(maxWidth).fill(undefined);
-    const infantry: Array<Regiment> = this.regiments.filter((val) => val.type === RegimentTypes.INFANTRY);
-    const cavalry: Array<Regiment> = this.regiments.filter((val) => val.type === RegimentTypes.CAVALRY);
-    let numCentreInfantry: number;
-    let numCavalry: number;
-
-    const targetWidth: number = Math.min(maxWidth, enemyMaxWidth); 
-
-    if (infantry.length + cavalry.length <= targetWidth) {
-        numCentreInfantry = infantry.length;
-        numCavalry = cavalry.length;
-    } else if (enemyMaxWidth < maxWidth / 2 || infantry.length < maxWidth / 2) {
-        numCentreInfantry = Math.min(infantry.length, enemyMaxWidth);
-        numCavalry = Math.min(cavalry.length, maxWidth - numCentreInfantry);
-    } else {
-        numCavalry = Math.min(cavalry.length, Math.floor(maxWidth / 2));
-        numCentreInfantry = Math.min(infantry.length, enemyMaxWidth, maxWidth - numCavalry)
-    }
-    const indexOrder: IterableIterator<number> = this.getDeployIndexOrder(maxWidth);
-    this.fillFront(infantry, indexOrder, numCentreInfantry);
-    this.fillFront(cavalry, indexOrder, numCavalry);
-    this.reserves = cavalry.concat(infantry);
-    this.fillFront(this.reserves, indexOrder);
-  }
-
-  frontlineRegimentCount(): number {
-    return this.regiments.filter((val) => val.type !== RegimentTypes.ARTILLERY).length;
-  }
-
-  getRegimentDataAtIndex(index: number): Regiment | undefined {
-    return this.front[index] === undefined ? undefined : this.front[index]?.unmodifiableCopy();
-  }
-
-  getSnapshot(): ArmySnapshot {
-    return new ArmySnapshot(this.front, this.reserves, this.regiments);
-  }
-
-  /**
-   * Returns true if morale or strength are at 0, otherwise returns true.
-   * @returns {boolean} true if morale or strength are at 0, otherwise returns true.
-   */
-  isBroken(): boolean {
-    return this.totalMorale() <= 0 || this.strength() <= 0
-  }
-    
-  /**
-   * Returns the total number of soldiers in the army.
-   * @returns {number} the total strength of all regiments in this army.
-   */
-  strength(): number {
-      return this.regiments.reduce((prev, curr) => prev + curr.strength, 0);
-  }
-
-  /**
+    /**
      * Given the front line of an enemy army as an array of regiments, sets the target for each regiment in this army.
      * Regiments will prioritize enemy regiments opposite them; if there isn't one there, they will pick an enemy regiment within their flanking range
      * (e.g a regiment at index 7 and flanking range 2 can hit enemy regiments from index 5 to 9.).
@@ -224,10 +208,10 @@ export default class Army {
         }
 
         for (let i = 0; i < this.front.length; i++) {
-            let regiment = this.front[i];
+            let regiment = this.front.at(i);
             if (regiment !== undefined) {
-                if (enemyArmy.front[i] !== undefined) {
-                    regiment.setTarget(enemyArmy.front[i], i);
+                if (enemyArmy.front.at(i) !== undefined) {
+                    regiment.setTarget(enemyArmy.front.at(i), i);
                 } else {
                     const minIndex = Math.max(0, i - regiment.flankingRange());
                     const maxIndex = Math.min(enemyArmy.front.length - 1, i + regiment.flankingRange());
@@ -244,40 +228,14 @@ export default class Army {
 
     /**
      * Moves destroyed/routed regiments out of combat, and replaces them with reserves if any are available.
-     * @returns  true if any regiments were removed/replaced, false otherwise.
+     * @returns  true if the front was changed, false otherwise.
      */
     replaceRegiments(): boolean {
-        let updated = false;
-
-        for (let i = 0; i < this.front.length; i++) {
-            const regiment = this.front[i];
-            if (regiment !== undefined && (regiment.strength <= 0 || regiment.currentMorale <= 0)) {
-                updated = true;
-                regiment.setTarget(undefined, undefined);
-                this.front[i] = undefined;
-            }
-        }
-
-        let rightHalfIndex = Math.ceil(this.front.length / 2);
-        let leftHalfIndex = rightHalfIndex - 1;
-        let isLeftNext = true;
-        let finished = false;
-        while (!finished && (leftHalfIndex >= 0 || rightHalfIndex < this.front.length)) {
-            const index = isLeftNext ? leftHalfIndex--: rightHalfIndex++;
-            if (this.front[index] === undefined) {
-                let replacement: Regiment | undefined = this.reserves.pop();
-                if (replacement !== undefined) {
-                    this.front[index] = replacement ;
-                } else {
-                    /*
-                    pop outmost regiment and fill
-                    */
-                }
-                updated = true;
-            }
-            isLeftNext = !isLeftNext;
-        }
-        return updated;
+        const removed: boolean = this.front.removeBrokenRegiments();
+        const reinforced = (this.moveRegimentsToRow(this.reserves) > 0);
+        const moved = this.front.moveFlankRegimentToCentreGap();
+        const shifted = this.front.shiftRegiments();
+        return removed || moved || shifted || reinforced;
     }
 
     /**

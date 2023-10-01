@@ -9,42 +9,44 @@ const MIN_OPACITY: number = 5;
 
 function createRegimentCells(front: (Regiment | undefined)[]): Array<JSX.Element> {
     return front.map((val, index) => {
+        let content: JSX.Element;
         if (val === undefined) {
-            return <td className="cell"/>
-        }
-
-        let icon: string = "";
-        if (val.type === RegimentTypes.INFANTRY) {
-            icon = infIcon;
-        } else if (val.type === RegimentTypes.CAVALRY) {
-            icon = cavIcon;
-        }
-        const iconOpacity: string = `${MIN_OPACITY + (100 - MIN_OPACITY) * (val.strength / Regiment.MAX_STRENGTH)}%`;
-        const moralePercent: number = 100 * (val.currentMorale / val.maxMorale)
-        let barHeight: string;
-        if (moralePercent > 2) {
-            barHeight =  `${moralePercent}%`;
-        } else if (moralePercent > 0) {
-            barHeight = "2%"
+            content = (<></>);
         } else {
-            barHeight = "0"
-        }
-        return (
-            <td className="cell" key={index}>
+            let icon: string = "";
+            if (val.type === RegimentTypes.INFANTRY) {
+                icon = infIcon;
+            } else if (val.type === RegimentTypes.CAVALRY) {
+                icon = cavIcon;
+            }
+            const iconOpacity: string = `${MIN_OPACITY + (100 - MIN_OPACITY) * (val.strength / Regiment.MAX_STRENGTH)}%`;
+            const moralePercent: number = 100 * (val.currentMorale / val.maxMorale)
+            let barHeight: string;
+            if (moralePercent > 2) {
+                barHeight =  `${moralePercent}%`;
+            } else if (moralePercent > 0) {
+                barHeight = "2%"
+            } else {
+                barHeight = "0"
+            }
+
+            content = (
                 <div className="cell-grid">
                     <img src={icon} alt="" style= {{opacity: iconOpacity}}/>
                     <div className="morale" style={{height: barHeight}}/>
                     <div className="tooltip">
                         <ul>
                             <li><strong>{`${val.type} Regiment`}</strong></li>
+                            <li>{`ID: ${val.id}`}</li>
                             <li>{`Morale: ${val.currentMorale.toFixed(2)}/${val.maxMorale.toFixed(2)}`}</li>
                             <li>{`Strength: ${val.strength}/${Regiment.MAX_STRENGTH}`}</li>
                         </ul>
-                        
                     </div>
                 </div>
-            </td>
-        )
+            )
+        }             
+        let cell = (<td key={index} className="cell">{content}</td>)
+        return cell;
     });
 }
 

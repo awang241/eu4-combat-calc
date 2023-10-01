@@ -9,7 +9,7 @@ export enum RegimentTypes {
 export default class Regiment{
   static id = 0;
   static readonly MAX_STRENGTH = 1000;
-  private id: number;
+  private _id: number;
   private _maxMorale: number;
   private _currentMorale: number;
   private _strength: number;
@@ -21,7 +21,7 @@ export default class Regiment{
 
   constructor(morale: number, type?: RegimentTypes) {
     Regiment.id++;
-    this.id = Regiment.id;
+    this._id = Regiment.id;
     this._maxMorale = morale;
     this._currentMorale = morale;
     this._strength = Regiment.MAX_STRENGTH;
@@ -82,6 +82,10 @@ export default class Regiment{
 
   public static flankingRange(type: RegimentTypes) {
     return type === RegimentTypes.INFANTRY ? 1 : 2; 
+  }
+
+  public get id(): number {
+    return this._id;
   }
 
   public get maxMorale(): number {return this._maxMorale;}

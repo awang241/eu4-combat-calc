@@ -1,4 +1,5 @@
 import Regiment from "./Regiment";
+import Row from "./Row";
 
 export default class ArmySnapshot{
     front: (Regiment | undefined)[];
@@ -8,8 +9,8 @@ export default class ArmySnapshot{
     currentMorale: number = 0;
     maxMorale: number = 0;
 
-    constructor(front: (Regiment | undefined)[], reserves: Regiment[], regiments: Regiment[]) {
-        this.front = front.map(val => val !== undefined ? val.unmodifiableCopy(): undefined);
+    constructor(front: Row, reserves: Regiment[], regiments: Regiment[]) {
+        this.front = front.createSnapshot();
         this.reserves = reserves.map(val => val.unmodifiableCopy());
         regiments.forEach((value) => {
             this.currentMorale += value.currentMorale;
