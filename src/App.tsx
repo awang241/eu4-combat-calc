@@ -3,12 +3,11 @@ import { useState } from 'react';
 import Army from './model/Army';
 import './App.css';
 import ArmyModifiersPanel from './components/ArmyModifiersPanel';
-import Modifiers from './model/data/Modifiers';
-import RegimentsPanel from './components/RegimentsPanel';
+import Modifiers, { ModifierNames } from './model/data/Modifiers';
+import RegimentsPanel, { RegimentCounts } from './components/RegimentsPanel';
 import BattleGrid from './components/BattleGrid';
 import ArmySnapshot from './model/data/ArmySnapshot';
-
-export {}
+import { RegimentTypes } from './model/Regiment';
 
 declare global {
   interface Array<T> {
@@ -22,7 +21,35 @@ declare global {
     ): T
   }
 }
+
+const DEFAULT_MORALE = 2.5;
  
+export type ArmyModifiers = {
+  [key in ModifierNames]?: number | undefined
+}
+
+function createDefaultModifiers(): ArmyModifiers {
+  return {
+    morale: DEFAULT_MORALE,
+    discipline: 0,
+    fireDamage: 0,
+    fireDamageReceived: 0,
+    infantryCombatAbility: 0,
+    cavalryCombatAbility: 0,
+    shockDamage: 0,
+    shockDamageReceived: 0,
+    moraleDamage: 0,
+    moraleDamageReceived: 0
+  }
+}
+
+function defaultCounts(): RegimentCounts {
+  return {
+    [RegimentTypes.INFANTRY]: 1,
+    [RegimentTypes.CAVALRY]: 0,
+    [RegimentTypes.ARTILLERY]: 0
+  }
+}
 /**
  * 
  * @param {Army} attacker 
@@ -63,36 +90,19 @@ function combat(attacker: Army, defender: Army): [ArmySnapshot, ArmySnapshot][] 
   return dailyStrengths;
 }
 
-let attackerArmyModifierMap: Map<String, number> = new Map();
-let defenderArmyModifierMap: Map<String, number> = new Map();
-let attackerRegiments: Map<String, number> = new Map();
-let defenderRegiments: Map<String, number> = new Map();
-
-function App() {
+export default function App() {
   const [results, setResults] = useState<[ArmySnapshot, ArmySnapshot][]>([]);
+  const [attackerModifiers, setAttackerModifiers] = useState(createDefaultModifiers);
+  const [defenderModifiers, setDefenderModifiers] = useState(createDefaultModifiers);
+  const [attackerCounts, setAttackerCounts] = useState(defaultCounts);
+  const [defenderCounts, setDefenderCounts] = useState(defaultCounts);
 
   const handleSubmit = (event: React.MouseEvent<HTMLElement>) => {
-    const attackerModifiers: Modifiers = Modifiers.createModifiersFromMap(attackerArmyModifierMap);
-    const defenderModifiers: Modifiers = Modifiers.createModifiersFromMap(defenderArmyModifierMap);
-    const army1 = new Army(attackerRegiments.get("infantry") as number, attackerRegiments.get("cavalry") as number, attackerModifiers);
-    const army2 = new Army(defenderRegiments.get("infantry") as number, defenderRegiments.get("cavalry") as number, defenderModifiers);
+    const attackerModifier: Modifiers = Modifiers.createModifiersFromObject(attackerModifiers);
+    const defenderModifier: Modifiers = Modifiers.createModifiersFromObject(defenderModifiers);
+    const army1 = new Army(attackerCounts.infantry, attackerCounts.cavalry, attackerModifier);
+    const army2 = new Army(defenderCounts.infantry, defenderCounts.cavalry, defenderModifier);
     setResults(combat(army1, army2));
-  }
-
-  const updateArmyModifiers = (val: Map<String, number>, isAttacker: boolean) => {
-    if (isAttacker) {
-      attackerArmyModifierMap = new Map(val.entries());
-    } else {
-      defenderArmyModifierMap = new Map(val.entries());
-    }
-  }
-
-  const updateRegiments = (val: Map<String, number>, isAttacker: boolean) => {
-    if (isAttacker) {
-      attackerRegiments = new Map(val.entries());
-    } else {
-      defenderRegiments = new Map(val.entries());
-    }
   }
 
   return (
@@ -105,13 +115,23 @@ function App() {
       <h2 className="column-heading">Defender</h2>
       <div id="regiment-modifiers" className='collapsing-panel'>
         <h3 className='full-width'>Regiments and Regiment Modifiers</h3>
-        <RegimentsPanel update={updateRegiments} isAttacker={true}/>
-        <RegimentsPanel update={updateRegiments} isAttacker={false}/>
+        <RegimentsPanel
+          modifiers={attackerModifiers}
+          counts={attackerCounts}
+          modifierCb={setAttackerModifiers}
+          countCb={setAttackerCounts}
+        />
+        <RegimentsPanel
+          modifiers={defenderModifiers}
+          counts={defenderCounts}
+          modifierCb={setDefenderModifiers}
+          countCb={setDefenderCounts}
+        />
       </div>
       <div id="army-modifiers" className='collapsing-panel'>
         <h3 className='full-width'>Army Modifiers</h3>
-        <ArmyModifiersPanel update={updateArmyModifiers} isAttacker={true}/>
-        <ArmyModifiersPanel update={updateArmyModifiers} isAttacker={false}/>
+        <ArmyModifiersPanel modifiers={attackerModifiers} callback={setAttackerModifiers}/>
+        <ArmyModifiersPanel modifiers={defenderModifiers} callback={setDefenderModifiers}/>
       </div>
       <table id="casualty-table" className='full-width'>
         <thead>
@@ -166,5 +186,3 @@ function App() {
 
   );
 }
-
-export default App;

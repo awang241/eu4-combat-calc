@@ -4,8 +4,6 @@
     text-align: center;
 }
 
-
-
 .battle-grid table {
     table-layout: fixed;
     border-spacing: 0px;
@@ -17,11 +15,14 @@
 }
 
 .battle-grid tr .cell{
-    border: 2px solid grey;
+    border: 1px solid #444444;
     padding: 0;
     background-color: white;
     height: 40px;
     width: 40px;
+}
+.battle-grid tr .cell:not(:last-child){
+    border-right-style: none;
 }
 .battle-grid .cell-grid {
     display: grid;

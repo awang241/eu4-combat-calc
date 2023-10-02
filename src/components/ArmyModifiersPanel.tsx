@@ -1,33 +1,20 @@
-import { useState } from "react";
 import "./ArmyModifiersPanel.css";
-import { ModifierNames } from "../model/data/Modifiers";
-
-function createDefaultModifiersMap(): Map<String, number> {
-    const defaultMap = new Map<String, number>()
-    defaultMap.set(ModifierNames.DISCIPLINE, 0);
-    defaultMap.set(ModifierNames.MORALE, 2.5);
-    defaultMap.set(ModifierNames.FIRE_DAMAGE, 0);
-    defaultMap.set(ModifierNames.FIRE_DAMAGE_RECEIVED, 0);
-    defaultMap.set(ModifierNames.SHOCK_DAMAGE, 0);
-    defaultMap.set(ModifierNames.SHOCK_DAMAGE_RECEIVED, 0);
-    defaultMap.set(ModifierNames.MORALE_DAMAGE, 0);
-    defaultMap.set(ModifierNames.MORALE_DAMAGE_RECEIVED, 0);
-    return defaultMap;
-}
+import { ModifierNames, inModifierNames } from "../model/data/Modifiers";
+import { ArmyModifiers } from "../App";
 
 export default function ArmyModifiersPanel(props: {
-            update: (val: Map<String, number>, isAttacker: boolean) => void,
-            isAttacker: boolean
+            modifiers: ArmyModifiers,
+            callback: (fn: ((state: ArmyModifiers) => ArmyModifiers) | ArmyModifiers) => void,
         }) {
-    const [modifiers, setModifiers] = useState(createDefaultModifiersMap());
 
     const handleInput = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const name: string = event.target.name;
+        const name: ModifierNames = event.target.name as ModifierNames
         const value: number = parseFloat(event.target.value);
-        const updatedModifiers: Map<String, number> = new Map<String, number>(modifiers.entries());
-        updatedModifiers.set(name, value);
-        setModifiers(updatedModifiers);
-        props.update(updatedModifiers, props.isAttacker);
+        if (inModifierNames(name) && !isNaN(value)) {
+            props.callback((state) => {
+                return {...state, [name]: value};
+            })
+        }
     }
 
     return (
@@ -41,7 +28,7 @@ export default function ArmyModifiersPanel(props: {
                     step={0.1} 
                     name={ModifierNames.MORALE} 
                     onChange={handleInput} 
-                    value={modifiers.get(ModifierNames.MORALE)}/>
+                    value={props.modifiers[ModifierNames.MORALE] ?? 0}/>
                 <label className="column-span-two">Bonus Discipline %:</label>
                 <span/>
                 <input 
@@ -50,7 +37,7 @@ export default function ArmyModifiersPanel(props: {
                     step={0} 
                     name={ModifierNames.DISCIPLINE} 
                     onChange={handleInput} 
-                    value={modifiers.get(ModifierNames.DISCIPLINE)}/>
+                    value={props.modifiers[ModifierNames.DISCIPLINE] ?? 0}/>
                 <span/>
                 <h5>Dealt</h5>
                 <h5>Received</h5>
@@ -60,14 +47,14 @@ export default function ArmyModifiersPanel(props: {
                     step={1} 
                     name={ModifierNames.FIRE_DAMAGE} 
                     onChange={handleInput} 
-                    value={modifiers.get(ModifierNames.FIRE_DAMAGE)}/>
+                    value={props.modifiers[ModifierNames.FIRE_DAMAGE] ?? 0}/>
                 <input 
                     type="number" 
                     step={0} 
                     max={0} 
-                    name={ModifierNames.SHOCK_DAMAGE} 
+                    name={ModifierNames.FIRE_DAMAGE_RECEIVED} 
                     onChange={handleInput} 
-                    value={modifiers.get(ModifierNames.FIRE_DAMAGE_RECEIVED)}/>
+                    value={props.modifiers[ModifierNames.FIRE_DAMAGE_RECEIVED] ?? 0}/>
 
                 <label className="army-modifier-label">Shock Damage %:</label>
                 <input 
@@ -76,13 +63,13 @@ export default function ArmyModifiersPanel(props: {
                     step={0} 
                     name={ModifierNames.SHOCK_DAMAGE} 
                     onChange={handleInput} 
-                    value={modifiers.get(ModifierNames.SHOCK_DAMAGE)}/>
+                    value={props.modifiers[ModifierNames.SHOCK_DAMAGE] ?? 0}/>
                 <input 
                     type="number" 
                     step={0} 
                     name={ModifierNames.SHOCK_DAMAGE_RECEIVED} 
                     onChange={handleInput} 
-                    value={modifiers.get(ModifierNames.SHOCK_DAMAGE_RECEIVED)}/>
+                    value={props.modifiers[ModifierNames.SHOCK_DAMAGE_RECEIVED] ?? 0}/>
 
                 <label className="army-modifier-label">Morale Damage %:</label>
                 <input 
@@ -91,13 +78,13 @@ export default function ArmyModifiersPanel(props: {
                     step={0} 
                     name={ModifierNames.MORALE_DAMAGE} 
                     onChange={handleInput} 
-                    value={modifiers.get(ModifierNames.MORALE_DAMAGE)}/>
+                    value={props.modifiers[ModifierNames.MORALE_DAMAGE] ?? 0}/>
                 <input 
                     type="number" 
                     step={0} 
                     name={ModifierNames.MORALE_DAMAGE_RECEIVED} 
                     onChange={handleInput} 
-                    value={modifiers.get(ModifierNames.MORALE_DAMAGE_RECEIVED)}/>
+                    value={props.modifiers[ModifierNames.MORALE_DAMAGE_RECEIVED] ?? 0}/>
         </div>
         
     );

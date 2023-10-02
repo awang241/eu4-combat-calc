@@ -82,11 +82,17 @@ export default function BattleGrid(props: {results:[ArmySnapshot, ArmySnapshot][
             style = {}
         } else if (index === focusedData.targetIndex) {
             style = {
-                border: "2px double red",
+                outline: "none",
+                borderColor: "red",
+                borderStyle: "double",
+                boxShadow: "0 0 10px red"
             }
         } else {
             style = {
-                border: "2px double yellow",
+                outline: "none",
+                borderColor: "#80aacc",
+                borderRightStyle: "solid",
+                boxShadow: "0 0 10px #80aacc"
             }
         }
         return style;

@@ -1,34 +1,37 @@
-import React, { useState, ChangeEventHandler } from "react";
+import { ChangeEventHandler } from "react";
 import "./RegimentsPanel.css";
+import { RegimentTypes } from "../model/Regiment";
+import { ModifierNames, inModifierNames } from "../model/data/Modifiers";
+import { ArmyModifiers } from "../App";
 
-const CAVALRY = "cavalry";
-const INFANTRY = "infantry";
-const CAVALRY_COMBAT_ABILITY = "cavalryCombatAbility";
-const INFANTRY_COMBAT_ABILITY = "infantryCombatAbility";
+function isRegimentType(name: string) {
+    return Object.values(RegimentTypes).includes(name as RegimentTypes);
+}
 
-function createDefaultValues(): Map<String, number> {
-    const map = new Map();
-    map.set(INFANTRY, 1);
-    map.set(CAVALRY, 0);
-    map.set(INFANTRY_COMBAT_ABILITY, 0);
-    map.set(CAVALRY_COMBAT_ABILITY, 0);
-    return map;
+export type RegimentCounts = {
+    [regimentType in RegimentTypes]: number
 }
 
 export default function RegimentsPanel(props: {
-            update: (val: Map<String, number>, isAttacker: boolean) => void,
-            isAttacker: boolean
+            modifiers: ArmyModifiers;
+            counts: RegimentCounts;
+            modifierCb: ((fn: (state: ArmyModifiers) => ArmyModifiers) => void);
+            countCb: ((fn: (state: RegimentCounts) => RegimentCounts) => void)
         }) {
-    const [values, setValues] = useState(createDefaultValues())
-    props.update(values, props.isAttacker)
 
-    const handleInput: ChangeEventHandler<HTMLInputElement> = (event) => {    
-        const name = event.currentTarget.name;
-        const value = parseInt(event.currentTarget.value);
-        const updatedValues: Map<String, number> = new Map<String, number>(values.entries());
-        updatedValues.set(name, value);
-        setValues(updatedValues);
-        props.update(updatedValues, props.isAttacker)
+    const handleInput: ChangeEventHandler<HTMLInputElement> = (event) => {  
+        let value: number = parseFloat(event.target.value);
+        if (!isNaN(value)){
+            if (inModifierNames(event.target.name)) {
+                props.modifierCb((state) => {
+                    return {...state, [event.target.name]: value};
+                })
+            } else if (isRegimentType(event.target.name)) {
+                props.countCb((state) => {
+                    return {...state, [event.target.name]: value};
+                })
+            }
+        }
       }
 
     return (
@@ -38,19 +41,19 @@ export default function RegimentsPanel(props: {
                 <h5>Combat Ability(%):</h5>
 
                 <label>Infantry:</label>
-                <input type="number" name={INFANTRY}
-                    value= {values.get(INFANTRY)}
+                <input type="number" name={RegimentTypes.INFANTRY}
+                    value= {props.counts[RegimentTypes.INFANTRY]}
                     onChange={handleInput}/>
-                <input type="number" name={INFANTRY_COMBAT_ABILITY}
-                    value= {values.get(INFANTRY_COMBAT_ABILITY)}
+                <input type="number" name={ModifierNames.INFANTRY_DAMAGE}
+                    value= {props.modifiers.infantryCombatAbility}
                     onChange={handleInput}/>
 
                 <label>Cavalry:</label>
-                <input type="number" name={CAVALRY}
-                    value= {values.get(CAVALRY)}
+                <input type="number" name={RegimentTypes.CAVALRY}
+                    value= {props.counts[RegimentTypes.CAVALRY]}
                     onChange={handleInput}/>
-                <input type="number" name={CAVALRY_COMBAT_ABILITY}
-                    value= {values.get(CAVALRY_COMBAT_ABILITY)}
+                <input type="number" name={ModifierNames.CAVALRY_DAMAGE}
+                    value= {props.modifiers.cavalryCombatAbility}
                     onChange={handleInput}/>
             </div>
     );
