@@ -42,7 +42,7 @@ export default function ArmyModifiersPanel(props: {
                     name={ModifierNames.MORALE} 
                     onChange={handleInput} 
                     value={modifiers.get(ModifierNames.MORALE)}/>
-                <label className="column-span-two">Bonus Discipline:</label>
+                <label className="column-span-two">Bonus Discipline %:</label>
                 <span/>
                 <input 
                     className="army-modifier-input" 
@@ -54,7 +54,7 @@ export default function ArmyModifiersPanel(props: {
                 <span/>
                 <h5>Dealt</h5>
                 <h5>Received</h5>
-                <label className="army-modifier-label">Land Fire Damage:</label>
+                <label className="army-modifier-label">Land Fire Damage %:</label>
                 <input 
                     type="number" 
                     step={1} 
@@ -69,7 +69,7 @@ export default function ArmyModifiersPanel(props: {
                     onChange={handleInput} 
                     value={modifiers.get(ModifierNames.FIRE_DAMAGE_RECEIVED)}/>
 
-                <label className="army-modifier-label">Shock Damage:</label>
+                <label className="army-modifier-label">Shock Damage %:</label>
                 <input 
                     className="army-modifier-type" 
                     type="number" 
@@ -84,7 +84,7 @@ export default function ArmyModifiersPanel(props: {
                     onChange={handleInput} 
                     value={modifiers.get(ModifierNames.SHOCK_DAMAGE_RECEIVED)}/>
 
-                <label className="army-modifier-label">Morale Damage:</label>
+                <label className="army-modifier-label">Morale Damage %:</label>
                 <input 
                     className="army-modifier-input" 
                     type="number" 

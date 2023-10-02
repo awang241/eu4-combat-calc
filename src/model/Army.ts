@@ -1,4 +1,4 @@
-import ArmySnapshot from "./ArmySnapshot";
+import ArmySnapshot from "./data/ArmySnapshot";
 import Modifiers from "./data/Modifiers";
 import Regiment, { RegimentTypes } from "./Regiment";
 import Row from "./Row";

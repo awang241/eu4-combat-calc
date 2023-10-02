@@ -34,8 +34,8 @@ export default function RegimentsPanel(props: {
     return (
             <div className="regiments-panel">
                 <span/>
-                <label>Regiments:</label>
-                <label>Combat Ability:</label>
+                <h5>Regiments:</h5>
+                <h5>Combat Ability(%):</h5>
 
                 <label>Infantry:</label>
                 <input type="number" name={INFANTRY}

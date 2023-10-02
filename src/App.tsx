@@ -6,7 +6,7 @@ import ArmyModifiersPanel from './components/ArmyModifiersPanel';
 import Modifiers from './model/data/Modifiers';
 import RegimentsPanel from './components/RegimentsPanel';
 import BattleGrid from './components/BattleGrid';
-import ArmySnapshot from './model/ArmySnapshot';
+import ArmySnapshot from './model/data/ArmySnapshot';
 
 export {}
 

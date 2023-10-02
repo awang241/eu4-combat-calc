@@ -2,7 +2,7 @@ import Regiment, { RegimentTypes } from "../model/Regiment";
 import "./BattleGrid.css";
 import infIcon from "../assets/Infantry.png"
 import cavIcon from "../assets/Cavalry.png"
-import ArmySnapshot from "../model/ArmySnapshot";
+import ArmySnapshot from "../model/data/ArmySnapshot";
 import { useState } from "react";
 
 type RegimentData = {
