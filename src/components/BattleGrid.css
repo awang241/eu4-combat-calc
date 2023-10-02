@@ -17,7 +17,7 @@
 }
 
 .battle-grid tr .cell{
-    border: 1px solid black;
+    border: 2px solid grey;
     padding: 0;
     background-color: white;
     height: 40px;

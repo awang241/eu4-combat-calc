@@ -45,10 +45,8 @@ function combat(attacker: Army, defender: Army): [ArmySnapshot, ArmySnapshot][] 
   while (!attacker.isBroken() && !defender.isBroken() && days < loopLimit) {
     let isFirePhase = (days - dayOffset) % combatPhasePeriod < firePhaseCutoff;
     let roll = 5;
-    if (isDefenderUpdated) {
+    if (isDefenderUpdated || isAttackerUpdated) {
       attacker.setTargets(defender);
-    }
-    if (isAttackerUpdated) {
       defender.setTargets(attacker);
     }
     //N.B. Do not collapse - casualties must be calculated for both sides before applying them.

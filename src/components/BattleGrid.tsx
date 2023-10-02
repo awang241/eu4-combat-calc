@@ -5,62 +5,100 @@ import cavIcon from "../assets/Cavalry.png"
 import ArmySnapshot from "../model/ArmySnapshot";
 import { useState } from "react";
 
+type RegimentData = {
+    index: number | undefined,
+    targetIndex: number | undefined,
+    flankingRange: number,
+    isAttacker: boolean
+}
+
 const MIN_OPACITY: number = 5;
+const initData: RegimentData = {index: undefined, targetIndex: undefined, flankingRange: 0, isAttacker: false};
 
-function createRegimentCells(front: (Regiment | undefined)[]): Array<JSX.Element> {
-    return front.map((val, index) => {
-        let content: JSX.Element;
-        if (val === undefined) {
-            content = (<></>);
+function RegimentCell(props: {
+        regiment: Regiment | undefined, 
+        index: number, 
+        isAttacker: boolean,
+        cellStyle: React.CSSProperties, 
+        hoverCb: (state: any) => unknown}) {
+    let barHeight: string = "";
+    let iconOpacity: string = "";
+    let icon: string = "";
+    let data: RegimentData | undefined;
+    if (props.regiment !== undefined) {
+        if (props.regiment.type === RegimentTypes.INFANTRY) {
+            icon = infIcon;
+        } else if (props.regiment.type === RegimentTypes.CAVALRY) {
+            icon = cavIcon;
+        }
+        iconOpacity = `${MIN_OPACITY + (100 - MIN_OPACITY) * (props.regiment.strength / Regiment.MAX_STRENGTH)}%`;
+        let moralePercent: number = 100 * (props.regiment.currentMorale / props.regiment.maxMorale);
+        if (moralePercent > 2) {
+            barHeight =  `${moralePercent}%`;
+        } else if (moralePercent > 0) {
+            barHeight = "2%"
         } else {
-            let icon: string = "";
-            if (val.type === RegimentTypes.INFANTRY) {
-                icon = infIcon;
-            } else if (val.type === RegimentTypes.CAVALRY) {
-                icon = cavIcon;
-            }
-            const iconOpacity: string = `${MIN_OPACITY + (100 - MIN_OPACITY) * (val.strength / Regiment.MAX_STRENGTH)}%`;
-            const moralePercent: number = 100 * (val.currentMorale / val.maxMorale)
-            let barHeight: string;
-            if (moralePercent > 2) {
-                barHeight =  `${moralePercent}%`;
-            } else if (moralePercent > 0) {
-                barHeight = "2%"
-            } else {
-                barHeight = "0"
-            }
-
-            content = (
-                <div className="cell-grid">
+            barHeight = "0"
+        }
+        data = {
+            index: props.index,
+            targetIndex: props.regiment.targetIndex,
+            isAttacker: props.isAttacker,
+            flankingRange: props.regiment.flankingRange()
+        }
+    }
+    return (
+        <td className="cell" 
+            style={props.cellStyle} 
+            onMouseEnter={data ? () => props.hoverCb(data): undefined} 
+            onMouseLeave={data ? () => props.hoverCb(initData): undefined}
+        >
+            {props.regiment !== undefined ? (
+                <div className="cell-grid" >
                     <img src={icon} alt="" style= {{opacity: iconOpacity}}/>
                     <div className="morale" style={{height: barHeight}}/>
                     <div className="tooltip">
                         <ul>
-                            <li><strong>{`${val.type} Regiment`}</strong></li>
-                            <li>{`ID: ${val.id}`}</li>
-                            <li>{`Morale: ${val.currentMorale.toFixed(2)}/${val.maxMorale.toFixed(2)}`}</li>
-                            <li>{`Strength: ${val.strength}/${Regiment.MAX_STRENGTH}`}</li>
+                            <li><strong>{`${props.regiment.type} Regiment`}</strong></li>
+                            <li>{`ID: ${props.regiment.id}`}</li>
+                            <li>{`Morale: ${props.regiment.currentMorale.toFixed(2)}/${props.regiment.maxMorale.toFixed(2)}`}</li>
+                            <li>{`Strength: ${props.regiment.strength}/${Regiment.MAX_STRENGTH}`}</li>
                         </ul>
                     </div>
                 </div>
-            )
-        }             
-        let cell = (<td key={index} className="cell">{content}</td>)
-        return cell;
-    });
+            ) : <></> }
+        </td>
+    )
 }
 
 export default function BattleGrid(props: {results:[ArmySnapshot, ArmySnapshot][]}) {
     const maxDay: number = Math.max(props.results.length - 1, 0);
     const [day, setDay] = useState(maxDay); 
-    
+    const [focusedData, setFocusedData] = useState(initData);
+
+    const getCellStyle = (index: number, isAttacker: boolean): React.CSSProperties => {
+        let style: React.CSSProperties;
+        if (focusedData.index === undefined || isAttacker === focusedData.isAttacker || Math.abs(index - focusedData.index) > focusedData.flankingRange) {
+            style = {}
+        } else if (index === focusedData.targetIndex) {
+            style = {
+                border: "2px double red",
+            }
+        } else {
+            style = {
+                border: "2px double yellow",
+            }
+        }
+        return style;
+    }
+
     const attackerResults: ArmySnapshot[] = props.results.map(val => val[0]);
     const defenderResults: ArmySnapshot[] = props.results.map(val => val[1]);
     let attackerLastResult = attackerResults[day];
     let defenderLastResult = defenderResults[day];
-    const attackerFront = attackerLastResult === undefined ? new Array(20).fill(undefined): attackerLastResult.front;
-    const defenderFront = defenderLastResult === undefined ? new Array(20).fill(undefined): defenderLastResult.front;
-
+    const attackerFront: (Regiment | undefined)[] = (attackerLastResult) ? attackerLastResult.front: new Array(20).fill(undefined);
+    const defenderFront: (Regiment | undefined)[] = (defenderLastResult) ? defenderLastResult.front: new Array(20).fill(undefined);
+    
     return (
         <div className="battle-grid">
             <div className="selector-panel">
@@ -72,23 +110,43 @@ export default function BattleGrid(props: {results:[ArmySnapshot, ArmySnapshot][
                     step={1} 
                     value={day}
                     disabled={props.results.length === 0}
-                    onChange={(event)=> setDay(parseInt(event.target.value))}>
-                </input>
+                    onChange={(event)=> setDay(parseInt(event.target.value))}
+                />
                 <button 
                     disabled={day === maxDay}
                     onClick={() => setDay(day + 1)}>
                     &#62;
                 </button>
                 <p> Day {day}</p>
-            </div>
+            </div>  
             <table>
                 <tbody>
                     <tr>
-                        {createRegimentCells(attackerFront)}
+                        {attackerFront.map((regiment, index) => (
+                            <RegimentCell 
+                                key={index} 
+                                index={index}
+                                regiment={regiment}
+                                isAttacker={true}
+                                cellStyle={getCellStyle(index, true)}
+                                hoverCb={setFocusedData}
+                            />
+                            )
+                        )}
                     </tr>
                     <tr className="grid-gap"/>
                     <tr>
-                        {createRegimentCells(defenderFront)}
+                        {defenderFront.map((regiment, index) => (
+                            <RegimentCell 
+                                key={index} 
+                                index={index}
+                                regiment={regiment}
+                                isAttacker={false}
+                                cellStyle={getCellStyle(index, false)}
+                                hoverCb={setFocusedData}
+                            />
+                            )
+                        )}
                     </tr>
                 </tbody>
             </table>
