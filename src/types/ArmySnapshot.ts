@@ -1,5 +1,5 @@
-import Regiment from "../Regiment";
-import Row from "../Row";
+import Regiment from "../model/Regiment";
+import Row from "../model/Row";
 
 export default class ArmySnapshot{
     front: (Regiment | undefined)[];

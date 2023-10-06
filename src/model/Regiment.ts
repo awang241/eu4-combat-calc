@@ -1,4 +1,4 @@
-import Pips from "./data/Pips";
+import Pips from "../types/Pips";
 
 export enum RegimentTypes {
   INFANTRY = "infantry",

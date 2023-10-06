@@ -3,10 +3,10 @@ import { useState } from 'react';
 import Army from './model/Army';
 import './App.css';
 import ArmyModifiersPanel from './components/ArmyModifiersPanel';
-import Modifiers, { ModifierNames } from './model/data/Modifiers';
+import { Modifiers, createDefaultModifiers } from './types/Modifiers';
 import RegimentsPanel, { RegimentCounts } from './components/RegimentsPanel';
 import BattleGrid from './components/BattleGrid';
-import ArmySnapshot from './model/data/ArmySnapshot';
+import ArmySnapshot from './types/ArmySnapshot';
 import { RegimentTypes } from './model/Regiment';
 
 declare global {
@@ -19,27 +19,6 @@ declare global {
       predicate: (value: T, index: number, obj: T[]) => unknown,
       thisArg?: any
     ): T
-  }
-}
-
-const DEFAULT_MORALE = 2.5;
- 
-export type ArmyModifiers = {
-  [key in ModifierNames]?: number | undefined
-}
-
-function createDefaultModifiers(): ArmyModifiers {
-  return {
-    morale: DEFAULT_MORALE,
-    discipline: 0,
-    fireDamage: 0,
-    fireDamageReceived: 0,
-    infantryCombatAbility: 0,
-    cavalryCombatAbility: 0,
-    shockDamage: 0,
-    shockDamageReceived: 0,
-    moraleDamage: 0,
-    moraleDamageReceived: 0
   }
 }
 
@@ -98,8 +77,8 @@ export default function App() {
   const [defenderCounts, setDefenderCounts] = useState(defaultCounts);
 
   const handleSubmit = (event: React.MouseEvent<HTMLElement>) => {
-    const attackerModifier: Modifiers = Modifiers.createModifiersFromObject(attackerModifiers);
-    const defenderModifier: Modifiers = Modifiers.createModifiersFromObject(defenderModifiers);
+    const attackerModifier: Modifiers = {...attackerModifiers};
+    const defenderModifier: Modifiers = {...defenderModifiers};
     const army1 = new Army(attackerCounts.infantry, attackerCounts.cavalry, attackerModifier);
     const army2 = new Army(defenderCounts.infantry, defenderCounts.cavalry, defenderModifier);
     setResults(combat(army1, army2));
@@ -133,6 +112,7 @@ export default function App() {
         <ArmyModifiersPanel modifiers={attackerModifiers} callback={setAttackerModifiers}/>
         <ArmyModifiersPanel modifiers={defenderModifiers} callback={setDefenderModifiers}/>
       </div>
+      <h2>Day-By-Day Casualties</h2>
       <table id="casualty-table" className='full-width'>
         <thead>
           <tr>

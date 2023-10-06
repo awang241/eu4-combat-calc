@@ -2,7 +2,7 @@ import Regiment, { RegimentTypes } from "../model/Regiment";
 import "./BattleGrid.css";
 import infIcon from "../assets/Infantry.png"
 import cavIcon from "../assets/Cavalry.png"
-import ArmySnapshot from "../model/data/ArmySnapshot";
+import ArmySnapshot from "../types/ArmySnapshot";
 import { useState } from "react";
 
 type RegimentData = {
@@ -92,7 +92,7 @@ export default function BattleGrid(props: {results:[ArmySnapshot, ArmySnapshot][
                 outline: "none",
                 borderColor: "#80aacc",
                 borderRightStyle: "solid",
-                boxShadow: "0 0 10px #80aacc"
+                boxShadow: "0 0 10px #80aacc",
             }
         }
         return style;

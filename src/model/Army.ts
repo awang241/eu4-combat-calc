@@ -1,5 +1,5 @@
-import ArmySnapshot from "./data/ArmySnapshot";
-import Modifiers from "./data/Modifiers";
+import ArmySnapshot from "../types/ArmySnapshot";
+import { Modifiers, toMultiplier } from "../types/Modifiers";
 import Regiment, { RegimentTypes } from "./Regiment";
 import Row from "./Row";
 
@@ -91,27 +91,28 @@ export default class Army {
                 const strengthPips = battlePips + regiment.pips.offencePips(isFirePhase)- regiment.target.pips.defencePips(isFirePhase);
                 const moralePips = strengthPips + regiment.pips.moraleOffence - regiment.target.pips.moraleDefence;
 
-                const phaseDamageBonus = isFirePhase ? this.modifiers.getFireDamage(): this.modifiers.getShockDamage();
-                const enemyPhaseDamageReduction = isFirePhase ? enemyModifiers.getFireDamageReceived(): enemyModifiers.getShockDamageReceived();
+                const phaseDamageBonus = toMultiplier(isFirePhase ? this.modifiers.fireDamage: this.modifiers.shockDamage);
+                const phaseDamageReduction = toMultiplier(isFirePhase ? enemyModifiers.fireDamageReceived : enemyModifiers.shockDamageReceived);
                 const strengthMultiplier = regiment.strength / Regiment.MAX_STRENGTH;
                 let typeMultiplier;
                 let damages;
 
                 if (regiment.type === RegimentTypes.INFANTRY) {
                     damages = this.damage.infantry;
-                    typeMultiplier = 1 + 0.01 * (this.modifiers.infantryDamage);
+                    typeMultiplier = toMultiplier(this.modifiers.infantryCombatAbility);
                 } else {
                     damages = this.damage.cavalry;
-                    typeMultiplier = 1 + 0.01 * (this.modifiers.cavalryDamage);
+                    typeMultiplier = toMultiplier(this.modifiers.cavalryCombatAbility);
                 }
                 
                 const damageMultiplier = isFirePhase ? damages.fire: damages.shock;
                 const roundMultiplier = 1 + days / 100;
-                const disciplineAndTacticsMultiplier = this.modifiers.getDiscipline() / (Army.tactics * enemyModifiers.getDiscipline());
-                const phaseBonusesMultiplier = phaseDamageBonus * enemyPhaseDamageReduction;
-                const moraleBonusMultiplier = this.modifiers.getMoraleDamage() / this.modifiers.getMoraleDamageReceived();
+                const discipline = toMultiplier(this.modifiers.discipline) 
+                const tactics = Army.tactics * toMultiplier(enemyModifiers.discipline);
+                const phaseBonusesMultiplier = phaseDamageBonus * phaseDamageReduction;
+                const moraleBonusMultiplier = toMultiplier(this.modifiers.moraleDamage) * toMultiplier(this.modifiers.moraleDamageReceived);
                 
-                const baseMultipliers = strengthMultiplier * damageMultiplier * roundMultiplier * disciplineAndTacticsMultiplier * typeMultiplier;
+                const baseMultipliers = strengthMultiplier * damageMultiplier * roundMultiplier * discipline * typeMultiplier / tactics;
                 const moraleMultipliers = baseMultipliers * (this.modifiers.morale / MORALE_DIVISOR) * moraleBonusMultiplier;
                 const casualtyModifiers = baseMultipliers * phaseBonusesMultiplier;
                 const baseCasualties = Math.max(0, 15 + 5 * strengthPips);  

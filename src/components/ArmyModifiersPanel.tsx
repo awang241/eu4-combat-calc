@@ -1,10 +1,9 @@
 import "./ArmyModifiersPanel.css";
-import { ModifierNames, inModifierNames } from "../model/data/Modifiers";
-import { ArmyModifiers } from "../App";
+import { ModifierNames, inModifierNames, Modifiers } from "../types/Modifiers";
 
 export default function ArmyModifiersPanel(props: {
-            modifiers: ArmyModifiers,
-            callback: (fn: ((state: ArmyModifiers) => ArmyModifiers) | ArmyModifiers) => void,
+            modifiers: Modifiers,
+            callback: (fn: ((state: Modifiers) => Modifiers)) => void,
         }) {
 
     const handleInput = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -25,7 +24,7 @@ export default function ArmyModifiersPanel(props: {
                     id="morale-input"
                     type="number"
                     min={0}
-                    step={0.1} 
+                    step={0.01} 
                     name={ModifierNames.MORALE} 
                     onChange={handleInput} 
                     value={props.modifiers[ModifierNames.MORALE] ?? 0}/>
@@ -34,7 +33,8 @@ export default function ArmyModifiersPanel(props: {
                 <input 
                     className="army-modifier-input" 
                     type="number" 
-                    step={0} 
+                    min={0}
+                    step={0.5} 
                     name={ModifierNames.DISCIPLINE} 
                     onChange={handleInput} 
                     value={props.modifiers[ModifierNames.DISCIPLINE] ?? 0}/>
@@ -45,12 +45,14 @@ export default function ArmyModifiersPanel(props: {
                 <input 
                     type="number" 
                     step={1} 
+                    min={0}
                     name={ModifierNames.FIRE_DAMAGE} 
                     onChange={handleInput} 
                     value={props.modifiers[ModifierNames.FIRE_DAMAGE] ?? 0}/>
                 <input 
                     type="number" 
-                    step={0} 
+                    step={1}
+                    min={-99}
                     max={0} 
                     name={ModifierNames.FIRE_DAMAGE_RECEIVED} 
                     onChange={handleInput} 
@@ -60,13 +62,16 @@ export default function ArmyModifiersPanel(props: {
                 <input 
                     className="army-modifier-type" 
                     type="number" 
-                    step={0} 
+                    step={1} 
+                    min={0}
                     name={ModifierNames.SHOCK_DAMAGE} 
                     onChange={handleInput} 
                     value={props.modifiers[ModifierNames.SHOCK_DAMAGE] ?? 0}/>
                 <input 
                     type="number" 
-                    step={0} 
+                    step={1}
+                    min={-99}
+                    max={0}
                     name={ModifierNames.SHOCK_DAMAGE_RECEIVED} 
                     onChange={handleInput} 
                     value={props.modifiers[ModifierNames.SHOCK_DAMAGE_RECEIVED] ?? 0}/>
@@ -75,13 +80,15 @@ export default function ArmyModifiersPanel(props: {
                 <input 
                     className="army-modifier-input" 
                     type="number" 
+                    min={0}
                     step={0} 
                     name={ModifierNames.MORALE_DAMAGE} 
                     onChange={handleInput} 
                     value={props.modifiers[ModifierNames.MORALE_DAMAGE] ?? 0}/>
                 <input 
                     type="number" 
-                    step={0} 
+                    min={-99}
+                    max={0}
                     name={ModifierNames.MORALE_DAMAGE_RECEIVED} 
                     onChange={handleInput} 
                     value={props.modifiers[ModifierNames.MORALE_DAMAGE_RECEIVED] ?? 0}/>
