@@ -1,6 +1,6 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
+  "short_name": "EU4 Calc",
+  "name": "EU4 Combat Calculator",
   "start_url": ".",
   "display": "standalone",
   "theme_color": "#000000",
