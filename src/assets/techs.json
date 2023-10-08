@@ -1,5 +1,5 @@
-{
-    "0": {
+[
+    {
         "militaryTactics": 0.5,
         "landMorale": 2.0,
         "infantryFire": 0.25,
@@ -9,9 +9,10 @@
         "artilleryFire": 0,
         "artilleryShock": 0,
         "maneuverValue": 0,
-        "combatWidth": 15
+        "combatWidth": 15,
+        "level": 0
     },
-    "1": {
+    {
         "militaryTactics": 0.5,
         "landMorale": 2.0,
         "infantryFire": 0.35,
@@ -21,9 +22,10 @@
         "artilleryFire": 0,
         "artilleryShock": 0,
         "maneuverValue": 0,
-        "combatWidth": 15
+        "combatWidth": 15,
+        "level": 1
     },
-    "2": {
+    {
         "militaryTactics": 0.5,
         "landMorale": 2.0,
         "infantryFire": 0.35,
@@ -33,9 +35,10 @@
         "artilleryFire": 0,
         "artilleryShock": 0,
         "maneuverValue": 0,
-        "combatWidth": 20
+        "combatWidth": 20,
+        "level": 2
     },
-    "3": {
+    {
         "militaryTactics": 0.5,
         "landMorale": 2.5,
         "infantryFire": 0.35,
@@ -45,9 +48,10 @@
         "artilleryFire": 0,
         "artilleryShock": 0,
         "maneuverValue": 0,
-        "combatWidth": 20
+        "combatWidth": 20,
+        "level": 3
     },
-    "4": {
+    {
         "militaryTactics": 0.75,
         "landMorale": 3.0,
         "infantryFire": 0.35,
@@ -57,9 +61,10 @@
         "artilleryFire": 0,
         "artilleryShock": 0,
         "maneuverValue": 0,
-        "combatWidth": 20
+        "combatWidth": 20,
+        "level": 4
     },
-    "5": {
+    {
         "militaryTactics": 0.75,
         "landMorale": 3.0,
         "infantryFire": 0.35,
@@ -69,9 +74,10 @@
         "artilleryFire": 0,
         "artilleryShock": 0,
         "maneuverValue": 0,
-        "combatWidth": 22
+        "combatWidth": 22,
+        "level": 5
     },
-    "6": {
+    {
         "militaryTactics": 1.0,
         "landMorale": 3.0,
         "infantryFire": 0.55,
@@ -81,9 +87,10 @@
         "artilleryFire": 0,
         "artilleryShock": 0,
         "maneuverValue": 0,
-        "combatWidth": 24
+        "combatWidth": 24,
+        "level": 6
     },
-    "7": {
+    {
         "militaryTactics": 1.25,
         "landMorale": 3.0,
         "infantryFire": 0.55,
@@ -93,9 +100,10 @@
         "artilleryFire": 1.0,
         "artilleryShock": 0.05,
         "maneuverValue": 0,
-        "combatWidth": 24
+        "combatWidth": 24,
+        "level": 7
     },
-    "8": {
+    {
         "militaryTactics": 1.25,
         "landMorale": 3.0,
         "infantryFire": 0.8,
@@ -105,9 +113,10 @@
         "artilleryFire": 1.0,
         "artilleryShock": 0.05,
         "maneuverValue": 0,
-        "combatWidth": 24
+        "combatWidth": 24,
+        "level": 8
     },
-    "9": {
+    {
         "militaryTactics": 1.5,
         "landMorale": 3.0,
         "infantryFire": 0.8,
@@ -117,9 +126,10 @@
         "artilleryFire": 1.0,
         "artilleryShock": 0.05,
         "maneuverValue": 0,
-        "combatWidth": 25
+        "combatWidth": 25,
+        "level": 9
     },
-    "10": {
+    {
         "militaryTactics": 1.5,
         "landMorale": 3.0,
         "infantryFire": 0.8,
@@ -129,9 +139,10 @@
         "artilleryFire": 1.0,
         "artilleryShock": 0.05,
         "maneuverValue": 0.25,
-        "combatWidth": 25
+        "combatWidth": 25,
+        "level": 10
     },
-    "11": {
+    {
         "militaryTactics": 1.5,
         "landMorale": 3.0,
         "infantryFire": 0.8,
@@ -141,9 +152,10 @@
         "artilleryFire": 1.0,
         "artilleryShock": 0.05,
         "maneuverValue": 0.25,
-        "combatWidth": 27
+        "combatWidth": 27,
+        "level": 11
     },
-    "12": {
+    {
         "militaryTactics": 1.75,
         "landMorale": 3.0,
         "infantryFire": 0.8,
@@ -153,9 +165,10 @@
         "artilleryFire": 1.0,
         "artilleryShock": 0.05,
         "maneuverValue": 0.25,
-        "combatWidth": 27
+        "combatWidth": 27,
+        "level": 12
     },
-    "13": {
+    {
         "militaryTactics": 1.75,
         "landMorale": 3.0,
         "infantryFire": 0.8,
@@ -165,9 +178,10 @@
         "artilleryFire": 1.4,
         "artilleryShock": 0.15000000000000002,
         "maneuverValue": 0.25,
-        "combatWidth": 27
+        "combatWidth": 27,
+        "level": 13
     },
-    "14": {
+    {
         "militaryTactics": 1.75,
         "landMorale": 3.0,
         "infantryFire": 1.1,
@@ -177,9 +191,10 @@
         "artilleryFire": 1.4,
         "artilleryShock": 0.15000000000000002,
         "maneuverValue": 0.25,
-        "combatWidth": 29
+        "combatWidth": 29,
+        "level": 14
     },
-    "15": {
+    {
         "militaryTactics": 2.0,
         "landMorale": 4.0,
         "infantryFire": 1.1,
@@ -189,9 +204,10 @@
         "artilleryFire": 1.4,
         "artilleryShock": 0.15000000000000002,
         "maneuverValue": 0.25,
-        "combatWidth": 29
+        "combatWidth": 29,
+        "level": 15
     },
-    "16": {
+    {
         "militaryTactics": 2.0,
         "landMorale": 4.0,
         "infantryFire": 1.1,
@@ -201,9 +217,10 @@
         "artilleryFire": 2.4,
         "artilleryShock": 0.25,
         "maneuverValue": 0.25,
-        "combatWidth": 30
+        "combatWidth": 30,
+        "level": 16
     },
-    "17": {
+    {
         "militaryTactics": 2.0,
         "landMorale": 4.0,
         "infantryFire": 1.1,
@@ -213,9 +230,10 @@
         "artilleryFire": 2.4,
         "artilleryShock": 0.25,
         "maneuverValue": 0.25,
-        "combatWidth": 30
+        "combatWidth": 30,
+        "level": 17
     },
-    "18": {
+    {
         "militaryTactics": 2.0,
         "landMorale": 4.0,
         "infantryFire": 1.1,
@@ -225,9 +243,10 @@
         "artilleryFire": 2.4,
         "artilleryShock": 0.25,
         "maneuverValue": 0.5,
-        "combatWidth": 32
+        "combatWidth": 32,
+        "level": 18
     },
-    "19": {
+    {
         "militaryTactics": 2.25,
         "landMorale": 4.0,
         "infantryFire": 1.1,
@@ -237,9 +256,10 @@
         "artilleryFire": 2.4,
         "artilleryShock": 0.25,
         "maneuverValue": 0.5,
-        "combatWidth": 32
+        "combatWidth": 32,
+        "level": 19
     },
-    "20": {
+    {
         "militaryTactics": 2.25,
         "landMorale": 4.0,
         "infantryFire": 1.6,
@@ -249,9 +269,10 @@
         "artilleryFire": 2.4,
         "artilleryShock": 0.25,
         "maneuverValue": 0.5,
-        "combatWidth": 34
+        "combatWidth": 34,
+        "level": 20
     },
-    "21": {
+    {
         "militaryTactics": 2.5,
         "landMorale": 4.0,
         "infantryFire": 1.6,
@@ -261,9 +282,10 @@
         "artilleryFire": 2.4,
         "artilleryShock": 0.25,
         "maneuverValue": 0.5,
-        "combatWidth": 34
+        "combatWidth": 34,
+        "level": 21
     },
-    "22": {
+    {
         "militaryTactics": 2.5,
         "landMorale": 4.0,
         "infantryFire": 1.6,
@@ -273,9 +295,10 @@
         "artilleryFire": 4.4,
         "artilleryShock": 0.35,
         "maneuverValue": 0.5,
-        "combatWidth": 36
+        "combatWidth": 36,
+        "level": 22
     },
-    "23": {
+    {
         "militaryTactics": 2.75,
         "landMorale": 4.0,
         "infantryFire": 1.6,
@@ -285,9 +308,10 @@
         "artilleryFire": 4.4,
         "artilleryShock": 0.35,
         "maneuverValue": 1.0,
-        "combatWidth": 36
+        "combatWidth": 36,
+        "level": 23
     },
-    "24": {
+    {
         "militaryTactics": 3.0,
         "landMorale": 4.0,
         "infantryFire": 1.6,
@@ -297,9 +321,10 @@
         "artilleryFire": 4.4,
         "artilleryShock": 0.35,
         "maneuverValue": 1.0,
-        "combatWidth": 38
+        "combatWidth": 38,
+        "level": 24
     },
-    "25": {
+    {
         "militaryTactics": 3.0,
         "landMorale": 4.0,
         "infantryFire": 1.6,
@@ -309,9 +334,10 @@
         "artilleryFire": 6.4,
         "artilleryShock": 0.44999999999999996,
         "maneuverValue": 1.0,
-        "combatWidth": 38
+        "combatWidth": 38,
+        "level": 25
     },
-    "26": {
+    {
         "militaryTactics": 3.0,
         "landMorale": 5.0,
         "infantryFire": 1.6,
@@ -321,9 +347,10 @@
         "artilleryFire": 6.4,
         "artilleryShock": 0.44999999999999996,
         "maneuverValue": 1.0,
-        "combatWidth": 40
+        "combatWidth": 40,
+        "level": 26
     },
-    "27": {
+    {
         "militaryTactics": 3.0,
         "landMorale": 5.0,
         "infantryFire": 2.1,
@@ -333,9 +360,10 @@
         "artilleryFire": 6.4,
         "artilleryShock": 0.44999999999999996,
         "maneuverValue": 1.0,
-        "combatWidth": 40
+        "combatWidth": 40,
+        "level": 27
     },
-    "28": {
+    {
         "militaryTactics": 3.0,
         "landMorale": 5.0,
         "infantryFire": 2.1,
@@ -345,9 +373,10 @@
         "artilleryFire": 6.4,
         "artilleryShock": 0.44999999999999996,
         "maneuverValue": 1.25,
-        "combatWidth": 40
+        "combatWidth": 40,
+        "level": 28
     },
-    "29": {
+    {
         "militaryTactics": 3.0,
         "landMorale": 5.0,
         "infantryFire": 2.1,
@@ -357,9 +386,10 @@
         "artilleryFire": 6.4,
         "artilleryShock": 0.44999999999999996,
         "maneuverValue": 1.25,
-        "combatWidth": 40
+        "combatWidth": 40,
+        "level": 29
     },
-    "30": {
+    {
         "militaryTactics": 3.25,
         "landMorale": 6.0,
         "infantryFire": 2.1,
@@ -369,9 +399,10 @@
         "artilleryFire": 6.4,
         "artilleryShock": 0.44999999999999996,
         "maneuverValue": 1.5,
-        "combatWidth": 40
+        "combatWidth": 40,
+        "level": 30
     },
-    "31": {
+    {
         "militaryTactics": 3.25,
         "landMorale": 6.0,
         "infantryFire": 3.1,
@@ -381,9 +412,10 @@
         "artilleryFire": 6.4,
         "artilleryShock": 0.44999999999999996,
         "maneuverValue": 1.5,
-        "combatWidth": 40
+        "combatWidth": 40,
+        "level": 31
     },
-    "32": {
+    {
         "militaryTactics": 3.5,
         "landMorale": 6.0,
         "infantryFire": 3.1,
@@ -393,6 +425,7 @@
         "artilleryFire": 8.4,
         "artilleryShock": 0.5499999999999999,
         "maneuverValue": 1.5,
-        "combatWidth": 40
+        "combatWidth": 40,
+        "level": 32
     }
-}
+]

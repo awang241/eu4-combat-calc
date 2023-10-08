@@ -1,13 +1,19 @@
 import React from 'react';
 import { useState } from 'react';
 import Army from './model/Army';
-import './App.css';
-import ArmyModifiersPanel from './components/ArmyModifiersPanel';
+
 import { Modifiers, createDefaultModifiers } from './types/Modifiers';
+import { RegimentTypes } from './model/Regiment';
+import ArmySnapshot from './types/ArmySnapshot';
+
+import ArmyModifiersPanel from './components/ArmyModifiersPanel';
 import RegimentsPanel, { RegimentCounts } from './components/RegimentsPanel';
 import BattleGrid from './components/BattleGrid';
-import ArmySnapshot from './types/ArmySnapshot';
-import { RegimentTypes } from './model/Regiment';
+import './App.css';
+
+import { parseUnits } from './util/Loader';
+import { TechGroup } from './types/TechGroup';
+import Unit, { blankUnit } from './types/Unit';
 
 declare global {
   interface Array<T> {
@@ -70,6 +76,7 @@ function combat(attacker: Army, defender: Army): [ArmySnapshot, ArmySnapshot][] 
 }
 
 export default function App() {
+  const units: Map<TechGroup, Unit[]> = parseUnits();
   const [results, setResults] = useState<[ArmySnapshot, ArmySnapshot][]>([]);
   const [attackerModifiers, setAttackerModifiers] = useState(createDefaultModifiers);
   const [defenderModifiers, setDefenderModifiers] = useState(createDefaultModifiers);
@@ -79,8 +86,10 @@ export default function App() {
   const handleSubmit = (event: React.MouseEvent<HTMLElement>) => {
     const attackerModifier: Modifiers = {...attackerModifiers};
     const defenderModifier: Modifiers = {...defenderModifiers};
-    const army1 = new Army(attackerCounts.infantry, attackerCounts.cavalry, attackerModifier);
-    const army2 = new Army(defenderCounts.infantry, defenderCounts.cavalry, defenderModifier);
+    const infUnit: Unit  = units.get(TechGroup.WESTERN)?.find(val => val.type === RegimentTypes.INFANTRY) ?? blankUnit(RegimentTypes.INFANTRY);
+    const cavUnit: Unit  = units.get(TechGroup.WESTERN)?.find(val => val.type === RegimentTypes.CAVALRY) ?? blankUnit(RegimentTypes.CAVALRY);
+    const army1 = new Army(attackerCounts.infantry, attackerCounts.cavalry, attackerModifier, infUnit, cavUnit);
+    const army2 = new Army(defenderCounts.infantry, defenderCounts.cavalry, defenderModifier, infUnit, cavUnit);
     setResults(combat(army1, army2));
   }
 

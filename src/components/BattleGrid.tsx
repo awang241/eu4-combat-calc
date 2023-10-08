@@ -60,6 +60,7 @@ function RegimentCell(props: {
                     <div className="tooltip">
                         <ul>
                             <li><strong>{`${props.regiment.type} Regiment`}</strong></li>
+                            <li>{`${props.regiment.unit.name}`}</li>
                             <li>{`ID: ${props.regiment.id}`}</li>
                             <li>{`Morale: ${props.regiment.currentMorale.toFixed(2)}/${props.regiment.maxMorale.toFixed(2)}`}</li>
                             <li>{`Strength: ${props.regiment.strength}/${Regiment.MAX_STRENGTH}`}</li>

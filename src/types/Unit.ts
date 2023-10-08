@@ -1,10 +1,23 @@
 import { RegimentTypes } from "../model/Regiment"
-import Pips from "./Pips"
+import Pips, { blankPips } from "./Pips"
+import { TechGroup } from "./TechGroup"
 
-export type Unit = {
+type Unit = {
     name: string,
     type: RegimentTypes,
-    techGroup: string,
+    techGroup: TechGroup,
     techLevel: number,
     pips: Pips
 }
+
+export function blankUnit(type: RegimentTypes): Unit {
+    return {
+        name: "",
+        type: type,
+        techGroup: TechGroup.NONE,
+        techLevel: 0,
+        pips: blankPips()
+    }
+}
+
+export default Unit

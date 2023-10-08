@@ -1,9 +1,14 @@
 import Pips from "../types/Pips";
+import Unit from "../types/Unit";
 
 export enum RegimentTypes {
   INFANTRY = "infantry",
   CAVALRY = "cavalry",
   ARTILLERY = "artillery",
+}
+
+export function inRegimentTypes(name: string) {
+  return Object.values(RegimentTypes).includes(name as RegimentTypes);
 }
 
 export default class Regiment{
@@ -15,25 +20,19 @@ export default class Regiment{
   private _strength: number;
   private _targetIndex?: number;
   private _target?: Regiment;
-  private _pips: Pips;
+  private _unit: Unit;
   private _type: RegimentTypes;
 
 
-  constructor(morale: number, type?: RegimentTypes) {
+  constructor(morale: number, unit: Unit) {
     Regiment.id++;
     this._id = Regiment.id;
     this._maxMorale = morale;
     this._currentMorale = morale;
     this._strength = Regiment.MAX_STRENGTH;
     this._targetIndex = undefined;
-
-    this._type = type ?? RegimentTypes.INFANTRY;
-    if (this._type === RegimentTypes.INFANTRY) {
-      this._pips = new Pips(0, 0, 0, 0, 1, 1);
-    } else {
-      this._pips = new Pips(0, 0, 1, 0, 1, 1);
-    }
-    Object.freeze(this._pips);
+    this._unit = unit
+    this._type = unit.type;
   }
   
   /**
@@ -59,7 +58,7 @@ export default class Regiment{
    * @returns an unmodifiable copy of this 
    */
   public unmodifiableCopy(): Regiment {
-    const copy = new Regiment(this.maxMorale);
+    const copy = new Regiment(this.maxMorale, this._unit);
     Object.assign(copy, this);
     Object.freeze(copy);
     return copy;
@@ -90,7 +89,7 @@ export default class Regiment{
 
   public get maxMorale(): number {return this._maxMorale;}
 
-  public get pips(): Pips {return this._pips;}
+  public get pips(): Pips {return this._unit.pips;}
 
   public get strength(): number {return this._strength;}
   public set strength(value: number) {this._strength = Math.max(Math.min(this._maxMorale, value), 0)}
@@ -99,4 +98,6 @@ export default class Regiment{
   public get targetIndex(): number | undefined {return this._targetIndex;} 
 
   public get type(): RegimentTypes {return this._type}
+
+  public get unit(): Unit {return this._unit}
 }  

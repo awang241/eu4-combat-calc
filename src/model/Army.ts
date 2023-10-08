@@ -1,5 +1,7 @@
 import ArmySnapshot from "../types/ArmySnapshot";
 import { Modifiers, toMultiplier } from "../types/Modifiers";
+import { getDefencePips, getOffencePips } from "../types/Pips";
+import Unit from "../types/Unit";
 import Regiment, { RegimentTypes } from "./Regiment";
 import Row from "./Row";
 
@@ -29,19 +31,25 @@ export default class Army {
 
     /**
      * Create a new Army object with the given number of infantry regiments.
-     * @param {number} infantry The number of infantry regiments.
+     * @param infantry The number of infantry regiments.
      * @param cavalry The number of cavalry regiments.
-     * @param {number} modifiers The army-level modifiers (morale, discipline, etc...) for this army.
+     * @param modifiers The army-level modifiers (morale, discipline, etc...) for this army.
      */
-    constructor(infantry: number, cavalry: number, modifiers: Modifiers) {
+    constructor(
+            infantry: number,
+            cavalry: number,
+            modifiers: Modifiers,
+            infantryUnit: Unit,
+            cavalryUnit: Unit
+    ) {
         this.front = new Row(0)
         this.reserves = new Array<Regiment>();
         this.regiments =  new Array<Regiment>();
         for (let i = 0; i < infantry; i++) {
-            this.regiments.push(new Regiment(modifiers.morale))
+            this.regiments.push(new Regiment(modifiers.morale, infantryUnit))
         }
         for (let i = 0; i < cavalry; i++) {
-            this.regiments.push(new Regiment(modifiers.morale, RegimentTypes.CAVALRY))
+            this.regiments.push(new Regiment(modifiers.morale, cavalryUnit))
         }
         this._modifiers = modifiers;
         Object.freeze(modifiers);
@@ -88,7 +96,7 @@ export default class Army {
         const MORALE_DIVISOR = 540;
         for (const regiment of this.front) {
             if (regiment !== undefined && regiment.target !== undefined && regiment.targetIndex !== undefined) {
-                const strengthPips = battlePips + regiment.pips.offencePips(isFirePhase)- regiment.target.pips.defencePips(isFirePhase);
+                const strengthPips = battlePips + getOffencePips(regiment.pips, isFirePhase) - getDefencePips(regiment.target.pips, isFirePhase);
                 const moralePips = strengthPips + regiment.pips.moraleOffence - regiment.target.pips.moraleDefence;
 
                 const phaseDamageBonus = toMultiplier(isFirePhase ? this.modifiers.fireDamage: this.modifiers.shockDamage);

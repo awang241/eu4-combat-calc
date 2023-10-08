@@ -1,7 +1,8 @@
-{
-    "aboriginal_warrior": {
+[
+    {
         "name": "Aboriginal Spearman",
-        "unitType": "aboriginalTech",
+        "id": "aboriginal_warrior",
+        "unitType": "aboriginal_tech",
         "type": "infantry",
         "maneuver": 1,
         "offensiveMorale": 1,
@@ -12,9 +13,10 @@
         "defensiveShock": 0,
         "techLevel": 1
     },
-    "aboriginal_ambusher": {
+    {
         "name": "Aboriginal Ambusher",
-        "unitType": "aboriginalTech",
+        "id": "aboriginal_ambusher",
+        "unitType": "aboriginal_tech",
         "type": "infantry",
         "maneuver": 1,
         "offensiveMorale": 1,
@@ -25,8 +27,9 @@
         "defensiveShock": 2,
         "techLevel": 5
     },
-    "eastern_bow": {
+    {
         "name": "East Asian Archer Cavalry",
+        "id": "eastern_bow",
         "type": "cavalry",
         "unitType": "chinese",
         "maneuver": 2,
@@ -38,10 +41,11 @@
         "defensiveShock": 0,
         "techLevel": 1
     },
-    "steppe_raiders": {
+    {
         "name": "Steppe Raiders",
+        "id": "steppe_raiders",
         "type": "infantry",
-        "unitType": "nomadGroup",
+        "unitType": "nomad_group",
         "maneuver": 1,
         "offensiveMorale": 1,
         "defensiveMorale": 2,
@@ -51,8 +55,9 @@
         "defensiveShock": 1,
         "techLevel": 9
     },
-    "eastern_militia": {
+    {
         "name": "Eastern Militia",
+        "id": "eastern_militia",
         "type": "infantry",
         "unitType": "eastern",
         "maneuver": 1,
@@ -64,9 +69,10 @@
         "defensiveShock": 1,
         "techLevel": 5
     },
-    "niger_kongolese_gunpowder_warfare": {
+    {
         "name": "Central African Musketeers",
-        "unitType": "subSaharan",
+        "id": "niger_kongolese_gunpowder_warfare",
+        "unitType": "sub_saharan",
         "type": "infantry",
         "maneuver": 1,
         "offensiveMorale": 2,
@@ -77,9 +83,10 @@
         "defensiveShock": 2,
         "techLevel": 15
     },
-    "aboriginal_guerrillas": {
+    {
         "name": "Black War Infantry",
-        "unitType": "aboriginalTech",
+        "id": "aboriginal_guerrillas",
+        "unitType": "aboriginal_tech",
         "type": "infantry",
         "maneuver": 1,
         "offensiveMorale": 3,
@@ -90,8 +97,9 @@
         "defensiveShock": 3,
         "techLevel": 26
     },
-    "prussian_frederickian": {
+    {
         "name": "Frederickian Infantry",
+        "id": "prussian_frederickian",
         "type": "infantry",
         "unitType": "western",
         "maneuver": 1,
@@ -103,9 +111,10 @@
         "defensiveShock": 3,
         "techLevel": 26
     },
-    "threedecker": {
+    {
         "name": "Threedecker",
-        "type": "heavyShip",
+        "id": "threedecker",
+        "type": "heavy_ship",
         "hullSize": 90,
         "baseCannons": 120,
         "blockade": 5,
@@ -113,8 +122,9 @@
         "sailors": 900,
         "spriteLevel": 6
     },
-    "zaporoghian_cossack": {
+    {
         "name": "Southern Cossacks",
+        "id": "zaporoghian_cossack",
         "type": "cavalry",
         "unitType": "eastern",
         "maneuver": 2,
@@ -126,8 +136,9 @@
         "defensiveShock": 2,
         "techLevel": 14
     },
-    "trabakul": {
+    {
         "name": "Trabakul",
+        "id": "trabakul",
         "type": "transport",
         "hullSize": 30,
         "baseCannons": 10,
@@ -136,8 +147,9 @@
         "sailors": 90,
         "spriteLevel": 4
     },
-    "mixed_order_infantry": {
+    {
         "name": "Mixed Order Infantry",
+        "id": "mixed_order_infantry",
         "unitType": "western",
         "type": "infantry",
         "maneuver": 1,
@@ -149,10 +161,11 @@
         "defensiveShock": 3,
         "techLevel": 30
     },
-    "african_swarm": {
+    {
         "name": "African Swarm Cavalry",
+        "id": "african_swarm",
         "type": "cavalry",
-        "unitType": "subSaharan",
+        "unitType": "sub_saharan",
         "maneuver": 2,
         "offensiveMorale": 3,
         "defensiveMorale": 2,
@@ -162,9 +175,10 @@
         "defensiveShock": 3,
         "techLevel": 17
     },
-    "frigate": {
+    {
         "name": "Frigate",
-        "type": "lightShip",
+        "id": "frigate",
+        "type": "light_ship",
         "hullSize": 16,
         "baseCannons": 20,
         "blockade": 10,
@@ -173,8 +187,9 @@
         "sailors": 125,
         "spriteLevel": 4
     },
-    "mughal_musketeer": {
+    {
         "name": "Toofangchis",
+        "id": "mughal_musketeer",
         "type": "infantry",
         "unitType": "indian",
         "maneuver": 1,
@@ -186,9 +201,10 @@
         "defensiveShock": 1,
         "techLevel": 9
     },
-    "bantu_plains_warfare": {
+    {
         "name": "African Plains Warriors",
-        "unitType": "subSaharan",
+        "id": "bantu_plains_warfare",
+        "unitType": "sub_saharan",
         "type": "infantry",
         "maneuver": 1,
         "offensiveMorale": 2,
@@ -199,9 +215,10 @@
         "defensiveShock": 2,
         "techLevel": 12
     },
-    "pacific_swarm_cav": {
+    {
         "name": "Polynesian Swarm Cavalry",
-        "unitType": "polynesianTech",
+        "id": "pacific_swarm_cav",
+        "unitType": "polynesian_tech",
         "type": "cavalry",
         "maneuver": 2,
         "offensiveMorale": 3,
@@ -212,9 +229,10 @@
         "defensiveShock": 3,
         "techLevel": 18
     },
-    "south_american_warfare": {
+    {
         "name": "American Mountain Warriors",
-        "unitType": "southAmerican",
+        "id": "south_american_warfare",
+        "unitType": "south_american",
         "type": "infantry",
         "maneuver": 1,
         "offensiveMorale": 1,
@@ -225,8 +243,9 @@
         "defensiveShock": 1,
         "techLevel": 1
     },
-    "east_asian_spearmen": {
+    {
         "name": "East Asian Spearmen",
+        "id": "east_asian_spearmen",
         "type": "infantry",
         "unitType": "chinese",
         "maneuver": 1,
@@ -238,10 +257,11 @@
         "defensiveShock": 1,
         "techLevel": 1
     },
-    "mongol_steppe": {
+    {
         "name": "Eastern Steppe Cavalry",
+        "id": "mongol_steppe",
         "type": "cavalry",
-        "unitType": "nomadGroup",
+        "unitType": "nomad_group",
         "maneuver": 2,
         "offensiveMorale": 2,
         "defensiveMorale": 2,
@@ -251,9 +271,10 @@
         "defensiveShock": 1,
         "techLevel": 1
     },
-    "african_hill_warfare": {
+    {
         "name": "African Hill Warriors",
-        "unitType": "subSaharan",
+        "id": "african_hill_warfare",
+        "unitType": "sub_saharan",
         "type": "infantry",
         "maneuver": 1,
         "offensiveMorale": 2,
@@ -264,9 +285,10 @@
         "defensiveShock": 2,
         "techLevel": 12
     },
-    "huron_arquebusier": {
+    {
         "name": "Native American Arquebusier",
-        "unitType": "northAmerican",
+        "id": "huron_arquebusier",
+        "unitType": "north_american",
         "type": "infantry",
         "maneuver": 1,
         "offensiveMorale": 3,
@@ -277,10 +299,11 @@
         "defensiveShock": 1,
         "techLevel": 14
     },
-    "mongol_bow": {
+    {
         "name": "Eastern Archers",
+        "id": "mongol_bow",
         "type": "infantry",
-        "unitType": "nomadGroup",
+        "unitType": "nomad_group",
         "maneuver": 1,
         "offensiveMorale": 1,
         "defensiveMorale": 1,
@@ -290,10 +313,11 @@
         "defensiveShock": 1,
         "techLevel": 1
     },
-    "reformed_steppe_rifles": {
+    {
         "name": "Reformed Steppe Rifles",
+        "id": "reformed_steppe_rifles",
         "type": "infantry",
-        "unitType": "nomadGroup",
+        "unitType": "nomad_group",
         "maneuver": 1,
         "offensiveMorale": 4,
         "defensiveMorale": 4,
@@ -303,8 +327,9 @@
         "defensiveShock": 3,
         "techLevel": 30
     },
-    "japanese_footsoldier": {
+    {
         "name": "Defensive Asian Foot Soldier",
+        "id": "japanese_footsoldier",
         "type": "infantry",
         "unitType": "chinese",
         "maneuver": 1,
@@ -316,8 +341,9 @@
         "defensiveShock": 1,
         "techLevel": 5
     },
-    "ottoman_lancer": {
+    {
         "name": "Reformed Lancer",
+        "id": "ottoman_lancer",
         "type": "cavalry",
         "unitType": "ottoman",
         "maneuver": 2,
@@ -329,8 +355,9 @@
         "defensiveShock": 3,
         "techLevel": 28
     },
-    "western_medieval_knights": {
+    {
         "name": "Latin Knights",
+        "id": "western_medieval_knights",
         "type": "cavalry",
         "unitType": "western",
         "maneuver": 2,
@@ -342,8 +369,9 @@
         "defensiveShock": 0,
         "techLevel": 1
     },
-    "russian_petrine": {
+    {
         "name": "Petrine Infantry",
+        "id": "russian_petrine",
         "type": "infantry",
         "unitType": "eastern",
         "maneuver": 1,
@@ -355,8 +383,9 @@
         "defensiveShock": 3,
         "techLevel": 23
     },
-    "muscovite_caracolle": {
+    {
         "name": "Eastern Caracole",
+        "id": "muscovite_caracolle",
         "type": "cavalry",
         "unitType": "eastern",
         "maneuver": 2,
@@ -368,8 +397,9 @@
         "defensiveShock": 2,
         "techLevel": 14
     },
-    "central_american_horsemen": {
+    {
         "name": "Central American Horsemen",
+        "id": "central_american_horsemen",
         "unitType": "mesoamerican",
         "type": "cavalry",
         "maneuver": 2,
@@ -381,10 +411,11 @@
         "defensiveShock": 1,
         "techLevel": 6
     },
-    "african_somali_cavalry": {
+    {
         "name": "Somali Light Cavalry",
+        "id": "african_somali_cavalry",
         "type": "cavalry",
-        "unitType": "subSaharan",
+        "unitType": "sub_saharan",
         "maneuver": 2,
         "offensiveMorale": 1,
         "defensiveMorale": 2,
@@ -394,9 +425,10 @@
         "defensiveShock": 1,
         "techLevel": 6
     },
-    "aboriginal_reformed_boomerang": {
+    {
         "name": "Reformed Boomerang Warrior",
-        "unitType": "aboriginalTech",
+        "id": "aboriginal_reformed_boomerang",
+        "unitType": "aboriginal_tech",
         "type": "infantry",
         "maneuver": 1,
         "offensiveMorale": 1,
@@ -407,8 +439,9 @@
         "defensiveShock": 1,
         "techLevel": 5
     },
-    "central_american_dragoon": {
+    {
         "name": "Central American Dragoon",
+        "id": "central_american_dragoon",
         "unitType": "mesoamerican",
         "type": "cavalry",
         "maneuver": 2,
@@ -420,8 +453,9 @@
         "defensiveShock": 3,
         "techLevel": 23
     },
-    "large_cast_bronze_mortar": {
+    {
         "name": "Large Cast Bronze Mortar",
+        "id": "large_cast_bronze_mortar",
         "type": "artillery",
         "maneuver": 2,
         "offensiveMorale": 2,
@@ -432,8 +466,9 @@
         "defensiveShock": 0,
         "techLevel": 7
     },
-    "reformed_manchu_rifle": {
+    {
         "name": "Green Standard Cavalry",
+        "id": "reformed_manchu_rifle",
         "type": "cavalry",
         "unitType": "chinese",
         "maneuver": 2,
@@ -445,10 +480,11 @@
         "defensiveShock": 4,
         "techLevel": 28
     },
-    "african_mandelaku": {
+    {
         "name": "Mandekalu Cavalry",
+        "id": "african_mandelaku",
         "type": "cavalry",
-        "unitType": "subSaharan",
+        "unitType": "sub_saharan",
         "maneuver": 2,
         "offensiveMorale": 1,
         "defensiveMorale": 1,
@@ -458,8 +494,9 @@
         "defensiveShock": 1,
         "techLevel": 1
     },
-    "napoleonic_square": {
+    {
         "name": "Napoleonic Square",
+        "id": "napoleonic_square",
         "unitType": "western",
         "type": "infantry",
         "maneuver": 1,
@@ -471,9 +508,10 @@
         "defensiveShock": 3,
         "techLevel": 30
     },
-    "ethiopian_gunpowder_warfare": {
+    {
         "name": "North African Musketeers",
-        "unitType": "subSaharan",
+        "id": "ethiopian_gunpowder_warfare",
+        "unitType": "sub_saharan",
         "type": "infantry",
         "maneuver": 1,
         "offensiveMorale": 1,
@@ -484,8 +522,9 @@
         "defensiveShock": 3,
         "techLevel": 15
     },
-    "chambered_demi_cannon": {
+    {
         "name": "Chambered Demi-Cannon",
+        "id": "chambered_demi_cannon",
         "type": "artillery",
         "maneuver": 2,
         "offensiveMorale": 2,
@@ -496,8 +535,9 @@
         "defensiveShock": 1,
         "techLevel": 16
     },
-    "eastern_uhlan": {
+    {
         "name": "Eastern Uhlan",
+        "id": "eastern_uhlan",
         "type": "cavalry",
         "unitType": "ottoman",
         "maneuver": 2,
@@ -509,8 +549,9 @@
         "defensiveShock": 4,
         "techLevel": 26
     },
-    "qizilbash_cavalry": {
+    {
         "name": "Qizilbash Cavalry",
+        "id": "qizilbash_cavalry",
         "type": "cavalry",
         "unitType": "muslim",
         "maneuver": 2,
@@ -522,9 +563,10 @@
         "defensiveShock": 2,
         "techLevel": 10
     },
-    "adal_guerilla_warfare": {
+    {
         "name": "East African Guerrillas",
-        "unitType": "subSaharan",
+        "id": "adal_guerilla_warfare",
+        "unitType": "sub_saharan",
         "type": "infantry",
         "maneuver": 1,
         "offensiveMorale": 2,
@@ -535,8 +577,9 @@
         "defensiveShock": 2,
         "techLevel": 23
     },
-    "archipelago_frigate": {
+    {
         "name": "Archipelago Frigate",
+        "id": "archipelago_frigate",
         "type": "galley",
         "hullSize": 24,
         "baseCannons": 36,
@@ -545,9 +588,10 @@
         "sailors": 180,
         "spriteLevel": 6
     },
-    "pacific_cavalry": {
+    {
         "name": "Polynesian Cavalry",
-        "unitType": "polynesianTech",
+        "id": "pacific_cavalry",
+        "unitType": "polynesian_tech",
         "type": "cavalry",
         "maneuver": 2,
         "offensiveMorale": 2,
@@ -558,9 +602,10 @@
         "defensiveShock": 2,
         "techLevel": 10
     },
-    "aboriginal_dragoon": {
+    {
         "name": "Aboriginal Dragoon",
-        "unitType": "aboriginalTech",
+        "id": "aboriginal_dragoon",
+        "unitType": "aboriginal_tech",
         "type": "cavalry",
         "maneuver": 2,
         "offensiveMorale": 4,
@@ -571,10 +616,11 @@
         "defensiveShock": 3,
         "techLevel": 23
     },
-    "african_abyssinian_light_cavalry": {
+    {
         "name": "Abyssinian Light Cavalry",
+        "id": "african_abyssinian_light_cavalry",
         "type": "cavalry",
-        "unitType": "subSaharan",
+        "unitType": "sub_saharan",
         "maneuver": 2,
         "offensiveMorale": 2,
         "defensiveMorale": 0,
@@ -584,9 +630,10 @@
         "defensiveShock": 1,
         "techLevel": 1
     },
-    "incan_slingshots": {
+    {
         "name": "Incan Slingshots",
-        "unitType": "southAmerican",
+        "id": "incan_slingshots",
+        "unitType": "south_american",
         "type": "infantry",
         "maneuver": 1,
         "offensiveMorale": 1,
@@ -597,9 +644,10 @@
         "defensiveShock": 1,
         "techLevel": 5
     },
-    "twodecker": {
+    {
         "name": "Twodecker",
-        "type": "heavyShip",
+        "id": "twodecker",
+        "type": "heavy_ship",
         "hullSize": 75,
         "baseCannons": 100,
         "blockade": 5,
@@ -607,8 +655,9 @@
         "sailors": 750,
         "spriteLevel": 5
     },
-    "asian_arquebusier": {
+    {
         "name": "Asian Arquebusier",
+        "id": "asian_arquebusier",
         "type": "infantry",
         "unitType": "chinese",
         "maneuver": 1,
@@ -620,8 +669,9 @@
         "defensiveShock": 1,
         "techLevel": 9
     },
-    "muslim_dragoon": {
+    {
         "name": "Muslim Dragoon",
+        "id": "muslim_dragoon",
         "type": "cavalry",
         "unitType": "muslim",
         "maneuver": 2,
@@ -633,10 +683,11 @@
         "defensiveShock": 4,
         "techLevel": 23
     },
-    "african_hussar": {
+    {
         "name": "African Hussar",
+        "id": "african_hussar",
         "type": "cavalry",
-        "unitType": "subSaharan",
+        "unitType": "sub_saharan",
         "maneuver": 2,
         "offensiveMorale": 3,
         "defensiveMorale": 3,
@@ -646,8 +697,9 @@
         "defensiveShock": 2,
         "techLevel": 14
     },
-    "shaybani": {
+    {
         "name": "Shaybanid Cavalry",
+        "id": "shaybani",
         "type": "cavalry",
         "unitType": "muslim",
         "maneuver": 2,
@@ -659,8 +711,9 @@
         "defensiveShock": 1,
         "techLevel": 6
     },
-    "reformed_asian_cavalry": {
+    {
         "name": "Reformed Asian Cavalry",
+        "id": "reformed_asian_cavalry",
         "type": "cavalry",
         "unitType": "chinese",
         "maneuver": 2,
@@ -672,9 +725,10 @@
         "defensiveShock": 4,
         "techLevel": 28
     },
-    "songhai_tribal_warfare": {
+    {
         "name": "West African Warrior",
-        "unitType": "subSaharan",
+        "id": "songhai_tribal_warfare",
+        "unitType": "sub_saharan",
         "type": "infantry",
         "maneuver": 1,
         "offensiveMorale": 1,
@@ -685,8 +739,9 @@
         "defensiveShock": 2,
         "techLevel": 5
     },
-    "french_carabinier": {
+    {
         "name": "Carabiniers",
+        "id": "french_carabinier",
         "type": "cavalry",
         "unitType": "western",
         "maneuver": 2,
@@ -698,8 +753,9 @@
         "defensiveShock": 4,
         "techLevel": 26
     },
-    "tipu_sultan_rocket": {
+    {
         "name": "Indian Drill Infantry",
+        "id": "tipu_sultan_rocket",
         "type": "infantry",
         "unitType": "indian",
         "maneuver": 1,
@@ -711,8 +767,9 @@
         "defensiveShock": 3,
         "techLevel": 30
     },
-    "prussian_drill": {
+    {
         "name": "Drill Infantry",
+        "id": "prussian_drill",
         "type": "infantry",
         "unitType": "western",
         "maneuver": 1,
@@ -724,9 +781,10 @@
         "defensiveShock": 3,
         "techLevel": 30
     },
-    "commanche_swarm": {
+    {
         "name": "North American Swarm Cavalry",
-        "unitType": "northAmerican",
+        "id": "commanche_swarm",
+        "unitType": "north_american",
         "type": "cavalry",
         "maneuver": 2,
         "offensiveMorale": 3,
@@ -737,8 +795,9 @@
         "defensiveShock": 3,
         "techLevel": 19
     },
-    "irish_charge": {
+    {
         "name": "Charge Infantry",
+        "id": "irish_charge",
         "type": "infantry",
         "unitType": "western",
         "maneuver": 1,
@@ -750,8 +809,9 @@
         "defensiveShock": 1,
         "techLevel": 15
     },
-    "chebeck": {
+    {
         "name": "Chebeck",
+        "id": "chebeck",
         "type": "galley",
         "hullSize": 20,
         "baseCannons": 30,
@@ -760,8 +820,9 @@
         "sailors": 150,
         "spriteLevel": 5
     },
-    "ottoman_azab": {
+    {
         "name": "Azab Infantry",
+        "id": "ottoman_azab",
         "type": "infantry",
         "unitType": "ottoman",
         "maneuver": 1,
@@ -773,8 +834,9 @@
         "defensiveShock": 1,
         "techLevel": 5
     },
-    "galleass": {
+    {
         "name": "Galleass",
+        "id": "galleass",
         "type": "galley",
         "hullSize": 12,
         "baseCannons": 18,
@@ -783,9 +845,10 @@
         "sailSpeed": "4.25",
         "spriteLevel": 3
     },
-    "african_clubmen": {
+    {
         "name": "African Clubmen",
-        "unitType": "subSaharan",
+        "id": "african_clubmen",
+        "unitType": "sub_saharan",
         "type": "infantry",
         "maneuver": 1,
         "offensiveMorale": 1,
@@ -796,9 +859,10 @@
         "defensiveShock": 0,
         "techLevel": 1
     },
-    "south_american_arquebusier": {
+    {
         "name": "South American Arquebusier",
-        "unitType": "southAmerican",
+        "id": "south_american_arquebusier",
+        "unitType": "south_american",
         "type": "infantry",
         "maneuver": 1,
         "offensiveMorale": 2,
@@ -809,8 +873,9 @@
         "defensiveShock": 1,
         "techLevel": 10
     },
-    "south_indian_musketeer": {
+    {
         "name": "Poligar Infantry",
+        "id": "south_indian_musketeer",
         "type": "infantry",
         "unitType": "indian",
         "maneuver": 1,
@@ -822,8 +887,9 @@
         "defensiveShock": 1,
         "techLevel": 9
     },
-    "brig": {
+    {
         "name": "Brig",
+        "id": "brig",
         "type": "transport",
         "hullSize": 18,
         "baseCannons": 6,
@@ -832,10 +898,11 @@
         "sailors": 70,
         "spriteLevel": 3
     },
-    "african_abyssinian_cavalry": {
+    {
         "name": "Abyssinian Barded Cavalry",
+        "id": "african_abyssinian_cavalry",
         "type": "cavalry",
-        "unitType": "subSaharan",
+        "unitType": "sub_saharan",
         "maneuver": 2,
         "offensiveMorale": 3,
         "defensiveMorale": 2,
@@ -845,8 +912,9 @@
         "defensiveShock": 2,
         "techLevel": 10
     },
-    "schwarze_reiter": {
+    {
         "name": "Schwarze Reiter",
+        "id": "schwarze_reiter",
         "type": "cavalry",
         "unitType": "western",
         "maneuver": 2,
@@ -858,9 +926,10 @@
         "defensiveShock": 1,
         "techLevel": 10
     },
-    "bantu_gunpowder_warfare": {
+    {
         "name": "South African Musketeers",
-        "unitType": "subSaharan",
+        "id": "bantu_gunpowder_warfare",
+        "unitType": "sub_saharan",
         "type": "infantry",
         "maneuver": 1,
         "offensiveMorale": 2,
@@ -871,8 +940,9 @@
         "defensiveShock": 2,
         "techLevel": 15
     },
-    "aztec_hill_warfare": {
+    {
         "name": "Reformed American Hill Warriors",
+        "id": "aztec_hill_warfare",
         "unitType": "mesoamerican",
         "type": "infantry",
         "maneuver": 1,
@@ -884,9 +954,10 @@
         "defensiveShock": 1,
         "techLevel": 10
     },
-    "wargalleon": {
+    {
         "name": "War Galleon",
-        "type": "heavyShip",
+        "id": "wargalleon",
+        "type": "heavy_ship",
         "hullSize": 60,
         "baseCannons": 80,
         "blockade": 5,
@@ -894,8 +965,9 @@
         "sailors": 600,
         "spriteLevel": 4
     },
-    "central_american_rifle_cavalry": {
+    {
         "name": "Central American Cavalry",
+        "id": "central_american_rifle_cavalry",
         "unitType": "mesoamerican",
         "type": "cavalry",
         "maneuver": 2,
@@ -907,8 +979,9 @@
         "defensiveShock": 2,
         "techLevel": 10
     },
-    "anglofrench_line": {
+    {
         "name": "Line Infantry",
+        "id": "anglofrench_line",
         "type": "infantry",
         "unitType": "western",
         "maneuver": 1,
@@ -920,8 +993,9 @@
         "defensiveShock": 2,
         "techLevel": 23
     },
-    "eastern_knights": {
+    {
         "name": "Eastern Knights",
+        "id": "eastern_knights",
         "type": "cavalry",
         "unitType": "eastern",
         "maneuver": 2,
@@ -933,10 +1007,11 @@
         "defensiveShock": 0,
         "techLevel": 1
     },
-    "steppe_riders": {
+    {
         "name": "Steppe Riders",
+        "id": "steppe_riders",
         "type": "cavalry",
-        "unitType": "nomadGroup",
+        "unitType": "nomad_group",
         "maneuver": 2,
         "offensiveMorale": 3,
         "defensiveMorale": 2,
@@ -946,9 +1021,10 @@
         "defensiveShock": 2,
         "techLevel": 10
     },
-    "aboriginal_tasmanian_arquebusier": {
+    {
         "name": "Offensive Arquebusier",
-        "unitType": "aboriginalTech",
+        "id": "aboriginal_tasmanian_arquebusier",
+        "unitType": "aboriginal_tech",
         "type": "infantry",
         "maneuver": 1,
         "offensiveMorale": 2,
@@ -959,8 +1035,9 @@
         "defensiveShock": 2,
         "techLevel": 14
     },
-    "swedish_gallop": {
+    {
         "name": "Gallop Cavalry",
+        "id": "swedish_gallop",
         "type": "cavalry",
         "unitType": "western",
         "maneuver": 2,
@@ -972,9 +1049,10 @@
         "defensiveShock": 3,
         "techLevel": 18
     },
-    "native_indian_mountain_warfare": {
+    {
         "name": "Native American Mountain Warriors",
-        "unitType": "northAmerican",
+        "id": "native_indian_mountain_warfare",
+        "unitType": "north_american",
         "type": "infantry",
         "maneuver": 1,
         "offensiveMorale": 2,
@@ -985,9 +1063,10 @@
         "defensiveShock": 2,
         "techLevel": 10
     },
-    "sioux_dragoon": {
+    {
         "name": "North American Dragoon",
-        "unitType": "northAmerican",
+        "id": "sioux_dragoon",
+        "unitType": "north_american",
         "type": "cavalry",
         "maneuver": 2,
         "offensiveMorale": 4,
@@ -998,8 +1077,9 @@
         "defensiveShock": 3,
         "techLevel": 23
     },
-    "zapotec_tribal_warfare": {
+    {
         "name": "American Plains Warriors",
+        "id": "zapotec_tribal_warfare",
         "unitType": "mesoamerican",
         "type": "infantry",
         "maneuver": 1,
@@ -1011,8 +1091,9 @@
         "defensiveShock": 0,
         "techLevel": 5
     },
-    "muscovite_musketeer": {
+    {
         "name": "Offensive Eastern Musketeers",
+        "id": "muscovite_musketeer",
         "type": "infantry",
         "unitType": "eastern",
         "maneuver": 1,
@@ -1024,9 +1105,10 @@
         "defensiveShock": 1,
         "techLevel": 12
     },
-    "early_carrack": {
+    {
         "name": "Early Carrack",
-        "type": "heavyShip",
+        "id": "early_carrack",
+        "type": "heavy_ship",
         "hullSize": 30,
         "baseCannons": 40,
         "blockade": 5,
@@ -1034,8 +1116,9 @@
         "sailors": 200,
         "spriteLevel": 1
     },
-    "french_caracolle": {
+    {
         "name": "Latin Caracole Cavalry",
+        "id": "french_caracolle",
         "type": "cavalry",
         "unitType": "western",
         "maneuver": 2,
@@ -1047,9 +1130,10 @@
         "defensiveShock": 2,
         "techLevel": 14
     },
-    "pacific_dragoon": {
+    {
         "name": "1 \"Polynesian Dragoons",
-        "unitType": "polynesianTech",
+        "id": "pacific_dragoon",
+        "unitType": "polynesian_tech",
         "type": "cavalry",
         "maneuver": 2,
         "offensiveMorale": 4,
@@ -1060,9 +1144,10 @@
         "defensiveShock": 3,
         "techLevel": 23
     },
-    "westernized_incan": {
+    {
         "name": "Westernized Incan Infantry",
-        "unitType": "southAmerican",
+        "id": "westernized_incan",
+        "unitType": "south_american",
         "type": "infantry",
         "maneuver": 1,
         "offensiveMorale": 3,
@@ -1073,8 +1158,9 @@
         "defensiveShock": 3,
         "techLevel": 26
     },
-    "mamluk_archer": {
+    {
         "name": "Muslim Archer",
+        "id": "mamluk_archer",
         "type": "infantry",
         "unitType": "muslim",
         "maneuver": 1,
@@ -1086,9 +1172,10 @@
         "defensiveShock": 1,
         "techLevel": 1
     },
-    "ha_xoloti": {
+    {
         "name": "Xoloti",
-        "unitType": "highAmerican",
+        "id": "ha_xoloti",
+        "unitType": "high_american",
         "type": "infantry",
         "maneuver": 1,
         "offensiveFire": 3,
@@ -1099,8 +1186,9 @@
         "defensiveMorale": 3,
         "techLevel": 18
     },
-    "rajput_hill_fighters": {
+    {
         "name": "Indian Cavalry",
+        "id": "rajput_hill_fighters",
         "type": "cavalry",
         "unitType": "indian",
         "maneuver": 2,
@@ -1112,8 +1200,9 @@
         "defensiveShock": 1,
         "techLevel": 1
     },
-    "saxon_infantry": {
+    {
         "name": "Saxon Infantry",
+        "id": "saxon_infantry",
         "type": "infantry",
         "unitType": "eastern",
         "maneuver": 1,
@@ -1125,8 +1214,9 @@
         "defensiveShock": 2,
         "techLevel": 19
     },
-    "eastern_carabinier": {
+    {
         "name": "Eastern Carabinier",
+        "id": "eastern_carabinier",
         "type": "infantry",
         "unitType": "ottoman",
         "maneuver": 1,
@@ -1138,8 +1228,9 @@
         "defensiveShock": 3,
         "techLevel": 26
     },
-    "open_order_cavalry": {
+    {
         "name": "Latin Chasseur",
+        "id": "open_order_cavalry",
         "unitType": "western",
         "type": "cavalry",
         "maneuver": 2,
@@ -1151,8 +1242,9 @@
         "defensiveShock": 4,
         "techLevel": 28
     },
-    "grand_battery": {
+    {
         "name": "Grand Battery",
+        "id": "grand_battery",
         "type": "artillery",
         "maneuver": 2,
         "offensiveMorale": 3,
@@ -1163,8 +1255,9 @@
         "defensiveShock": 4,
         "techLevel": 29
     },
-    "indian_arquebusier": {
+    {
         "name": "Indian Arquebusier",
+        "id": "indian_arquebusier",
         "type": "infantry",
         "unitType": "indian",
         "maneuver": 1,
@@ -1176,9 +1269,10 @@
         "defensiveShock": 1,
         "techLevel": 5
     },
-    "south_american_dragoon": {
+    {
         "name": "South American Dragoon",
-        "unitType": "southAmerican",
+        "id": "south_american_dragoon",
+        "unitType": "south_american",
         "type": "cavalry",
         "maneuver": 2,
         "offensiveMorale": 4,
@@ -1189,10 +1283,11 @@
         "defensiveShock": 3,
         "techLevel": 23
     },
-    "steppe_uhlans": {
+    {
         "name": "Steppe Uhlans",
+        "id": "steppe_uhlans",
         "type": "cavalry",
-        "unitType": "nomadGroup",
+        "unitType": "nomad_group",
         "maneuver": 2,
         "offensiveMorale": 4,
         "defensiveMorale": 3,
@@ -1202,8 +1297,9 @@
         "defensiveShock": 4,
         "techLevel": 28
     },
-    "asian_mass_infantry": {
+    {
         "name": "Asian Mass Infantry",
+        "id": "asian_mass_infantry",
         "type": "infantry",
         "unitType": "chinese",
         "maneuver": 1,
@@ -1215,9 +1311,10 @@
         "defensiveShock": 2,
         "techLevel": 15
     },
-    "high_american_horsemen": {
+    {
         "name": "American Horsemen",
-        "unitType": "highAmerican",
+        "id": "high_american_horsemen",
+        "unitType": "high_american",
         "type": "cavalry",
         "maneuver": 2,
         "offensiveMorale": 1,
@@ -1228,8 +1325,9 @@
         "defensiveShock": 1,
         "techLevel": 6
     },
-    "bhonsle_cavalry": {
+    {
         "name": "Sowars",
+        "id": "bhonsle_cavalry",
         "type": "cavalry",
         "unitType": "indian",
         "maneuver": 2,
@@ -1241,9 +1339,10 @@
         "defensiveShock": 4,
         "techLevel": 28
     },
-    "pacific_island_warriors": {
+    {
         "name": "1 \"Polynesian Island Warriors",
-        "unitType": "polynesianTech",
+        "id": "pacific_island_warriors",
+        "unitType": "polynesian_tech",
         "type": "infantry",
         "maneuver": 1,
         "offensiveMorale": 2,
@@ -1254,8 +1353,9 @@
         "defensiveShock": 2,
         "techLevel": 10
     },
-    "flying_battery": {
+    {
         "name": "Flying Battery",
+        "id": "flying_battery",
         "type": "artillery",
         "maneuver": 2,
         "offensiveMorale": 4,
@@ -1266,9 +1366,10 @@
         "defensiveShock": 2,
         "techLevel": 29
     },
-    "creek_arquebusier": {
+    {
         "name": "Creek Arquebusier",
-        "unitType": "northAmerican",
+        "id": "creek_arquebusier",
+        "unitType": "north_american",
         "type": "infantry",
         "maneuver": 1,
         "offensiveMorale": 2,
@@ -1279,8 +1380,9 @@
         "defensiveShock": 2,
         "techLevel": 14
     },
-    "sikh_hit_and_run": {
+    {
         "name": "North Indian Musket Infantry",
+        "id": "sikh_hit_and_run",
         "type": "infantry",
         "unitType": "indian",
         "maneuver": 1,
@@ -1292,9 +1394,10 @@
         "defensiveShock": 2,
         "techLevel": 18
     },
-    "pacific_reformed_spearman": {
+    {
         "name": "1 \"Polynesian Reformed Spearmen",
-        "unitType": "polynesianTech",
+        "id": "pacific_reformed_spearman",
+        "unitType": "polynesian_tech",
         "type": "infantry",
         "maneuver": 1,
         "offensiveMorale": 1,
@@ -1305,8 +1408,9 @@
         "defensiveShock": 1,
         "techLevel": 5
     },
-    "russian_cossack": {
+    {
         "name": "Advanced Cossack Cavalry",
+        "id": "russian_cossack",
         "type": "cavalry",
         "unitType": "eastern",
         "maneuver": 2,
@@ -1318,8 +1422,9 @@
         "defensiveShock": 4,
         "techLevel": 28
     },
-    "sikh_rifle": {
+    {
         "name": "Mysorean Light Cavalry",
+        "id": "sikh_rifle",
         "type": "cavalry",
         "unitType": "indian",
         "maneuver": 2,
@@ -1331,9 +1436,10 @@
         "defensiveShock": 4,
         "techLevel": 28
     },
-    "galleon": {
+    {
         "name": "Galleon",
-        "type": "heavyShip",
+        "id": "galleon",
+        "type": "heavy_ship",
         "hullSize": 45,
         "baseCannons": 60,
         "blockade": 5,
@@ -1341,8 +1447,9 @@
         "sailSpeed": 7,
         "spriteLevel": 3
     },
-    "british_square": {
+    {
         "name": "Square Infantry",
+        "id": "british_square",
         "type": "infantry",
         "unitType": "western",
         "maneuver": 1,
@@ -1354,8 +1461,9 @@
         "defensiveShock": 3,
         "techLevel": 28
     },
-    "chinese_dragoon": {
+    {
         "name": "Asian Dragoons",
+        "id": "chinese_dragoon",
         "type": "cavalry",
         "unitType": "chinese",
         "maneuver": 2,
@@ -1367,8 +1475,9 @@
         "defensiveShock": 3,
         "techLevel": 23
     },
-    "manchu_banner": {
+    {
         "name": "Banner Cavalry",
+        "id": "manchu_banner",
         "type": "cavalry",
         "unitType": "chinese",
         "maneuver": 2,
@@ -1380,8 +1489,9 @@
         "defensiveShock": 3,
         "techLevel": 17
     },
-    "chinese_steppe": {
+    {
         "name": "Asian Steppe Cavalry",
+        "id": "chinese_steppe",
         "type": "cavalry",
         "unitType": "chinese",
         "maneuver": 2,
@@ -1393,8 +1503,9 @@
         "defensiveShock": 2,
         "techLevel": 6
     },
-    "polish_tercio": {
+    {
         "name": "Eastern Tercio",
+        "id": "polish_tercio",
         "type": "infantry",
         "unitType": "eastern",
         "maneuver": 1,
@@ -1406,8 +1517,9 @@
         "defensiveShock": 2,
         "techLevel": 15
     },
-    "westernized_zapotec": {
+    {
         "name": "Westernized American Plains Infantry",
+        "id": "westernized_zapotec",
         "unitType": "mesoamerican",
         "type": "infantry",
         "maneuver": 1,
@@ -1419,8 +1531,9 @@
         "defensiveShock": 3,
         "techLevel": 26
     },
-    "eastern_skirmisher": {
+    {
         "name": "Eastern Skirmisher",
+        "id": "eastern_skirmisher",
         "type": "cavalry",
         "unitType": "ottoman",
         "maneuver": 2,
@@ -1432,9 +1545,10 @@
         "defensiveShock": 3,
         "techLevel": 26
     },
-    "ethiopian_mountain_warfare": {
+    {
         "name": "African Mountain Warriors",
-        "unitType": "subSaharan",
+        "id": "ethiopian_mountain_warfare",
+        "unitType": "sub_saharan",
         "type": "infantry",
         "maneuver": 1,
         "offensiveMorale": 1,
@@ -1445,8 +1559,9 @@
         "defensiveShock": 2,
         "techLevel": 12
     },
-    "war_galley": {
+    {
         "name": "War Galley",
+        "id": "war_galley",
         "type": "galley",
         "hullSize": 10,
         "baseCannons": 15,
@@ -1455,8 +1570,9 @@
         "sailors": 75,
         "spriteLevel": 2
     },
-    "ottoman_spahi": {
+    {
         "name": "Spahi Cavalry",
+        "id": "ottoman_spahi",
         "type": "cavalry",
         "unitType": "ottoman",
         "maneuver": 2,
@@ -1468,8 +1584,9 @@
         "defensiveShock": 2,
         "techLevel": 10
     },
-    "chambered_cannon": {
+    {
         "name": "Chambered Cannon",
+        "id": "chambered_cannon",
         "type": "artillery",
         "maneuver": 2,
         "offensiveMorale": 1,
@@ -1480,8 +1597,9 @@
         "defensiveShock": 2,
         "techLevel": 18
     },
-    "afsharid_reformed_infantry": {
+    {
         "name": "Afsharid Reformed Infantry",
+        "id": "afsharid_reformed_infantry",
         "type": "infantry",
         "unitType": "muslim",
         "maneuver": 1,
@@ -1493,9 +1611,10 @@
         "defensiveShock": 2,
         "techLevel": 15
     },
-    "native_indian_archer": {
+    {
         "name": "Native American Archer",
-        "unitType": "northAmerican",
+        "id": "native_indian_archer",
+        "unitType": "north_american",
         "type": "infantry",
         "maneuver": 1,
         "offensiveMorale": 1,
@@ -1506,9 +1625,10 @@
         "defensiveShock": 1,
         "techLevel": 1
     },
-    "peruvian_guerilla_warfare": {
+    {
         "name": "South American Guerrilla",
-        "unitType": "southAmerican",
+        "id": "peruvian_guerilla_warfare",
+        "unitType": "south_american",
         "type": "infantry",
         "maneuver": 1,
         "offensiveMorale": 3,
@@ -1519,10 +1639,11 @@
         "defensiveShock": 2,
         "techLevel": 19
     },
-    "mongol_swarm": {
+    {
         "name": "Eastern Swarm Cavalry",
+        "id": "mongol_swarm",
         "type": "cavalry",
-        "unitType": "nomadGroup",
+        "unitType": "nomad_group",
         "maneuver": 2,
         "offensiveMorale": 2,
         "defensiveMorale": 1,
@@ -1532,9 +1653,10 @@
         "defensiveShock": 1,
         "techLevel": 1
     },
-    "niger_kongolese_guerilla_warfare": {
+    {
         "name": "Central African Guerrillas",
-        "unitType": "subSaharan",
+        "id": "niger_kongolese_guerilla_warfare",
+        "unitType": "sub_saharan",
         "type": "infantry",
         "maneuver": 1,
         "offensiveMorale": 3,
@@ -1545,8 +1667,9 @@
         "defensiveShock": 3,
         "techLevel": 23
     },
-    "indian_rifle": {
+    {
         "name": "North Indian Sepoy",
+        "id": "indian_rifle",
         "type": "infantry",
         "unitType": "indian",
         "maneuver": 1,
@@ -1558,8 +1681,9 @@
         "defensiveShock": 3,
         "techLevel": 26
     },
-    "reformed_mughal_musketeer": {
+    {
         "name": "South Indian Infantry",
+        "id": "reformed_mughal_musketeer",
         "type": "infantry",
         "unitType": "indian",
         "maneuver": 1,
@@ -1571,8 +1695,9 @@
         "defensiveShock": 1,
         "techLevel": 12
     },
-    "italian_condotta": {
+    {
         "name": "Condotta Infantry",
+        "id": "italian_condotta",
         "type": "infantry",
         "unitType": "western",
         "maneuver": 1,
@@ -1584,9 +1709,10 @@
         "defensiveShock": 1,
         "techLevel": 9
     },
-    "american_western_franchise_warfare": {
+    {
         "name": "American Westernized Infantry",
-        "unitType": "northAmerican",
+        "id": "american_western_franchise_warfare",
+        "unitType": "north_american",
         "type": "infantry",
         "maneuver": 1,
         "offensiveMorale": 4,
@@ -1597,10 +1723,11 @@
         "defensiveShock": 3,
         "techLevel": 30
     },
-    "steppe_lancers": {
+    {
         "name": "Steppe Lancers",
+        "id": "steppe_lancers",
         "type": "cavalry",
-        "unitType": "nomadGroup",
+        "unitType": "nomad_group",
         "maneuver": 2,
         "offensiveMorale": 3,
         "defensiveMorale": 3,
@@ -1610,8 +1737,9 @@
         "defensiveShock": 3,
         "techLevel": 14
     },
-    "gaelic_mercenary": {
+    {
         "name": "Reformed Galloglaigh Infantry",
+        "id": "gaelic_mercenary",
         "type": "infantry",
         "unitType": "western",
         "maneuver": 1,
@@ -1623,8 +1751,9 @@
         "defensiveShock": 0,
         "techLevel": 9
     },
-    "russian_lancer": {
+    {
         "name": "Lancers",
+        "id": "russian_lancer",
         "type": "cavalry",
         "unitType": "eastern",
         "maneuver": 2,
@@ -1636,8 +1765,9 @@
         "defensiveShock": 4,
         "techLevel": 26
     },
-    "gaelic_galloglaigh": {
+    {
         "name": "Galloglaigh Infantry",
+        "id": "gaelic_galloglaigh",
         "type": "infantry",
         "unitType": "western",
         "maneuver": 1,
@@ -1649,8 +1779,9 @@
         "defensiveShock": 0,
         "techLevel": 5
     },
-    "muscovite_soldaty": {
+    {
         "name": "Soldaty Infantry",
+        "id": "muscovite_soldaty",
         "type": "infantry",
         "unitType": "eastern",
         "maneuver": 1,
@@ -1662,8 +1793,9 @@
         "defensiveShock": 1,
         "techLevel": 15
     },
-    "halberd_infantry": {
+    {
         "name": "Halberd Infantry",
+        "id": "halberd_infantry",
         "type": "infantry",
         "unitType": "western",
         "maneuver": 1,
@@ -1675,9 +1807,10 @@
         "defensiveShock": 0,
         "techLevel": 1
     },
-    "aboriginal_outback_warriors": {
+    {
         "name": "Outback Warriors",
-        "unitType": "aboriginalTech",
+        "id": "aboriginal_outback_warriors",
+        "unitType": "aboriginal_tech",
         "type": "infantry",
         "maneuver": 1,
         "offensiveMorale": 2,
@@ -1688,9 +1821,10 @@
         "defensiveShock": 2,
         "techLevel": 10
     },
-    "south_american_rifle_cavalry": {
+    {
         "name": "South American Cavalry",
-        "unitType": "southAmerican",
+        "id": "south_american_rifle_cavalry",
+        "unitType": "south_american",
         "type": "cavalry",
         "maneuver": 2,
         "offensiveMorale": 2,
@@ -1701,8 +1835,9 @@
         "defensiveShock": 2,
         "techLevel": 10
     },
-    "han_banner": {
+    {
         "name": "Banner Infantry",
+        "id": "han_banner",
         "type": "infantry",
         "unitType": "chinese",
         "maneuver": 1,
@@ -1714,8 +1849,9 @@
         "defensiveShock": 1,
         "techLevel": 12
     },
-    "austrian_hussar": {
+    {
         "name": "Latin Hussars",
+        "id": "austrian_hussar",
         "type": "cavalry",
         "unitType": "western",
         "maneuver": 2,
@@ -1727,9 +1863,10 @@
         "defensiveShock": 3,
         "techLevel": 23
     },
-    "adal_gunpowder_warfare": {
+    {
         "name": "East African Musketeers",
-        "unitType": "subSaharan",
+        "id": "adal_gunpowder_warfare",
+        "unitType": "sub_saharan",
         "type": "infantry",
         "maneuver": 1,
         "offensiveMorale": 2,
@@ -1740,8 +1877,9 @@
         "defensiveShock": 2,
         "techLevel": 15
     },
-    "french_cuirassier": {
+    {
         "name": "Latin Cuirassiers",
+        "id": "french_cuirassier",
         "type": "cavalry",
         "unitType": "western",
         "maneuver": 2,
@@ -1753,8 +1891,9 @@
         "defensiveShock": 4,
         "techLevel": 28
     },
-    "rajput_musketeer": {
+    {
         "name": "Akbarid Musketeers",
+        "id": "rajput_musketeer",
         "unitType": "indian",
         "type": "infantry",
         "maneuver": 1,
@@ -1766,9 +1905,10 @@
         "defensiveShock": 2,
         "techLevel": 12
     },
-    "north_american_hussar": {
+    {
         "name": "North American Hussar",
-        "unitType": "northAmerican",
+        "id": "north_american_hussar",
+        "unitType": "north_american",
         "type": "cavalry",
         "maneuver": 2,
         "offensiveMorale": 3,
@@ -1779,9 +1919,10 @@
         "defensiveShock": 2,
         "techLevel": 14
     },
-    "south_american_forest_warfare": {
+    {
         "name": "South American Forest Warriors",
-        "unitType": "southAmerican",
+        "id": "south_american_forest_warfare",
+        "unitType": "south_american",
         "type": "infantry",
         "maneuver": 1,
         "offensiveMorale": 1,
@@ -1792,9 +1933,10 @@
         "defensiveShock": 1,
         "techLevel": 5
     },
-    "inca_mountain_warfare": {
+    {
         "name": "Reformed Mountain Warriors",
-        "unitType": "southAmerican",
+        "id": "inca_mountain_warfare",
+        "unitType": "south_american",
         "type": "infantry",
         "maneuver": 1,
         "offensiveMorale": 0,
@@ -1805,10 +1947,11 @@
         "defensiveShock": 2,
         "techLevel": 5
     },
-    "steppe_infantry": {
+    {
         "name": "Steppe Infantry",
+        "id": "steppe_infantry",
         "type": "infantry",
-        "unitType": "nomadGroup",
+        "unitType": "nomad_group",
         "maneuver": 1,
         "offensiveMorale": 3,
         "defensiveMorale": 2,
@@ -1818,8 +1961,9 @@
         "defensiveShock": 2,
         "techLevel": 19
     },
-    "western_medieval_infantry": {
+    {
         "name": "Latin Medieval Infantry",
+        "id": "western_medieval_infantry",
         "type": "infantry",
         "unitType": "western",
         "maneuver": 1,
@@ -1831,9 +1975,10 @@
         "defensiveShock": 0,
         "techLevel": 1
     },
-    "reformed_westernized_incan": {
+    {
         "name": "Reformed Westernized Incan Infantry",
-        "unitType": "southAmerican",
+        "id": "reformed_westernized_incan",
+        "unitType": "south_american",
         "type": "infantry",
         "maneuver": 1,
         "offensiveMorale": 3,
@@ -1844,8 +1989,9 @@
         "defensiveShock": 3,
         "techLevel": 30
     },
-    "chevauchee": {
+    {
         "name": "Chevauch\u00e9e",
+        "id": "chevauchee",
         "type": "cavalry",
         "unitType": "western",
         "maneuver": 2,
@@ -1857,8 +2003,9 @@
         "defensiveShock": 1,
         "techLevel": 1
     },
-    "mamluk_duel": {
+    {
         "name": "Muslim Duel Infantry",
+        "id": "mamluk_duel",
         "unitType": "muslim",
         "type": "infantry",
         "maneuver": 1,
@@ -1870,9 +2017,10 @@
         "defensiveShock": 1,
         "techLevel": 5
     },
-    "south_american_reformed_gunpowder_warfare": {
+    {
         "name": "Reformed American Musketeers",
-        "unitType": "southAmerican",
+        "id": "south_american_reformed_gunpowder_warfare",
+        "unitType": "south_american",
         "type": "infantry",
         "maneuver": 1,
         "offensiveMorale": 2,
@@ -1883,9 +2031,10 @@
         "defensiveShock": 2,
         "techLevel": 14
     },
-    "native_clubmen": {
+    {
         "name": "Clubmen",
-        "unitType": "northAmerican",
+        "id": "native_clubmen",
+        "unitType": "north_american",
         "type": "infantry",
         "maneuver": 1,
         "offensiveMorale": 1,
@@ -1896,9 +2045,10 @@
         "defensiveShock": 0,
         "techLevel": 1
     },
-    "south_american_swarm": {
+    {
         "name": "South American Swarm Cavalry",
-        "unitType": "southAmerican",
+        "id": "south_american_swarm",
+        "unitType": "south_american",
         "type": "cavalry",
         "maneuver": 2,
         "offensiveMorale": 3,
@@ -1909,9 +2059,10 @@
         "defensiveShock": 3,
         "techLevel": 19
     },
-    "caravel": {
+    {
         "name": "Caravel",
-        "type": "lightShip",
+        "id": "caravel",
+        "type": "light_ship",
         "hullSize": 10,
         "baseCannons": 13,
         "blockade": 10,
@@ -1920,8 +2071,9 @@
         "sailors": 75,
         "spriteLevel": 2
     },
-    "ottoman_toprakli_dragoon": {
+    {
         "name": "Toprakli Dragoons",
+        "id": "ottoman_toprakli_dragoon",
         "type": "cavalry",
         "unitType": "ottoman",
         "maneuver": 2,
@@ -1933,8 +2085,9 @@
         "defensiveShock": 3,
         "techLevel": 28
     },
-    "prussian_uhlan": {
+    {
         "name": "Uhlan Cavalry",
+        "id": "prussian_uhlan",
         "type": "cavalry",
         "unitType": "western",
         "maneuver": 2,
@@ -1946,8 +2099,9 @@
         "defensiveShock": 4,
         "techLevel": 26
     },
-    "indian_archers": {
+    {
         "name": "Elephant Archers",
+        "id": "indian_archers",
         "unitType": "indian",
         "type": "cavalry",
         "maneuver": 2,
@@ -1959,9 +2113,10 @@
         "defensiveShock": 0,
         "techLevel": 1
     },
-    "african_spearmen": {
+    {
         "name": "African Spearmen",
-        "unitType": "subSaharan",
+        "id": "african_spearmen",
+        "unitType": "sub_saharan",
         "type": "infantry",
         "maneuver": 1,
         "offensiveMorale": 1,
@@ -1972,9 +2127,10 @@
         "defensiveShock": 1,
         "techLevel": 1
     },
-    "ha_reformed_xantican_warrior": {
+    {
         "name": "Reformed Xantican Warrior",
-        "unitType": "highAmerican",
+        "id": "ha_reformed_xantican_warrior",
+        "unitType": "high_american",
         "type": "infantry",
         "maneuver": 1,
         "offensiveFire": 2,
@@ -1985,8 +2141,9 @@
         "defensiveMorale": 0,
         "techLevel": 5
     },
-    "napoleonic_lancers": {
+    {
         "name": "Latin Lancers",
+        "id": "napoleonic_lancers",
         "unitType": "western",
         "type": "cavalry",
         "maneuver": 2,
@@ -1998,9 +2155,10 @@
         "defensiveShock": 4,
         "techLevel": 28
     },
-    "aboriginal_riflemen": {
+    {
         "name": "Frontier Riflemen",
-        "unitType": "aboriginalTech",
+        "id": "aboriginal_riflemen",
+        "unitType": "aboriginal_tech",
         "type": "infantry",
         "maneuver": 1,
         "offensiveMorale": 3,
@@ -2011,9 +2169,10 @@
         "defensiveShock": 2,
         "techLevel": 19
     },
-    "aboriginal_cavalry": {
+    {
         "name": "Aboriginal Cavalry",
-        "unitType": "aboriginalTech",
+        "id": "aboriginal_cavalry",
+        "unitType": "aboriginal_tech",
         "type": "cavalry",
         "maneuver": 2,
         "offensiveMorale": 2,
@@ -2024,8 +2183,9 @@
         "defensiveShock": 2,
         "techLevel": 10
     },
-    "tartar_cossack": {
+    {
         "name": "Reformed Cossack Cavalry",
+        "id": "tartar_cossack",
         "type": "cavalry",
         "unitType": "eastern",
         "maneuver": 2,
@@ -2037,9 +2197,10 @@
         "defensiveShock": 4,
         "techLevel": 26
     },
-    "great_frigate": {
+    {
         "name": "Great Frigate",
-        "type": "lightShip",
+        "id": "great_frigate",
+        "type": "light_ship",
         "hullSize": 24,
         "baseCannons": 30,
         "blockade": 10,
@@ -2048,9 +2209,10 @@
         "sailors": 150,
         "spriteLevel": 6
     },
-    "aboriginal_horseman": {
+    {
         "name": "Aboriginal Horsemen",
-        "unitType": "aboriginalTech",
+        "id": "aboriginal_horseman",
+        "unitType": "aboriginal_tech",
         "type": "cavalry",
         "maneuver": 2,
         "offensiveMorale": 1,
@@ -2061,9 +2223,10 @@
         "defensiveShock": 1,
         "techLevel": 6
     },
-    "niger_kongolese_forest_warfare": {
+    {
         "name": "African Forest Warriors",
-        "unitType": "subSaharan",
+        "id": "niger_kongolese_forest_warfare",
+        "unitType": "sub_saharan",
         "type": "infantry",
         "maneuver": 1,
         "offensiveMorale": 2,
@@ -2074,8 +2237,9 @@
         "defensiveShock": 2,
         "techLevel": 12
     },
-    "bardiche_infantry": {
+    {
         "name": "Bardiche Infantry",
+        "id": "bardiche_infantry",
         "type": "infantry",
         "unitType": "eastern",
         "maneuver": 1,
@@ -2087,8 +2251,9 @@
         "defensiveShock": 0,
         "techLevel": 1
     },
-    "war_canoe": {
+    {
         "name": "War Canoe",
+        "id": "war_canoe",
         "type": "transport",
         "hullSize": 4,
         "baseCannons": 1,
@@ -2097,8 +2262,9 @@
         "sailors": 20,
         "spriteLevel": 1
     },
-    "ottoman_new_model": {
+    {
         "name": "Eastern New Model Infantry",
+        "id": "ottoman_new_model",
         "type": "infantry",
         "unitType": "ottoman",
         "maneuver": 1,
@@ -2110,8 +2276,9 @@
         "defensiveShock": 3,
         "techLevel": 30
     },
-    "eastern_medieval_infantry": {
+    {
         "name": "Eastern Medieval Infantry",
+        "id": "eastern_medieval_infantry",
         "type": "infantry",
         "unitType": "eastern",
         "maneuver": 1,
@@ -2123,9 +2290,10 @@
         "defensiveShock": 0,
         "techLevel": 1
     },
-    "ha_foreign_influenced_infantry": {
+    {
         "name": "Foreign Influenced Infantry",
-        "unitType": "highAmerican",
+        "id": "ha_foreign_influenced_infantry",
+        "unitType": "high_american",
         "type": "infantry",
         "maneuver": 1,
         "offensiveFire": 4,
@@ -2136,9 +2304,10 @@
         "defensiveMorale": 3,
         "techLevel": 23
     },
-    "aboriginal_boomerang": {
+    {
         "name": "Boomerang Hunter",
-        "unitType": "aboriginalTech",
+        "id": "aboriginal_boomerang",
+        "unitType": "aboriginal_tech",
         "type": "infantry",
         "maneuver": 1,
         "offensiveMorale": 0,
@@ -2149,8 +2318,9 @@
         "defensiveShock": 1,
         "techLevel": 1
     },
-    "chinese_footsoldier": {
+    {
         "name": "Offensive Asian Foot Soldier",
+        "id": "chinese_footsoldier",
         "type": "infantry",
         "unitType": "chinese",
         "maneuver": 1,
@@ -2162,8 +2332,9 @@
         "defensiveShock": 0,
         "techLevel": 5
     },
-    "muslim_mass_infantry": {
+    {
         "name": "Muslim Mass Infantry",
+        "id": "muslim_mass_infantry",
         "type": "infantry",
         "unitType": "muslim",
         "maneuver": 1,
@@ -2175,8 +2346,9 @@
         "defensiveShock": 3,
         "techLevel": 26
     },
-    "french_impulse": {
+    {
         "name": "Impulse Infantry",
+        "id": "french_impulse",
         "type": "infantry",
         "unitType": "western",
         "maneuver": 1,
@@ -2188,9 +2360,10 @@
         "defensiveShock": 3,
         "techLevel": 28
     },
-    "barque": {
+    {
         "name": "Barque",
-        "type": "lightShip",
+        "id": "barque",
+        "type": "light_ship",
         "hullSize": 8,
         "baseCannons": 10,
         "blockade": 10,
@@ -2199,9 +2372,10 @@
         "sailors": 50,
         "spriteLevel": 1
     },
-    "african_western_franchise_warfare": {
+    {
         "name": "African Western Franchise Infantry",
-        "unitType": "subSaharan",
+        "id": "african_western_franchise_warfare",
+        "unitType": "sub_saharan",
         "type": "infantry",
         "maneuver": 1,
         "offensiveMorale": 3,
@@ -2212,9 +2386,10 @@
         "defensiveShock": 3,
         "techLevel": 30
     },
-    "westernized_ethiopian": {
+    {
         "name": "Westernized North African Infantry",
-        "unitType": "subSaharan",
+        "id": "westernized_ethiopian",
+        "unitType": "sub_saharan",
         "type": "infantry",
         "maneuver": 1,
         "offensiveMorale": 3,
@@ -2225,9 +2400,10 @@
         "defensiveShock": 4,
         "techLevel": 26
     },
-    "south_american_spearmen": {
+    {
         "name": "South American Spearmen",
-        "unitType": "southAmerican",
+        "id": "south_american_spearmen",
+        "unitType": "south_american",
         "type": "infantry",
         "maneuver": 1,
         "offensiveMorale": 1,
@@ -2238,9 +2414,10 @@
         "defensiveShock": 1,
         "techLevel": 1
     },
-    "north_american_rifle_cavalry": {
+    {
         "name": "North American Cavalry",
-        "unitType": "northAmerican",
+        "id": "north_american_rifle_cavalry",
+        "unitType": "north_american",
         "type": "cavalry",
         "maneuver": 2,
         "offensiveMorale": 2,
@@ -2251,8 +2428,9 @@
         "defensiveShock": 2,
         "techLevel": 10
     },
-    "swivel_cannon": {
+    {
         "name": "Swivel Cannon",
+        "id": "swivel_cannon",
         "type": "artillery",
         "maneuver": 2,
         "offensiveMorale": 3,
@@ -2263,8 +2441,9 @@
         "defensiveShock": 2,
         "techLevel": 20
     },
-    "western_men_at_arms": {
+    {
         "name": "Men at Arms",
+        "id": "western_men_at_arms",
         "type": "infantry",
         "unitType": "western",
         "maneuver": 1,
@@ -2276,8 +2455,9 @@
         "defensiveShock": 1,
         "techLevel": 5
     },
-    "scottish_highlander": {
+    {
         "name": "Highlanders Infantry",
+        "id": "scottish_highlander",
         "type": "infantry",
         "unitType": "western",
         "maneuver": 1,
@@ -2289,8 +2469,9 @@
         "defensiveShock": 2,
         "techLevel": 19
     },
-    "mamluk_musket_charge": {
+    {
         "name": "Musket Charge Cavalry",
+        "id": "mamluk_musket_charge",
         "type": "cavalry",
         "unitType": "muslim",
         "maneuver": 2,
@@ -2302,8 +2483,9 @@
         "defensiveShock": 3,
         "techLevel": 18
     },
-    "dutch_maurician": {
+    {
         "name": "Maurician Infantry",
+        "id": "dutch_maurician",
         "type": "infantry",
         "unitType": "western",
         "maneuver": 1,
@@ -2315,8 +2497,9 @@
         "defensiveShock": 1,
         "techLevel": 15
     },
-    "afsharid_reformed": {
+    {
         "name": "Afsharid Reformed Cavalry",
+        "id": "afsharid_reformed",
         "type": "cavalry",
         "unitType": "muslim",
         "maneuver": 2,
@@ -2328,8 +2511,9 @@
         "defensiveShock": 3,
         "techLevel": 18
     },
-    "durrani_swivel": {
+    {
         "name": "Durrani Swivel Cavalry",
+        "id": "durrani_swivel",
         "type": "cavalry",
         "unitType": "muslim",
         "maneuver": 2,
@@ -2341,8 +2525,9 @@
         "defensiveShock": 5,
         "techLevel": 28
     },
-    "central_american_swarm": {
+    {
         "name": "Central American Swarm Cavalry",
+        "id": "central_american_swarm",
         "unitType": "mesoamerican",
         "type": "cavalry",
         "maneuver": 2,
@@ -2354,9 +2539,10 @@
         "defensiveShock": 3,
         "techLevel": 19
     },
-    "incan_guerilla_warfare": {
+    {
         "name": "Incan Guerrilla",
-        "unitType": "southAmerican",
+        "id": "incan_guerilla_warfare",
+        "unitType": "south_american",
         "type": "infantry",
         "maneuver": 1,
         "offensiveMorale": 2,
@@ -2367,10 +2553,11 @@
         "defensiveShock": 2,
         "techLevel": 19
     },
-    "african_dragoon": {
+    {
         "name": "African Dragoon",
+        "id": "african_dragoon",
         "type": "cavalry",
-        "unitType": "subSaharan",
+        "unitType": "sub_saharan",
         "maneuver": 2,
         "offensiveMorale": 4,
         "defensiveMorale": 4,
@@ -2380,10 +2567,11 @@
         "defensiveShock": 3,
         "techLevel": 23
     },
-    "african_cuirassier": {
+    {
         "name": "African Cuirassier",
+        "id": "african_cuirassier",
         "type": "cavalry",
-        "unitType": "subSaharan",
+        "unitType": "sub_saharan",
         "maneuver": 2,
         "offensiveMorale": 4,
         "defensiveMorale": 4,
@@ -2393,8 +2581,9 @@
         "defensiveShock": 4,
         "techLevel": 28
     },
-    "russian_green_coat": {
+    {
         "name": "Green Coat Infantry",
+        "id": "russian_green_coat",
         "type": "infantry",
         "unitType": "eastern",
         "maneuver": 1,
@@ -2406,8 +2595,9 @@
         "defensiveShock": 3,
         "techLevel": 26
     },
-    "maya_gunpowder_warfare": {
+    {
         "name": "American Forest Musketeers",
+        "id": "maya_gunpowder_warfare",
         "unitType": "mesoamerican",
         "type": "infantry",
         "maneuver": 1,
@@ -2419,9 +2609,10 @@
         "defensiveShock": 2,
         "techLevel": 14
     },
-    "ha_xiuhtecuhtlian_infantry": {
+    {
         "name": "Xiuhtecuhtlian Infantry",
-        "unitType": "highAmerican",
+        "id": "ha_xiuhtecuhtlian_infantry",
+        "unitType": "high_american",
         "type": "infantry",
         "maneuver": 1,
         "offensiveFire": 3,
@@ -2432,8 +2623,9 @@
         "defensiveMorale": 3,
         "techLevel": 12
     },
-    "demi_culverin": {
+    {
         "name": "Demi-Culverin",
+        "id": "demi_culverin",
         "type": "artillery",
         "maneuver": 2,
         "offensiveMorale": 2,
@@ -2444,8 +2636,9 @@
         "defensiveShock": 2,
         "techLevel": 16
     },
-    "westernized_aztec": {
+    {
         "name": "Westernized American Hill Infantry",
+        "id": "westernized_aztec",
         "unitType": "mesoamerican",
         "type": "infantry",
         "maneuver": 1,
@@ -2457,8 +2650,9 @@
         "defensiveShock": 3,
         "techLevel": 26
     },
-    "austrian_jaeger": {
+    {
         "name": "1 \"J\u00e4ger Infantry",
+        "id": "austrian_jaeger",
         "type": "infantry",
         "unitType": "western",
         "maneuver": 1,
@@ -2470,8 +2664,9 @@
         "defensiveShock": 3,
         "techLevel": 30
     },
-    "chinese_longspear": {
+    {
         "name": "Asian Longspear Infantry",
+        "id": "chinese_longspear",
         "type": "infantry",
         "unitType": "chinese",
         "maneuver": 1,
@@ -2483,9 +2678,10 @@
         "defensiveShock": 1,
         "techLevel": 1
     },
-    "heavy_frigate": {
+    {
         "name": "Heavy Frigate",
-        "type": "lightShip",
+        "id": "heavy_frigate",
+        "type": "light_ship",
         "hullSize": 20,
         "baseCannons": 25,
         "blockade": 10,
@@ -2494,8 +2690,9 @@
         "tradePower": "4.0",
         "spriteLevel": 5
     },
-    "persian_shamshir": {
+    {
         "name": "Shamshir Infantry",
+        "id": "persian_shamshir",
         "type": "infantry",
         "unitType": "muslim",
         "maneuver": 1,
@@ -2507,9 +2704,10 @@
         "defensiveShock": 1,
         "techLevel": 9
     },
-    "pacific_horseman": {
+    {
         "name": "1 \"Polynesian Horsemen",
-        "unitType": "polynesianTech",
+        "id": "pacific_horseman",
+        "unitType": "polynesian_tech",
         "type": "cavalry",
         "maneuver": 2,
         "offensiveMorale": 1,
@@ -2520,8 +2718,9 @@
         "defensiveShock": 1,
         "techLevel": 6
     },
-    "leather_cannon": {
+    {
         "name": "Leather Cannon",
+        "id": "leather_cannon",
         "type": "artillery",
         "maneuver": 2,
         "offensiveMorale": 2,
@@ -2532,8 +2731,9 @@
         "defensiveShock": 1,
         "techLevel": 18
     },
-    "ottoman_nizami_cedid": {
+    {
         "name": "Nizami Cedid Infantry",
+        "id": "ottoman_nizami_cedid",
         "type": "infantry",
         "unitType": "ottoman",
         "maneuver": 1,
@@ -2545,8 +2745,9 @@
         "defensiveShock": 2,
         "techLevel": 23
     },
-    "flute": {
+    {
         "name": "Flute",
+        "id": "flute",
         "type": "transport",
         "hullSize": 15,
         "baseCannons": 5,
@@ -2555,9 +2756,10 @@
         "sailors": 60,
         "spriteLevel": 2
     },
-    "pacific_riflemen": {
+    {
         "name": "Polynesian Riflemen",
-        "unitType": "polynesianTech",
+        "id": "pacific_riflemen",
+        "unitType": "polynesian_tech",
         "type": "infantry",
         "maneuver": 1,
         "offensiveMorale": 3,
@@ -2568,8 +2770,9 @@
         "defensiveShock": 2,
         "techLevel": 19
     },
-    "royal_mortar": {
+    {
         "name": "Royal Mortar",
+        "id": "royal_mortar",
         "type": "artillery",
         "maneuver": 2,
         "offensiveMorale": 5,
@@ -2580,9 +2783,10 @@
         "defensiveShock": 1,
         "techLevel": 25
     },
-    "incan_axemen": {
+    {
         "name": "Incan Axemen",
-        "unitType": "southAmerican",
+        "id": "incan_axemen",
+        "unitType": "south_american",
         "type": "infantry",
         "maneuver": 1,
         "offensiveMorale": 2,
@@ -2593,8 +2797,9 @@
         "defensiveShock": 0,
         "techLevel": 5
     },
-    "durrani_dragoon": {
+    {
         "name": "Durrani Cavalry",
+        "id": "durrani_dragoon",
         "type": "cavalry",
         "unitType": "muslim",
         "maneuver": 2,
@@ -2606,9 +2811,10 @@
         "defensiveShock": 3,
         "techLevel": 28
     },
-    "pacific_arquebusier": {
+    {
         "name": "1 \"Polynesian Arquebusiers",
-        "unitType": "polynesianTech",
+        "id": "pacific_arquebusier",
+        "unitType": "polynesian_tech",
         "type": "infantry",
         "maneuver": 1,
         "offensiveMorale": 2,
@@ -2619,9 +2825,10 @@
         "defensiveShock": 3,
         "techLevel": 14
     },
-    "westernized_bantu": {
+    {
         "name": "Westernized South African Infantry",
-        "unitType": "subSaharan",
+        "id": "westernized_bantu",
+        "unitType": "sub_saharan",
         "type": "infantry",
         "maneuver": 1,
         "offensiveMorale": 3,
@@ -2632,8 +2839,9 @@
         "defensiveShock": 3,
         "techLevel": 26
     },
-    "mesoamerican_spearmen": {
+    {
         "name": "Mesoamerican Spearmen",
+        "id": "mesoamerican_spearmen",
         "unitType": "mesoamerican",
         "type": "infantry",
         "maneuver": 1,
@@ -2645,8 +2853,9 @@
         "defensiveShock": 0,
         "techLevel": 1
     },
-    "zapotec_gunpowder_warfare": {
+    {
         "name": "Offensive American Musketeers",
+        "id": "zapotec_gunpowder_warfare",
         "unitType": "mesoamerican",
         "type": "infantry",
         "maneuver": 1,
@@ -2658,8 +2867,9 @@
         "defensiveShock": 2,
         "techLevel": 14
     },
-    "reformed_mughal_mansabdar": {
+    {
         "name": "Dai-Phat Cavalry",
+        "id": "reformed_mughal_mansabdar",
         "type": "cavalry",
         "unitType": "indian",
         "maneuver": 2,
@@ -2671,8 +2881,9 @@
         "defensiveShock": 3,
         "techLevel": 14
     },
-    "austrian_tercio": {
+    {
         "name": "Reformed Tercio",
+        "id": "austrian_tercio",
         "type": "infantry",
         "unitType": "western",
         "maneuver": 1,
@@ -2684,8 +2895,9 @@
         "defensiveShock": 3,
         "techLevel": 19
     },
-    "westernized_mayan": {
+    {
         "name": "Westernized Central American infantry",
+        "id": "westernized_mayan",
         "unitType": "mesoamerican",
         "type": "infantry",
         "maneuver": 1,
@@ -2697,8 +2909,9 @@
         "defensiveShock": 3,
         "techLevel": 30
     },
-    "maharathan_cavalry": {
+    {
         "name": "Maratha Raiders",
+        "id": "maharathan_cavalry",
         "type": "cavalry",
         "unitType": "indian",
         "maneuver": 2,
@@ -2710,8 +2923,9 @@
         "defensiveShock": 3,
         "techLevel": 17
     },
-    "germanized_pike": {
+    {
         "name": "Pike Infantry",
+        "id": "germanized_pike",
         "type": "infantry",
         "unitType": "eastern",
         "maneuver": 1,
@@ -2723,8 +2937,9 @@
         "defensiveShock": 2,
         "techLevel": 9
     },
-    "durrani_rifled_musketeer": {
+    {
         "name": "Reformed Muslim Musketeers",
+        "id": "durrani_rifled_musketeer",
         "type": "infantry",
         "unitType": "muslim",
         "maneuver": 1,
@@ -2736,8 +2951,9 @@
         "defensiveShock": 2,
         "techLevel": 23
     },
-    "swedish_caroline": {
+    {
         "name": "Caroline Infantry",
+        "id": "swedish_caroline",
         "type": "infantry",
         "unitType": "western",
         "maneuver": 1,
@@ -2749,8 +2965,9 @@
         "defensiveShock": 2,
         "techLevel": 23
     },
-    "austrian_grenzer": {
+    {
         "name": "Grenzer Infantry",
+        "id": "austrian_grenzer",
         "type": "infantry",
         "unitType": "western",
         "maneuver": 1,
@@ -2762,8 +2979,9 @@
         "defensiveShock": 3,
         "techLevel": 23
     },
-    "hungarian_hussar": {
+    {
         "name": "Eastern Hussar",
+        "id": "hungarian_hussar",
         "type": "cavalry",
         "unitType": "eastern",
         "maneuver": 2,
@@ -2775,9 +2993,10 @@
         "defensiveShock": 2,
         "techLevel": 10
     },
-    "ha_xantican_warrior": {
+    {
         "name": "Xantican Warrior",
-        "unitType": "highAmerican",
+        "id": "ha_xantican_warrior",
+        "unitType": "high_american",
         "type": "infantry",
         "maneuver": 1,
         "offensiveFire": 1,
@@ -2788,9 +3007,10 @@
         "defensiveMorale": 0,
         "techLevel": 1
     },
-    "pacific_hussar": {
+    {
         "name": "1 \"Polynesian Hussars",
-        "unitType": "polynesianTech",
+        "id": "pacific_hussar",
+        "unitType": "polynesian_tech",
         "type": "cavalry",
         "maneuver": 2,
         "offensiveMorale": 3,
@@ -2801,8 +3021,9 @@
         "defensiveShock": 2,
         "techLevel": 14
     },
-    "houfnice": {
+    {
         "name": "Houfnice",
+        "id": "houfnice",
         "type": "artillery",
         "maneuver": 2,
         "offensiveMorale": 0,
@@ -2813,8 +3034,9 @@
         "defensiveShock": 0,
         "techLevel": 7
     },
-    "western_longbow": {
+    {
         "name": "Longbow",
+        "id": "western_longbow",
         "type": "infantry",
         "unitType": "western",
         "maneuver": 1,
@@ -2826,8 +3048,9 @@
         "defensiveShock": 0,
         "techLevel": 5
     },
-    "indian_footsoldier": {
+    {
         "name": "Indian Foot Soldier",
+        "id": "indian_footsoldier",
         "type": "infantry",
         "unitType": "indian",
         "maneuver": 1,
@@ -2839,9 +3062,10 @@
         "defensiveShock": 0,
         "techLevel": 1
     },
-    "niger_kongolese_tribal_warfare": {
+    {
         "name": "Central African Warrior",
-        "unitType": "subSaharan",
+        "id": "niger_kongolese_tribal_warfare",
+        "unitType": "sub_saharan",
         "type": "infantry",
         "maneuver": 1,
         "offensiveMorale": 2,
@@ -2852,8 +3076,9 @@
         "defensiveShock": 1,
         "techLevel": 5
     },
-    "large_cast_iron_bombard": {
+    {
         "name": "Large Cast Iron Cannon",
+        "id": "large_cast_iron_bombard",
         "type": "artillery",
         "maneuver": 2,
         "offensiveMorale": 2,
@@ -2864,8 +3089,9 @@
         "defensiveShock": 1,
         "techLevel": 13
     },
-    "tofongchis_musketeer": {
+    {
         "name": "Muslim Musketeer",
+        "id": "tofongchis_musketeer",
         "type": "infantry",
         "unitType": "muslim",
         "maneuver": 1,
@@ -2877,9 +3103,10 @@
         "defensiveShock": 2,
         "techLevel": 12
     },
-    "carrack": {
+    {
         "name": "Carrack",
-        "type": "heavyShip",
+        "id": "carrack",
+        "type": "heavy_ship",
         "hullSize": 35,
         "baseCannons": 50,
         "blockade": 5,
@@ -2887,8 +3114,9 @@
         "sailors": 300,
         "spriteLevel": 2
     },
-    "polish_hussar": {
+    {
         "name": "Reformed Eastern Hussars",
+        "id": "polish_hussar",
         "type": "cavalry",
         "unitType": "eastern",
         "maneuver": 2,
@@ -2900,8 +3128,9 @@
         "defensiveShock": 3,
         "techLevel": 14
     },
-    "pedrero": {
+    {
         "name": "Pedrero",
+        "id": "pedrero",
         "type": "artillery",
         "maneuver": 2,
         "offensiveMorale": 1,
@@ -2912,8 +3141,9 @@
         "defensiveShock": 2,
         "techLevel": 10
     },
-    "asian_charge_cavalry": {
+    {
         "name": "Asian Charge Cavalry",
+        "id": "asian_charge_cavalry",
         "type": "cavalry",
         "unitType": "chinese",
         "maneuver": 2,
@@ -2925,8 +3155,9 @@
         "defensiveShock": 2,
         "techLevel": 14
     },
-    "eastindiaman": {
+    {
         "name": "East Indiaman",
+        "id": "eastindiaman",
         "type": "transport",
         "hullSize": 36,
         "baseCannons": 12,
@@ -2935,9 +3166,10 @@
         "sailors": 100,
         "spriteLevel": 5
     },
-    "native_indian_horsemen": {
+    {
         "name": "North American Horsemen",
-        "unitType": "northAmerican",
+        "id": "native_indian_horsemen",
+        "unitType": "north_american",
         "type": "cavalry",
         "maneuver": 2,
         "offensiveMorale": 1,
@@ -2948,10 +3180,11 @@
         "defensiveShock": 1,
         "techLevel": 6
     },
-    "steppe_musketeers": {
+    {
         "name": "Steppe Musketeers",
+        "id": "steppe_musketeers",
         "type": "infantry",
-        "unitType": "nomadGroup",
+        "unitType": "nomad_group",
         "maneuver": 1,
         "offensiveMorale": 2,
         "defensiveMorale": 2,
@@ -2961,9 +3194,10 @@
         "defensiveShock": 2,
         "techLevel": 15
     },
-    "aboriginal_arquebusier": {
+    {
         "name": "Ambush Arquebusier",
-        "unitType": "aboriginalTech",
+        "id": "aboriginal_arquebusier",
+        "unitType": "aboriginal_tech",
         "type": "infantry",
         "maneuver": 1,
         "offensiveMorale": 2,
@@ -2974,8 +3208,9 @@
         "defensiveShock": 3,
         "techLevel": 14
     },
-    "russian_mass": {
+    {
         "name": "Mass Infantry",
+        "id": "russian_mass",
         "type": "infantry",
         "unitType": "eastern",
         "maneuver": 1,
@@ -2987,8 +3222,9 @@
         "defensiveShock": 3,
         "techLevel": 30
     },
-    "persian_cavalry_charge": {
+    {
         "name": "Muslim Cavalry",
+        "id": "persian_cavalry_charge",
         "type": "cavalry",
         "unitType": "muslim",
         "maneuver": 2,
@@ -3000,8 +3236,9 @@
         "defensiveShock": 0,
         "techLevel": 1
     },
-    "reformed_asian_musketeer": {
+    {
         "name": "Reformed Asian Musketeer",
+        "id": "reformed_asian_musketeer",
         "type": "infantry",
         "unitType": "chinese",
         "maneuver": 1,
@@ -3013,9 +3250,10 @@
         "defensiveShock": 3,
         "techLevel": 26
     },
-    "zulu_chest_and_horns": {
+    {
         "name": "Chest and Horn Infantry",
-        "unitType": "subSaharan",
+        "id": "zulu_chest_and_horns",
+        "unitType": "sub_saharan",
         "type": "infantry",
         "maneuver": 1,
         "offensiveMorale": 3,
@@ -3025,9 +3263,10 @@
         "offensiveShock": 2,
         "defensiveShock": 1
     },
-    "native_indian_tribal_warfare": {
+    {
         "name": "American Plains Warriors",
-        "unitType": "northAmerican",
+        "id": "native_indian_tribal_warfare",
+        "unitType": "north_american",
         "type": "infantry",
         "maneuver": 1,
         "offensiveMorale": 1,
@@ -3038,10 +3277,11 @@
         "defensiveShock": 1,
         "techLevel": 5
     },
-    "steppe_mounted_raiders": {
+    {
         "name": "Mounted Steppe Raiders",
+        "id": "steppe_mounted_raiders",
         "type": "cavalry",
-        "unitType": "nomadGroup",
+        "unitType": "nomad_group",
         "maneuver": 2,
         "offensiveMorale": 3,
         "defensiveMorale": 3,
@@ -3051,8 +3291,9 @@
         "defensiveShock": 3,
         "techLevel": 18
     },
-    "indian_shock_cavalry": {
+    {
         "name": "Deccani Light Cavalry",
+        "id": "indian_shock_cavalry",
         "unitType": "indian",
         "type": "cavalry",
         "maneuver": 2,
@@ -3064,9 +3305,10 @@
         "defensiveShock": 3,
         "techLevel": 23
     },
-    "south_american_gunpowder_warfare": {
+    {
         "name": "Defensive American Musketeers",
-        "unitType": "southAmerican",
+        "id": "south_american_gunpowder_warfare",
+        "unitType": "south_american",
         "type": "infantry",
         "maneuver": 1,
         "offensiveMorale": 1,
@@ -3077,8 +3319,9 @@
         "defensiveShock": 2,
         "techLevel": 10
     },
-    "indian_elephant": {
+    {
         "name": "Mansabdar Cavalry",
+        "id": "indian_elephant",
         "unitType": "indian",
         "type": "cavalry",
         "maneuver": 2,
@@ -3090,9 +3333,10 @@
         "defensiveShock": 2,
         "techLevel": 10
     },
-    "high_american_swarm": {
+    {
         "name": "American Swarm Cavalry",
-        "unitType": "highAmerican",
+        "id": "high_american_swarm",
+        "unitType": "high_american",
         "type": "cavalry",
         "maneuver": 2,
         "offensiveMorale": 3,
@@ -3103,8 +3347,9 @@
         "defensiveShock": 3,
         "techLevel": 19
     },
-    "persian_footsoldier": {
+    {
         "name": "Muslim Foot Soldier",
+        "id": "persian_footsoldier",
         "type": "infantry",
         "unitType": "muslim",
         "maneuver": 1,
@@ -3116,8 +3361,9 @@
         "defensiveShock": 0,
         "techLevel": 1
     },
-    "mamluk_cavalry_charge": {
+    {
         "name": "Charge Cavalry",
+        "id": "mamluk_cavalry_charge",
         "type": "cavalry",
         "unitType": "muslim",
         "maneuver": 2,
@@ -3129,8 +3375,9 @@
         "defensiveShock": 0,
         "techLevel": 1
     },
-    "japanese_archer": {
+    {
         "name": "Asian Longbow",
+        "id": "japanese_archer",
         "type": "infantry",
         "unitType": "chinese",
         "maneuver": 1,
@@ -3142,8 +3389,9 @@
         "defensiveShock": 0,
         "techLevel": 1
     },
-    "muscovite_cossack": {
+    {
         "name": "Cossack Cavalry",
+        "id": "muscovite_cossack",
         "type": "cavalry",
         "unitType": "eastern",
         "maneuver": 2,
@@ -3155,8 +3403,9 @@
         "defensiveShock": 3,
         "techLevel": 22
     },
-    "russian_cuirassier": {
+    {
         "name": "Eastern Cuirassiers",
+        "id": "russian_cuirassier",
         "type": "cavalry",
         "unitType": "eastern",
         "maneuver": 2,
@@ -3168,8 +3417,9 @@
         "defensiveShock": 4,
         "techLevel": 28
     },
-    "maya_forest_warfare": {
+    {
         "name": "Reformed American Forest Warriors",
+        "id": "maya_forest_warfare",
         "unitType": "mesoamerican",
         "type": "infantry",
         "maneuver": 1,
@@ -3181,8 +3431,9 @@
         "defensiveShock": 2,
         "techLevel": 10
     },
-    "ottoman_toprakli_hit_and_run": {
+    {
         "name": "Toprakli Hit and Run Cavalry",
+        "id": "ottoman_toprakli_hit_and_run",
         "type": "cavalry",
         "unitType": "ottoman",
         "maneuver": 2,
@@ -3194,8 +3445,9 @@
         "defensiveShock": 3,
         "techLevel": 23
     },
-    "horse_artillery_unit": {
+    {
         "name": "Horse Artillery",
+        "id": "horse_artillery_unit",
         "type": "artillery",
         "maneuver": 2,
         "offensiveMorale": 4,
@@ -3206,9 +3458,10 @@
         "defensiveShock": 1,
         "techLevel": 22
     },
-    "south_american_hussar": {
+    {
         "name": "South American Hussar",
-        "unitType": "southAmerican",
+        "id": "south_american_hussar",
+        "unitType": "south_american",
         "type": "cavalry",
         "maneuver": 2,
         "offensiveMorale": 3,
@@ -3219,9 +3472,10 @@
         "defensiveShock": 2,
         "techLevel": 14
     },
-    "high_american_rifle_cavalry": {
+    {
         "name": "Xiuhtecuhtli Cavalry",
-        "unitType": "highAmerican",
+        "id": "high_american_rifle_cavalry",
+        "unitType": "high_american",
         "type": "cavalry",
         "maneuver": 2,
         "offensiveMorale": 2,
@@ -3232,9 +3486,10 @@
         "defensiveShock": 2,
         "techLevel": 10
     },
-    "pacific_spearman": {
+    {
         "name": "1 \"Polynesian Spearmen",
-        "unitType": "polynesianTech",
+        "id": "pacific_spearman",
+        "unitType": "polynesian_tech",
         "type": "infantry",
         "maneuver": 1,
         "offensiveMorale": 0,
@@ -3245,8 +3500,9 @@
         "defensiveShock": 1,
         "techLevel": 1
     },
-    "ottoman_musellem": {
+    {
         "name": "Musellem Cavalry",
+        "id": "ottoman_musellem",
         "type": "cavalry",
         "unitType": "ottoman",
         "maneuver": 2,
@@ -3258,9 +3514,10 @@
         "defensiveShock": 1,
         "techLevel": 1
     },
-    "ha_reformed_influenced_infantry": {
+    {
         "name": "Reformed Influenced Infantry",
-        "unitType": "highAmerican",
+        "id": "ha_reformed_influenced_infantry",
+        "unitType": "high_american",
         "type": "infantry",
         "maneuver": 1,
         "offensiveFire": 4,
@@ -3271,8 +3528,9 @@
         "defensiveMorale": 3,
         "techLevel": 26
     },
-    "aztec_tribal_warfare": {
+    {
         "name": "American Hill Warriors",
+        "id": "aztec_tribal_warfare",
         "unitType": "mesoamerican",
         "type": "infantry",
         "maneuver": 1,
@@ -3284,8 +3542,9 @@
         "defensiveShock": 2,
         "techLevel": 5
     },
-    "maya_tribal_warfare": {
+    {
         "name": "American Forest Warriors",
+        "id": "maya_tribal_warfare",
         "unitType": "mesoamerican",
         "type": "infantry",
         "maneuver": 1,
@@ -3297,10 +3556,11 @@
         "defensiveShock": 1,
         "techLevel": 5
     },
-    "steppe_cavalry": {
+    {
         "name": "Steppe Cavalry",
+        "id": "steppe_cavalry",
         "type": "cavalry",
-        "unitType": "nomadGroup",
+        "unitType": "nomad_group",
         "maneuver": 2,
         "offensiveMorale": 3,
         "defensiveMorale": 3,
@@ -3310,8 +3570,9 @@
         "defensiveShock": 3,
         "techLevel": 23
     },
-    "british_redcoat": {
+    {
         "name": "Redcoat Infantry",
+        "id": "british_redcoat",
         "type": "infantry",
         "unitType": "western",
         "maneuver": 1,
@@ -3323,8 +3584,9 @@
         "defensiveShock": 3,
         "techLevel": 26
     },
-    "ottoman_reformed_janissary": {
+    {
         "name": "Reformed Janissary Infantry",
+        "id": "ottoman_reformed_janissary",
         "type": "infantry",
         "unitType": "ottoman",
         "maneuver": 1,
@@ -3336,8 +3598,9 @@
         "defensiveShock": 2,
         "techLevel": 19
     },
-    "zapotec_plains_warfare": {
+    {
         "name": "Reformed American Plains Warriors",
+        "id": "zapotec_plains_warfare",
         "unitType": "mesoamerican",
         "type": "infantry",
         "maneuver": 1,
@@ -3349,8 +3612,9 @@
         "defensiveShock": 2,
         "techLevel": 10
     },
-    "bhonsle_infantry": {
+    {
         "name": "Deccani Musket Infantry",
+        "id": "bhonsle_infantry",
         "type": "infantry",
         "unitType": "indian",
         "maneuver": 1,
@@ -3362,8 +3626,9 @@
         "defensiveShock": 2,
         "techLevel": 18
     },
-    "aztec_gunpowder_warfare": {
+    {
         "name": "American Hill Musketeers",
+        "id": "aztec_gunpowder_warfare",
         "unitType": "mesoamerican",
         "type": "infantry",
         "maneuver": 1,
@@ -3375,8 +3640,9 @@
         "defensiveShock": 2,
         "techLevel": 14
     },
-    "persian_rifle": {
+    {
         "name": "Muslim Rifle Infantry",
+        "id": "persian_rifle",
         "type": "infantry",
         "unitType": "muslim",
         "maneuver": 1,
@@ -3388,8 +3654,9 @@
         "defensiveShock": 3,
         "techLevel": 30
     },
-    "licorne": {
+    {
         "name": "Licorne",
+        "id": "licorne",
         "type": "artillery",
         "maneuver": 2,
         "offensiveMorale": 3,
@@ -3400,8 +3667,9 @@
         "defensiveShock": 2,
         "techLevel": 25
     },
-    "galley": {
+    {
         "name": "Galley",
+        "id": "galley",
         "type": "galley",
         "hullSize": 8,
         "baseCannons": 12,
@@ -3410,8 +3678,9 @@
         "sailors": 60,
         "spriteLevel": 1
     },
-    "howitzer": {
+    {
         "name": "Howitzer",
+        "id": "howitzer",
         "type": "artillery",
         "maneuver": 2,
         "offensiveMorale": 2,
@@ -3422,9 +3691,10 @@
         "defensiveShock": 2,
         "techLevel": 20
     },
-    "bantu_tribal_warfare": {
+    {
         "name": "South African Warrior",
-        "unitType": "subSaharan",
+        "id": "bantu_tribal_warfare",
+        "unitType": "sub_saharan",
         "type": "infantry",
         "maneuver": 1,
         "offensiveMorale": 2,
@@ -3435,8 +3705,9 @@
         "defensiveShock": 1,
         "techLevel": 5
     },
-    "maya_guerilla_warfare": {
+    {
         "name": "American Guerrilla Warfare",
+        "id": "maya_guerilla_warfare",
         "unitType": "mesoamerican",
         "type": "infantry",
         "maneuver": 1,
@@ -3448,8 +3719,9 @@
         "defensiveShock": 2,
         "techLevel": 19
     },
-    "mexican_guerilla_warfare": {
+    {
         "name": "Central American Guerrillas",
+        "id": "mexican_guerilla_warfare",
         "unitType": "mesoamerican",
         "type": "infantry",
         "maneuver": 1,
@@ -3461,8 +3733,9 @@
         "defensiveShock": 2,
         "techLevel": 19
     },
-    "ottoman_timariot": {
+    {
         "name": "Timariot Cavalry",
+        "id": "ottoman_timariot",
         "type": "cavalry",
         "unitType": "ottoman",
         "maneuver": 2,
@@ -3474,8 +3747,9 @@
         "defensiveShock": 1,
         "techLevel": 6
     },
-    "british_hussar": {
+    {
         "name": "Reformed Latin Hussars",
+        "id": "british_hussar",
         "type": "cavalry",
         "unitType": "western",
         "maneuver": 2,
@@ -3487,9 +3761,10 @@
         "defensiveShock": 4,
         "techLevel": 26
     },
-    "ha_xiuhtecuhtli_soldier": {
+    {
         "name": "Xiuhtecuhtli Soldier",
-        "unitType": "highAmerican",
+        "id": "ha_xiuhtecuhtli_soldier",
+        "unitType": "high_american",
         "type": "infantry",
         "maneuver": 1,
         "offensiveFire": 3,
@@ -3500,9 +3775,10 @@
         "defensiveMorale": 2,
         "techLevel": 9
     },
-    "iroquois_rifle_scout": {
+    {
         "name": "Rifle Scout Infantry",
-        "unitType": "northAmerican",
+        "id": "iroquois_rifle_scout",
+        "unitType": "north_american",
         "type": "infantry",
         "maneuver": 1,
         "offensiveMorale": 2,
@@ -3513,8 +3789,9 @@
         "defensiveShock": 2,
         "techLevel": 19
     },
-    "topchis_artillery": {
+    {
         "name": "Muslim Musketeer Cavalry",
+        "id": "topchis_artillery",
         "type": "cavalry",
         "unitType": "muslim",
         "maneuver": 2,
@@ -3526,9 +3803,10 @@
         "defensiveShock": 2,
         "techLevel": 14
     },
-    "pueblo_ambush": {
+    {
         "name": "Ambush Infantry",
-        "unitType": "northAmerican",
+        "id": "pueblo_ambush",
+        "unitType": "north_american",
         "type": "infantry",
         "maneuver": 1,
         "offensiveMorale": 2,
@@ -3539,9 +3817,10 @@
         "defensiveShock": 0,
         "techLevel": 5
     },
-    "algonkin_tomahawk_charge": {
+    {
         "name": "Algonkin Tomahawk Warriors",
-        "unitType": "northAmerican",
+        "id": "algonkin_tomahawk_charge",
+        "unitType": "north_american",
         "type": "infantry",
         "maneuver": 1,
         "offensiveMorale": 2,
@@ -3552,8 +3831,9 @@
         "defensiveShock": 1,
         "techLevel": 5
     },
-    "mughal_mansabdar": {
+    {
         "name": "Indian Cavalry Archers",
+        "id": "mughal_mansabdar",
         "type": "cavalry",
         "unitType": "indian",
         "maneuver": 2,
@@ -3565,9 +3845,10 @@
         "defensiveShock": 2,
         "techLevel": 6
     },
-    "westernized_south_american": {
+    {
         "name": "Westernized South American Infantry",
-        "unitType": "southAmerican",
+        "id": "westernized_south_american",
+        "unitType": "south_american",
         "type": "infantry",
         "maneuver": 1,
         "offensiveMorale": 3,
@@ -3578,8 +3859,9 @@
         "defensiveShock": 3,
         "techLevel": 26
     },
-    "spanish_tercio": {
+    {
         "name": "Tercio Infantry",
+        "id": "spanish_tercio",
         "type": "infantry",
         "unitType": "western",
         "maneuver": 1,
@@ -3591,8 +3873,9 @@
         "defensiveShock": 2,
         "techLevel": 12
     },
-    "swiss_landsknechten": {
+    {
         "name": "Landsknecht Infantry",
+        "id": "swiss_landsknechten",
         "type": "infantry",
         "unitType": "western",
         "maneuver": 1,
@@ -3604,8 +3887,9 @@
         "defensiveShock": 1,
         "techLevel": 9
     },
-    "ottoman_reformed_spahi": {
+    {
         "name": "Reformed Spahi Cavalry",
+        "id": "ottoman_reformed_spahi",
         "type": "cavalry",
         "unitType": "ottoman",
         "maneuver": 2,
@@ -3617,8 +3901,9 @@
         "defensiveShock": 3,
         "techLevel": 18
     },
-    "slavic_stradioti": {
+    {
         "name": "Stratioti Cavalry",
+        "id": "slavic_stradioti",
         "type": "cavalry",
         "unitType": "eastern",
         "maneuver": 2,
@@ -3630,8 +3915,9 @@
         "defensiveShock": 1,
         "techLevel": 6
     },
-    "muslim_cavalry_archers": {
+    {
         "name": "Muslim Cavalry Archers",
+        "id": "muslim_cavalry_archers",
         "type": "cavalry",
         "unitType": "muslim",
         "maneuver": 2,
@@ -3643,8 +3929,9 @@
         "defensiveShock": 1,
         "techLevel": 1
     },
-    "small_cast_iron_bombard": {
+    {
         "name": "Small Cast Iron Cannon",
+        "id": "small_cast_iron_bombard",
         "type": "artillery",
         "maneuver": 2,
         "offensiveMorale": 1,
@@ -3655,8 +3942,9 @@
         "defensiveShock": 2,
         "techLevel": 13
     },
-    "cog": {
+    {
         "name": "Cog",
+        "id": "cog",
         "type": "transport",
         "hullSize": 12,
         "baseCannons": 4,
@@ -3665,10 +3953,11 @@
         "sailors": 50,
         "spriteLevel": 1
     },
-    "steppe_rifles": {
+    {
         "name": "Steppe Rifles",
+        "id": "steppe_rifles",
         "type": "infantry",
-        "unitType": "nomadGroup",
+        "unitType": "nomad_group",
         "maneuver": 1,
         "offensiveMorale": 4,
         "defensiveMorale": 4,
@@ -3678,9 +3967,10 @@
         "defensiveShock": 3,
         "techLevel": 26
     },
-    "ha_reformed_xoloti": {
+    {
         "name": "Reformed Xoloti",
-        "unitType": "highAmerican",
+        "id": "ha_reformed_xoloti",
+        "unitType": "high_american",
         "type": "infantry",
         "maneuver": 1,
         "offensiveFire": 4,
@@ -3691,9 +3981,10 @@
         "defensiveMorale": 3,
         "techLevel": 30
     },
-    "apache_guerilla": {
+    {
         "name": "North American Guerrillas",
-        "unitType": "northAmerican",
+        "id": "apache_guerilla",
+        "unitType": "north_american",
         "type": "infantry",
         "maneuver": 1,
         "offensiveMorale": 3,
@@ -3704,8 +3995,9 @@
         "defensiveShock": 4,
         "techLevel": 26
     },
-    "japanese_samurai": {
+    {
         "name": "Samurai Cavalry",
+        "id": "japanese_samurai",
         "type": "cavalry",
         "unitType": "chinese",
         "maneuver": 2,
@@ -3717,9 +4009,10 @@
         "defensiveShock": 1,
         "techLevel": 6
     },
-    "aboriginal_swarm_cav": {
+    {
         "name": "Aboriginal Swarm Cavalry",
-        "unitType": "aboriginalTech",
+        "id": "aboriginal_swarm_cav",
+        "unitType": "aboriginal_tech",
         "type": "cavalry",
         "maneuver": 2,
         "offensiveMorale": 3,
@@ -3730,8 +4023,9 @@
         "defensiveShock": 3,
         "techLevel": 18
     },
-    "merchantman": {
+    {
         "name": "Merchantman",
+        "id": "merchantman",
         "type": "transport",
         "hullSize": 24,
         "baseCannons": 8,
@@ -3740,9 +4034,10 @@
         "sailors": 100,
         "spriteLevel": 4
     },
-    "aboriginal_infantry": {
+    {
         "name": "Ritual Warrior",
-        "unitType": "aboriginalTech",
+        "id": "aboriginal_infantry",
+        "unitType": "aboriginal_tech",
         "type": "infantry",
         "maneuver": 1,
         "offensiveMorale": 1,
@@ -3753,8 +4048,9 @@
         "defensiveShock": 2,
         "techLevel": 5
     },
-    "central_american_hussar": {
+    {
         "name": "Central American Hussar",
+        "id": "central_american_hussar",
         "unitType": "mesoamerican",
         "type": "cavalry",
         "maneuver": 2,
@@ -3766,8 +4062,9 @@
         "defensiveShock": 2,
         "techLevel": 14
     },
-    "ottoman_janissary": {
+    {
         "name": "Janissary Infantry",
+        "id": "ottoman_janissary",
         "type": "infantry",
         "unitType": "ottoman",
         "maneuver": 1,
@@ -3779,9 +4076,10 @@
         "defensiveShock": 1,
         "techLevel": 9
     },
-    "south_american_horsemen": {
+    {
         "name": "South American Horsemen",
-        "unitType": "southAmerican",
+        "id": "south_american_horsemen",
+        "unitType": "south_american",
         "type": "cavalry",
         "maneuver": 2,
         "offensiveMorale": 1,
@@ -3792,8 +4090,9 @@
         "defensiveShock": 1,
         "techLevel": 6
     },
-    "ali_bey_reformed_infantry": {
+    {
         "name": "Ali Bey Reformed Cavalry",
+        "id": "ali_bey_reformed_infantry",
         "unitType": "muslim",
         "type": "cavalry",
         "maneuver": 2,
@@ -3805,9 +4104,10 @@
         "defensiveShock": 3,
         "techLevel": 23
     },
-    "westernized_niger_kongolese": {
+    {
         "name": "Westernized Central African Infantry",
-        "unitType": "subSaharan",
+        "id": "westernized_niger_kongolese",
+        "unitType": "sub_saharan",
         "type": "infantry",
         "maneuver": 1,
         "offensiveMorale": 4,
@@ -3818,8 +4118,9 @@
         "defensiveShock": 3,
         "techLevel": 26
     },
-    "asian_musketeer": {
+    {
         "name": "Asian Musketeer",
+        "id": "asian_musketeer",
         "type": "infantry",
         "unitType": "chinese",
         "maneuver": 1,
@@ -3831,9 +4132,10 @@
         "defensiveShock": 2,
         "techLevel": 19
     },
-    "pacific_guerrillas": {
+    {
         "name": "Polynesian Guerrillas",
-        "unitType": "polynesianTech",
+        "id": "pacific_guerrillas",
+        "unitType": "polynesian_tech",
         "type": "infantry",
         "maneuver": 1,
         "offensiveMorale": 3,
@@ -3844,8 +4146,9 @@
         "defensiveShock": 3,
         "techLevel": 26
     },
-    "french_bluecoat": {
+    {
         "name": "Blue Coat Infantry",
+        "id": "french_bluecoat",
         "type": "infantry",
         "unitType": "western",
         "maneuver": 1,
@@ -3857,9 +4160,10 @@
         "defensiveShock": 3,
         "techLevel": 26
     },
-    "early_frigate": {
+    {
         "name": "Early Frigate",
-        "type": "lightShip",
+        "id": "early_frigate",
+        "type": "light_ship",
         "hullSize": 12,
         "baseCannons": 15,
         "blockade": 10,
@@ -3868,9 +4172,10 @@
         "sailors": 100,
         "spriteLevel": 3
     },
-    "aboriginal_hussar": {
+    {
         "name": "Aboriginal Hussar",
-        "unitType": "aboriginalTech",
+        "id": "aboriginal_hussar",
+        "unitType": "aboriginal_tech",
         "type": "cavalry",
         "maneuver": 2,
         "offensiveMorale": 3,
@@ -3881,8 +4186,9 @@
         "defensiveShock": 2,
         "techLevel": 14
     },
-    "druzhina_cavalry": {
+    {
         "name": "Druzhina Cavalry",
+        "id": "druzhina_cavalry",
         "type": "cavalry",
         "unitType": "eastern",
         "maneuver": 2,
@@ -3894,8 +4200,9 @@
         "defensiveShock": 1,
         "techLevel": 1
     },
-    "galiot": {
+    {
         "name": "Galiot",
+        "id": "galiot",
         "type": "galley",
         "hullSize": 16,
         "baseCannons": 24,
@@ -3904,8 +4211,9 @@
         "sailors": 120,
         "spriteLevel": 4
     },
-    "east_mongolian_steppe": {
+    {
         "name": "Reformed Asian Steppe Cavalry",
+        "id": "east_mongolian_steppe",
         "type": "cavalry",
         "unitType": "chinese",
         "maneuver": 2,
@@ -3917,8 +4225,9 @@
         "defensiveShock": 2,
         "techLevel": 10
     },
-    "swedish_gustavian": {
+    {
         "name": "Gustavian Infantry",
+        "id": "swedish_gustavian",
         "type": "infantry",
         "unitType": "western",
         "maneuver": 1,
@@ -3930,8 +4239,9 @@
         "defensiveShock": 2,
         "techLevel": 19
     },
-    "coehorn_mortar": {
+    {
         "name": "Coehorn Mortar",
+        "id": "coehorn_mortar",
         "type": "artillery",
         "maneuver": 2,
         "offensiveMorale": 2,
@@ -3942,8 +4252,9 @@
         "defensiveShock": 2,
         "techLevel": 22
     },
-    "ottoman_sekban": {
+    {
         "name": "Sekban Infantry",
+        "id": "ottoman_sekban",
         "type": "infantry",
         "unitType": "ottoman",
         "maneuver": 1,
@@ -3955,8 +4266,9 @@
         "defensiveShock": 1,
         "techLevel": 12
     },
-    "mongolian_bow": {
+    {
         "name": "Archer Cavalry",
+        "id": "mongolian_bow",
         "type": "cavalry",
         "unitType": "chinese",
         "maneuver": 2,
@@ -3968,8 +4280,9 @@
         "defensiveShock": 1,
         "techLevel": 1
     },
-    "maharathan_guerilla_warfare": {
+    {
         "name": "Telingas",
+        "id": "maharathan_guerilla_warfare",
         "type": "infantry",
         "unitType": "indian",
         "maneuver": 1,
@@ -3981,8 +4294,9 @@
         "defensiveShock": 2,
         "techLevel": 23
     },
-    "polish_winged_hussar": {
+    {
         "name": "Winged Hussars",
+        "id": "polish_winged_hussar",
         "type": "cavalry",
         "unitType": "eastern",
         "maneuver": 2,
@@ -3994,8 +4308,9 @@
         "defensiveShock": 4,
         "techLevel": 22
     },
-    "ottoman_yaya": {
+    {
         "name": "Yaya Infantry",
+        "id": "ottoman_yaya",
         "type": "infantry",
         "unitType": "ottoman",
         "maneuver": 1,
@@ -4007,9 +4322,10 @@
         "defensiveShock": 0,
         "techLevel": 1
     },
-    "high_american_dragoon": {
+    {
         "name": "American Dragoon",
-        "unitType": "highAmerican",
+        "id": "high_american_dragoon",
+        "unitType": "high_american",
         "type": "cavalry",
         "maneuver": 2,
         "offensiveMorale": 4,
@@ -4020,9 +4336,10 @@
         "defensiveShock": 3,
         "techLevel": 23
     },
-    "westernized_adal": {
+    {
         "name": "Westernized East African Infantry",
-        "unitType": "subSaharan",
+        "id": "westernized_adal",
+        "unitType": "sub_saharan",
         "type": "infantry",
         "maneuver": 1,
         "offensiveMorale": 4,
@@ -4033,10 +4350,11 @@
         "defensiveShock": 2,
         "techLevel": 26
     },
-    "african_tuareg_cavalry": {
+    {
         "name": "Tuareg Cavalry",
+        "id": "african_tuareg_cavalry",
         "type": "cavalry",
-        "unitType": "subSaharan",
+        "unitType": "sub_saharan",
         "maneuver": 2,
         "offensiveMorale": 2,
         "defensiveMorale": 1,
@@ -4046,8 +4364,9 @@
         "defensiveShock": 1,
         "techLevel": 6
     },
-    "french_dragoon": {
+    {
         "name": "Latin Dragoons",
+        "id": "french_dragoon",
         "type": "cavalry",
         "unitType": "western",
         "maneuver": 2,
@@ -4059,8 +4378,9 @@
         "defensiveShock": 4,
         "techLevel": 23
     },
-    "austrian_white_coat": {
+    {
         "name": "White Coat Infantry",
+        "id": "austrian_white_coat",
         "type": "infantry",
         "unitType": "western",
         "maneuver": 1,
@@ -4072,10 +4392,11 @@
         "defensiveShock": 3,
         "techLevel": 26
     },
-    "african_mossi_horsemen": {
+    {
         "name": "Mossi Horsemen",
+        "id": "african_mossi_horsemen",
         "type": "cavalry",
-        "unitType": "subSaharan",
+        "unitType": "sub_saharan",
         "maneuver": 2,
         "offensiveMorale": 3,
         "defensiveMorale": 3,
@@ -4085,9 +4406,10 @@
         "defensiveShock": 2,
         "techLevel": 10
     },
-    "high_american_hussar": {
+    {
         "name": "American Hussars",
-        "unitType": "highAmerican",
+        "id": "high_american_hussar",
+        "unitType": "high_american",
         "type": "cavalry",
         "maneuver": 2,
         "offensiveMorale": 3,
@@ -4098,10 +4420,11 @@
         "defensiveShock": 2,
         "techLevel": 14
     },
-    "steppe_footmen": {
+    {
         "name": "Steppe Footmen",
+        "id": "steppe_footmen",
         "type": "infantry",
-        "unitType": "nomadGroup",
+        "unitType": "nomad_group",
         "maneuver": 1,
         "offensiveMorale": 2,
         "defensiveMorale": 2,
@@ -4111,8 +4434,9 @@
         "defensiveShock": 2,
         "techLevel": 12
     },
-    "swedish_arme_blanche": {
+    {
         "name": "Arme Blanche Cavalry",
+        "id": "swedish_arme_blanche",
         "type": "cavalry",
         "unitType": "western",
         "maneuver": 2,
@@ -4124,8 +4448,9 @@
         "defensiveShock": 3,
         "techLevel": 23
     },
-    "gaelic_free_shooter": {
+    {
         "name": "Free Shooter Infantry",
+        "id": "gaelic_free_shooter",
         "type": "infantry",
         "unitType": "western",
         "maneuver": 1,
@@ -4137,8 +4462,9 @@
         "defensiveShock": 1,
         "techLevel": 12
     },
-    "polish_musketeer": {
+    {
         "name": "Defensive Eastern Musketeers",
+        "id": "polish_musketeer",
         "type": "infantry",
         "unitType": "eastern",
         "maneuver": 1,
@@ -4150,9 +4476,10 @@
         "defensiveShock": 2,
         "techLevel": 12
     },
-    "ethiopian_guerilla_warfare": {
+    {
         "name": "North African Guerrillas",
-        "unitType": "subSaharan",
+        "id": "ethiopian_guerilla_warfare",
+        "unitType": "sub_saharan",
         "type": "infantry",
         "maneuver": 1,
         "offensiveMorale": 2,
@@ -4163,8 +4490,9 @@
         "defensiveShock": 3,
         "techLevel": 23
     },
-    "culverin": {
+    {
         "name": "Culverin",
+        "id": "culverin",
         "type": "artillery",
         "maneuver": 2,
         "offensiveMorale": 0,
@@ -4175,9 +4503,10 @@
         "defensiveShock": 1,
         "techLevel": 10
     },
-    "mali_tribal_warfare": {
+    {
         "name": "North African Warrior",
-        "unitType": "subSaharan",
+        "id": "mali_tribal_warfare",
+        "unitType": "sub_saharan",
         "type": "infantry",
         "maneuver": 1,
         "offensiveMorale": 1,
@@ -4188,4 +4517,4 @@
         "defensiveShock": 2,
         "techLevel": 5
     }
-}
+]
