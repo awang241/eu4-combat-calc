@@ -1,6 +1,6 @@
 import { RegimentTypes } from "../model/Regiment"
 import Pips, { blankPips } from "./Pips"
-import { TechGroup } from "./TechGroup"
+import TechGroup from "./TechGroup"
 
 type Unit = {
     name: string,

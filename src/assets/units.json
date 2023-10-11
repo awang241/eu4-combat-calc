@@ -3487,7 +3487,7 @@
         "techLevel": 10
     },
     {
-        "name": "1 \"Polynesian Spearmen",
+        "name": "Polynesian Spearmen",
         "id": "pacific_spearman",
         "unitType": "polynesian_tech",
         "type": "infantry",
