@@ -1,11 +1,9 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useState } from 'react';
 import Army from './model/Army';
-import { RegimentTypes } from './model/Regiment';
 
 import ArmyModifiersPanel from './components/ArmyModifiersPanel';
 import RegimentsPanel from './components/RegimentsPanel';
-import { RegimentsState, defaultRegimentsState } from "./types/state/RegimentsState";
 import BattleGrid from './components/BattleGrid';
 
 import { parseTechs, parseUnits } from './util/Loader';
@@ -14,9 +12,10 @@ import './App.css';
 import { Modifiers, createDefaultModifiers } from './types/Modifiers';
 import ArmySnapshot from './types/ArmySnapshot';
 import TechGroup from './types/TechGroup';
-import Unit, { blankUnit } from './types/Unit';
-import { Tech, TechState } from './types/Tech';
+import Unit from './types/Unit';
+import { Tech, TechState, defaultTechState } from './types/Tech';
 import TechPanel from './components/TechPanel';
+import { useRegimentsState } from "./types/state/RegimentsState";
 
 declare global {
   interface Array<T> {
@@ -33,7 +32,11 @@ declare global {
 
 const units: Map<TechGroup, Unit[]> = parseUnits();
 const techs: Tech[] = parseTechs();
-let attacker: ArmyState, defender: ArmyState; 
+
+function getUnitsAtTech(state: TechState): Unit[] {
+  const source: Unit[] = units.get(state.group) ?? [];
+  return source.filter(unit => (unit.techLevel <= state.level)).sort((a, b) => b.techLevel - a.techLevel);
+}
 
 /**
  * 
@@ -79,23 +82,26 @@ export default function App() {
   const [results, setResults] = useState<[ArmySnapshot, ArmySnapshot][]>([]);
   const [attackerModifiers, setAttackerModifiers] = useState(createDefaultModifiers);
   const [defenderModifiers, setDefenderModifiers] = useState(createDefaultModifiers);
-  const [attackerCounts, setAttackerCounts] = useState(defaultRegimentsState);
-  const [defenderCounts, setDefenderCounts] = useState(defaultRegimentsState);
   const [attackerTech, setAttackerTech] = useState(defaultTechState);
   const [defenderTech, setDefenderTech] = useState(defaultTechState);
+  const [attackerUnits, setAttackerUnits] = useState(getUnitsAtTech(attackerTech));
+  const [defenderUnits, setDefenderUnits] = useState(getUnitsAtTech(attackerTech));
+  const [attackerRegState, attackerRegSetters] = useRegimentsState();
+  const [defenderRegState, defenderRegSetters] = useRegimentsState();
 
-  const getUnitsAtTech = (techLevel: number, techGroup: TechGroup): Unit[] => {
-    const source: Unit[] = units.get(techGroup) ?? []
-    return source.filter(unit => (unit.techLevel <= techLevel)).sort((a, b) => b.techLevel - a.techLevel);
-  }
+  useEffect(() => {
+    setAttackerUnits(getUnitsAtTech(attackerTech))
+  }, [attackerTech])
+
+  useEffect(() => {
+    setDefenderUnits(getUnitsAtTech(defenderTech))
+  }, [defenderTech])
 
   const handleSubmit = (event: React.MouseEvent<HTMLElement>) => {
     const attackerModifier: Modifiers = {...attackerModifiers};
     const defenderModifier: Modifiers = {...defenderModifiers};
-    const infUnit: Unit  = units.get(TechGroup.WESTERN)?.findLast(val => val.type === RegimentTypes.INFANTRY) ?? blankUnit(RegimentTypes.INFANTRY);
-    const cavUnit: Unit  = units.get(TechGroup.WESTERN)?.findLast(val => val.type === RegimentTypes.CAVALRY) ?? blankUnit(RegimentTypes.CAVALRY);
-    const army1 = new Army(attackerCounts.infantry, attackerCounts.cavalry, attackerModifier, infUnit, cavUnit);
-    const army2 = new Army(defenderCounts.infantry, defenderCounts.cavalry, defenderModifier, infUnit, cavUnit);
+    const army1 = new Army(attackerRegState, attackerModifier, techs[attackerTech.level]);
+    const army2 = new Army(defenderRegState, defenderModifier, techs[defenderTech.level]);
     setResults(combat(army1, army2));
   }
 
@@ -114,20 +120,8 @@ export default function App() {
       </div>
       <div id="regiment-modifiers" className='collapsing-panel'>
         <h3 className='full-width'>Regiments and Regiment Modifiers</h3>
-        <RegimentsPanel
-          modifiers={attackerModifiers}
-          counts={attackerCounts}
-          units={getUnitsAtTech(attackerTech.level, attackerTech.group) ?? []}
-          modifierCb={setAttackerModifiers}
-          countCb={setAttackerCounts}
-        />
-        <RegimentsPanel
-          modifiers={defenderModifiers}
-          counts={defenderCounts}
-          units={getUnitsAtTech(defenderTech.level, defenderTech.group) ?? []}
-          modifierCb={setDefenderModifiers}
-          countCb={setDefenderCounts}
-        />
+        <RegimentsPanel state={attackerRegState} units={attackerUnits} setters={attackerRegSetters}/>
+        <RegimentsPanel state={defenderRegState} units={defenderUnits} setters={defenderRegSetters}/>
       </div>
       <div id="army-modifiers" className='collapsing-panel'>
         <h3 className='full-width'>Army Modifiers</h3>

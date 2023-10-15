@@ -1,9 +1,7 @@
 import "./ArmyModifiersPanel.css";
 import { ModifierNames, inModifierNames, Modifiers, toMultiplier } from "../types/Modifiers";
 import { Tech } from "../types/Tech";
-import { useState } from "react";
-import Unit from "../types/Unit";
-import { RegimentTypes } from "../model/Regiment";
+import { useEffect, useState } from "react";
 
 
 
@@ -12,23 +10,43 @@ export default function ArmyModifiersPanel(props: {
             tech: Tech,
             callback: (fn: ((state: Modifiers) => Modifiers)) => void,
         }) {
-    const [moralePercent, setMoralePercent] = useState(0);
+    const [bonusMoralePercent, setBonusMoralePercent] = useState(0);
+    const [bonusTactics, setBonusTactics] = useState(0);
 
-    const calculatePercentChange = (baseValue: number, percent: number): number => {
-        return baseValue * toMultiplier(percent);
+    useEffect(() => {console.log(`tech changed : ${props.tech.level}`)}, [props.tech])
+
+
+    const totalMorale = (moraleBonus: number) => {
+        return props.tech.morale * toMultiplier(moraleBonus)
+    }
+
+    const totalTactics = (tacticsBonus: number) => {
+        return (props.tech.tactics + tacticsBonus) * toMultiplier(props.modifiers.discipline)
     }
 
     const handleModifierInput = (event: React.ChangeEvent<HTMLInputElement>) => {
         const name: ModifierNames = event.target.name as ModifierNames
         const value: number = (event.target.value === "") ? 0 : parseFloat(event.target.value);
         if (inModifierNames(name) && !isNaN(value)) {
-            let modifierValue: number = value;
+            const newModifiers = new Map<ModifierNames, number>();
             if (name === ModifierNames.MORALE) {
-                modifierValue = calculatePercentChange(props.tech.morale, value);
-                setMoralePercent(value);
-            }
+                newModifiers.set(name, totalMorale(value));
+                setBonusMoralePercent(value);
+            } else if (name === ModifierNames.DISCIPLINE) {
+                newModifiers.set(name, value);
+                newModifiers.set(ModifierNames.TACTICS, totalTactics(bonusTactics));
+            } else if (name === ModifierNames.TACTICS){
+                newModifiers.set(name, totalTactics(value));
+                setBonusTactics(value);
+            } else {
+                newModifiers.set(name, value);
+            } 
             props.callback((state) => {
-                return {...state, [name]: modifierValue};
+                let newState = {...state};
+                for (const entry of newModifiers.entries()) {
+                    newState[entry[0]] = entry[1];
+                }
+                return newState;
             })
         }
     }
@@ -55,7 +73,7 @@ export default function ArmyModifiersPanel(props: {
                             step={0.1} 
                             name={ModifierNames.MORALE} 
                             onChange={handleModifierInput} 
-                            value={moralePercent}
+                            value={bonusMoralePercent}
                         />
                         <label htmlFor="morale-input">%</label>
                     </div>
@@ -64,7 +82,7 @@ export default function ArmyModifiersPanel(props: {
                     <input 
                         disabled={true}
                         type="number"
-                        value={calculatePercentChange(props.tech.morale, moralePercent).toFixed(2)}
+                        value={totalMorale(bonusMoralePercent).toFixed(2)}
                     />
                 </div>
                 <div className="two-column-grid">
@@ -84,9 +102,9 @@ export default function ArmyModifiersPanel(props: {
                         type="number" 
                         min={0}
                         step={0.1} 
-                        name={ModifierNames.BONUS_TACTICS} 
+                        name={ModifierNames.TACTICS} 
                         onChange={handleModifierInput} 
-                        value={props.modifiers[ModifierNames.BONUS_TACTICS] ?? 0}
+                        value={bonusTactics}
                     />
 
                     <span>Discipline:</span>
@@ -108,9 +126,7 @@ export default function ArmyModifiersPanel(props: {
                     <input
                         disabled={true}
                         type="number"
-                        value={calculatePercentChange(
-                            props.tech.tactics + props.modifiers.bonusTactics,
-                             props.modifiers.discipline).toFixed(2)}
+                        value={totalTactics(bonusTactics).toFixed(2)}
                     />
                 </div>
             </div>

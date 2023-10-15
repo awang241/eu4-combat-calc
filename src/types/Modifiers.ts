@@ -11,7 +11,8 @@ export enum ModifierNames{
     MORALE_DAMAGE_RECEIVED = "moraleDamageReceived",
     INFANTRY_DAMAGE = "infantryCombatAbility",
     CAVALRY_DAMAGE = "cavalryCombatAbility",
-    BONUS_TACTICS = "bonusTactics"
+    ARTILLERY_DAMAGE = "artilleryCombatAbility",
+    TACTICS = "tactics"
 }
 
 export function inModifierNames(name: string) {
@@ -30,11 +31,12 @@ export function createDefaultModifiers(): Modifiers {
         fireDamageReceived: 0,
         infantryCombatAbility: 0,
         cavalryCombatAbility: 0,
+        artilleryCombatAbility: 0,
         shockDamage: 0,
         shockDamageReceived: 0,
         moraleDamage: 0,
         moraleDamageReceived: 0,
-        bonusTactics: 0
+        tactics: 0
     }
 }
 

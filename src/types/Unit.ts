@@ -20,4 +20,16 @@ export function blankUnit(type: RegimentTypes): Unit {
     }
 }
 
+export function blankInfantry(): Unit {
+    return blankUnit(RegimentTypes.INFANTRY);
+}
+
+export function blankCavalry(): Unit {
+    return blankUnit(RegimentTypes.INFANTRY);
+}
+
+export function blankArtillery(): Unit {
+    return blankUnit(RegimentTypes.INFANTRY);
+}
+
 export default Unit
