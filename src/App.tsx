@@ -16,6 +16,7 @@ import Unit from './types/Unit';
 import { Tech, TechState, defaultTechState } from './types/Tech';
 import TechPanel from './components/TechPanel';
 import { useRegimentsState } from "./types/state/RegimentsState";
+import { combat } from './Combat';
 
 declare global {
   interface Array<T> {
@@ -36,46 +37,6 @@ const techs: Tech[] = parseTechs();
 function getUnitsAtTech(state: TechState): Unit[] {
   const source: Unit[] = units.get(state.group) ?? [];
   return source.filter(unit => (unit.techLevel <= state.level)).sort((a, b) => b.techLevel - a.techLevel);
-}
-
-/**
- * 
- * @param {Army} attacker 
- * @param {Army} defender 
- */
-function combat(attacker: Army, defender: Army): [ArmySnapshot, ArmySnapshot][] {
-  let days = 1;
-
-  const loopLimit:number = 100;
-  const dayOffset:number = 1;
-  const combatPhasePeriod: number = 6;
-  const firePhaseCutoff: number = 3;
-  const combatWidth: number = 20;
-  attacker.deploy(combatWidth, defender.frontlineRegimentCount());
-  defender.deploy(combatWidth, attacker.frontlineRegimentCount());
-  let isAttackerUpdated = true;
-  let isDefenderUpdated = true;
-  const dailyStrengths: [ArmySnapshot, ArmySnapshot][] = [];
-  dailyStrengths.push([attacker.getSnapshot(), defender.getSnapshot()]);
-  while (!attacker.isBroken() && !defender.isBroken() && days < loopLimit) {
-    let isFirePhase = (days - dayOffset) % combatPhasePeriod < firePhaseCutoff;
-    let roll = 5;
-    if (isDefenderUpdated || isAttackerUpdated) {
-      attacker.setTargets(defender);
-      defender.setTargets(attacker);
-    }
-    //N.B. Do not collapse - casualties must be calculated for both sides before applying them.
-    const defenderCasualties = attacker.calculateCasualties(roll, isFirePhase, days, defender.modifiers);
-    const attackerCasualties = defender.calculateCasualties(roll, isFirePhase, days, attacker.modifiers);
-    attacker.applyCasualtiesAndMoraleDamage(attackerCasualties, defender.modifiers.morale);
-    defender.applyCasualtiesAndMoraleDamage(defenderCasualties, attacker.modifiers.morale);
-    dailyStrengths.push([attacker.getSnapshot(), defender.getSnapshot()]);
-    isAttackerUpdated = attacker.replaceRegiments();
-    isDefenderUpdated = defender.replaceRegiments();
-
-    days++;
-  }
-  return dailyStrengths;
 }
 
 export default function App() {
