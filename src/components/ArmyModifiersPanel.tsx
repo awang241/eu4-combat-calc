@@ -12,7 +12,11 @@ export default function ArmyModifiersPanel(props: {
         }) {
     const [bonusMoralePercent, setBonusMoralePercent] = useState(0);
     const [bonusTactics, setBonusTactics] = useState(0);
-
+    useEffect(() => {
+        setModifier(ModifierNames.MORALE, bonusMoralePercent);
+        setModifier(ModifierNames.TACTICS, bonusTactics);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [props.tech])
 
     const totalMorale = (moraleBonus: number) => {
         return props.tech.morale * toMultiplier(moraleBonus)
@@ -22,30 +26,28 @@ export default function ArmyModifiersPanel(props: {
         return (props.tech.tactics + tacticsBonus) * toMultiplier(props.modifiers.discipline)
     }
 
+    const setModifier = (name: ModifierNames, value: number) => {
+        const newModifiers: {[name in ModifierNames]?: number} = {};
+            if (name === ModifierNames.MORALE) {
+                newModifiers[name] = totalMorale(value);
+                setBonusMoralePercent(value);
+            } else if (name === ModifierNames.DISCIPLINE) {
+                newModifiers[name] = value;
+                newModifiers[ModifierNames.TACTICS] = totalTactics(bonusTactics);
+            } else if (name === ModifierNames.TACTICS){
+                newModifiers[name] = totalTactics(value);
+                setBonusTactics(value);
+            } else {
+                newModifiers[name] = value;
+            } 
+            props.callback(state => ({...state, ...newModifiers}));
+    }
+
     const handleModifierInput = (event: React.ChangeEvent<HTMLInputElement>) => {
         const name: ModifierNames = event.target.name as ModifierNames
         const value: number = (event.target.value === "") ? 0 : parseFloat(event.target.value);
         if (inModifierNames(name) && !isNaN(value)) {
-            const newModifiers = new Map<ModifierNames, number>();
-            if (name === ModifierNames.MORALE) {
-                newModifiers.set(name, totalMorale(value));
-                setBonusMoralePercent(value);
-            } else if (name === ModifierNames.DISCIPLINE) {
-                newModifiers.set(name, value);
-                newModifiers.set(ModifierNames.TACTICS, totalTactics(bonusTactics));
-            } else if (name === ModifierNames.TACTICS){
-                newModifiers.set(name, totalTactics(value));
-                setBonusTactics(value);
-            } else {
-                newModifiers.set(name, value);
-            } 
-            props.callback((state) => {
-                let newState = {...state};
-                for (const entry of newModifiers.entries()) {
-                    newState[entry[0]] = entry[1];
-                }
-                return newState;
-            })
+            setModifier(name, value);
         }
     }
 

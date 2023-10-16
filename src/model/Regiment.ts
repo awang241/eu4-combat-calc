@@ -31,7 +31,7 @@ export default class Regiment{
     this._currentMorale = morale;
     this._strength = Regiment.MAX_STRENGTH;
     this._targetIndex = undefined;
-    this._unit = unit
+    this._unit = unit;
     this._type = unit.type;
   }
   

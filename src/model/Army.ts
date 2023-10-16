@@ -2,9 +2,10 @@ import ArmySnapshot from "../types/ArmySnapshot";
 import { Modifiers, toMultiplier } from "../types/Modifiers";
 import { getDefencePips, getOffencePips } from "../types/Pips";
 import { Tech } from "../types/Tech";
-import { RegimentsState } from "../types/state/RegimentsState";
+import { RegimentsState } from "../state/RegimentsState";
 import Regiment, { RegimentTypes } from "./Regiment";
 import Row from "./Row";
+import { blankUnit } from "../types/Unit";
 
 export default class Army {
     //The base maximum morale for this army.
@@ -44,9 +45,12 @@ export default class Army {
         for (let i = 0; i < regsState.counts.infantry; i++) {
             this.regiments.push(new Regiment(modifiers.morale, regsState.units.infantry))
         }
-        for (let i = 0; i < regsState.counts.cavalry; i++) {
-            this.regiments.push(new Regiment(modifiers.morale, regsState.units.cavalry))
+        if (regsState.units.cavalry !== blankUnit(RegimentTypes.CAVALRY)) {
+            for (let i = 0; i < regsState.counts.cavalry; i++) {
+                this.regiments.push(new Regiment(modifiers.morale, regsState.units.cavalry))
+            }
         }
+        
         this._modifiers = modifiers;
         this.tech = tech;
         Object.freeze(modifiers);

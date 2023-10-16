@@ -1,9 +1,9 @@
 import "./RegimentsPanel.css";
 import { RegimentTypes } from "../model/Regiment";
 import Unit, { blankUnit, unitCompare } from "../types/Unit";
-import { RegimentsSetters, RegimentsState } from "../types/state/RegimentsState";
+import { Action, ActionType, RegimentsState } from "../state/RegimentsState";
 import {v4 as uuidv4} from 'uuid';
-import { useEffect, useMemo, useState } from "react";
+import { Dispatch, useEffect, useMemo, useState } from "react";
 
 const USE_LATEST_PREFIX = "Use Latest: ";
 const NONE = "(none)"
@@ -12,11 +12,12 @@ const NONE = "(none)"
 function handleNumericInput(
         value: string,
         regType: RegimentTypes,
-        setFn: (val: number, type: RegimentTypes) => void
+        actionType: ActionType,
+        dispatch: Dispatch<Action>,
 ): void {
     const result = parseFloat(value);
     if (!isNaN(result)) {
-        setFn(result, regType);
+        dispatch({type:actionType, value: result , regType: regType});
     }
 }
 
@@ -24,7 +25,7 @@ function handleNumericInput(
 function handleUnitSelect(
     value: string,
     unitList: Unit[],
-    setUnitFn: (val: Unit) => void,
+    dispatch: Dispatch<Action>,
     setSelectedFn: (val: string) => void
 ): void {
     let selectedUnit: Unit | undefined = undefined;
@@ -36,7 +37,7 @@ function handleUnitSelect(
         }
     }
     if (selectedUnit !== undefined) {
-        setUnitFn(selectedUnit);
+        dispatch({type: ActionType.SET_UNIT, unit: selectedUnit});
         setSelectedFn(value);
     }
 }
@@ -57,7 +58,7 @@ const UnitSelector = (
     props: {
         regType: RegimentTypes, 
         units: Unit[], 
-        setter: (val: Unit) => void
+        dispatch: Dispatch<Action>
     }
 ): JSX.Element => {
     const [selected, setSelected] = useState(USE_LATEST_PREFIX);
@@ -69,14 +70,16 @@ const UnitSelector = (
     }, [props.units])
 
     useEffect(() => {
+        let updated: Unit | undefined;
         if (props.units.length === 0) {
-            setSelected(NONE)
-            props.setter(blankUnit(props.regType))
-        } else {
-            if (selected === USE_LATEST_PREFIX || !props.units.some(unit => selected.startsWith(unit.name))) {
-                setSelected(USE_LATEST_PREFIX);
-                props.setter(getLatestUnit(props.units) ?? blankUnit(props.units.at(0)?.type ?? RegimentTypes.INFANTRY))
-            }
+            setSelected(NONE);
+            updated = blankUnit(props.regType);
+        } else if (selected === USE_LATEST_PREFIX || !props.units.some(unit => selected.startsWith(unit.name))) {
+            setSelected(USE_LATEST_PREFIX);
+            updated = getLatestUnit(props.units);
+        }
+        if (updated !== undefined) {
+            props.dispatch({type: ActionType.SET_UNIT, unit: updated});
         }
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [props.units])
@@ -86,7 +89,7 @@ const UnitSelector = (
         <select 
             className="unit-select"
             value={selected}
-            onChange={e => handleUnitSelect(e.target.value, props.units, props.setter, setSelected)}
+            onChange={e => handleUnitSelect(e.target.value, props.units, props.dispatch, setSelected)}
             disabled={options.at(0) === NONE}>
                 {options.map(name => 
                 <option key={name} value={name}>
@@ -100,7 +103,7 @@ const CombatAbilityInput = (
     props: {
         value: number, 
         type: RegimentTypes, 
-        setter: (val: number, type: RegimentTypes) => void
+        dispatch: Dispatch<Action>
     }
 ): JSX.Element => {
     const id = uuidv4();
@@ -111,7 +114,7 @@ const CombatAbilityInput = (
                 value={props.value}
                 min={0}
                 step={0.1}
-                onChange={e => handleNumericInput(e.target.value, props.type, props.setter)}
+                onChange={e => handleNumericInput(e.target.value, props.type, ActionType.SET_ABILITY, props.dispatch)}
             />
             <label htmlFor={id}>%</label>
         </div>
@@ -120,7 +123,7 @@ const CombatAbilityInput = (
 
 function RegimentsRow(props: {
     state: RegimentsState,
-    setters: RegimentsSetters,
+    dispatch: Dispatch<Action>,
     type: RegimentTypes
     units: Unit[],
 }): JSX.Element {
@@ -130,17 +133,17 @@ function RegimentsRow(props: {
             <UnitSelector 
                 units={props.units} 
                 regType={props.type} 
-                setter={props.setters.setUnit}
+                dispatch={props.dispatch}
             />
             <input 
                 type="number" 
                 value= {props.state.counts[props.type]}
                 min={0}
-                onChange={e => handleNumericInput(e.target.value, props.type, props.setters.setCount)}
+                onChange={e => handleNumericInput(e.target.value, props.type, ActionType.SET_COUNT, props.dispatch)}
             />
             <CombatAbilityInput 
                 value={props.state.abilities[props.type]} 
-                setter={props.setters.setAbility} 
+                dispatch={props.dispatch} 
                 type={props.type}
             />
         </div>
@@ -150,7 +153,7 @@ function RegimentsRow(props: {
 
 export default function RegimentsPanel(props: {
             state: RegimentsState,
-            setters: RegimentsSetters,
+            dispatch: Dispatch<Action>,
             units: Unit[],
         }) {
     const [infantry, cavalry, artillery] = useMemo(() => {
@@ -179,9 +182,19 @@ export default function RegimentsPanel(props: {
             <h5>Regiments:</h5>
             <h5>Combat Ability(%):</h5>
 
-            <RegimentsRow state={props.state} setters={props.setters} units={infantry} type={RegimentTypes.INFANTRY} />
-            <RegimentsRow state={props.state} setters={props.setters} units={cavalry} type={RegimentTypes.CAVALRY} />
+            <RegimentsRow 
+                state={props.state} 
+                dispatch={props.dispatch} 
+                units={infantry} 
+                type={RegimentTypes.INFANTRY} 
+            />
 
+            <RegimentsRow 
+                state={props.state} 
+                dispatch={props.dispatch} 
+                units={cavalry} 
+                type={RegimentTypes.CAVALRY} 
+            />
         </div>
     );
 }

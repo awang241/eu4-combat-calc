@@ -3,7 +3,7 @@ import "./BattleGrid.css";
 import infIcon from "../assets/Infantry.png"
 import cavIcon from "../assets/Cavalry.png"
 import ArmySnapshot from "../types/ArmySnapshot";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 type RegimentData = {
     index: number | undefined,
@@ -77,6 +77,20 @@ export default function BattleGrid(props: {results:[ArmySnapshot, ArmySnapshot][
     const [day, setDay] = useState(maxDay); 
     const [focusedData, setFocusedData] = useState(initData);
 
+    useEffect(() => {
+        runThroughDays()
+    }, [props.results]);
+
+    const runThroughDays = () => {
+        const nextDay = (max: number, current: number) => {
+            if (current <= max) {
+                setDay(current);
+                setTimeout(() => {nextDay(max, current + 1)}, 300);
+            }
+        }
+        nextDay(maxDay, 0);
+    }
+
     const getCellStyle = (index: number, isAttacker: boolean): React.CSSProperties => {
         let style: React.CSSProperties;
         if (focusedData.index === undefined || isAttacker === focusedData.isAttacker || Math.abs(index - focusedData.index) > focusedData.flankingRange) {
@@ -99,13 +113,11 @@ export default function BattleGrid(props: {results:[ArmySnapshot, ArmySnapshot][
         return style;
     }
 
-    const attackerResults: ArmySnapshot[] = props.results.map(val => val[0]);
-    const defenderResults: ArmySnapshot[] = props.results.map(val => val[1]);
-    let attackerLastResult = attackerResults[day];
-    let defenderLastResult = defenderResults[day];
-    const attackerFront: (Regiment | undefined)[] = (attackerLastResult) ? attackerLastResult.front: new Array(20).fill(undefined);
-    const defenderFront: (Regiment | undefined)[] = (defenderLastResult) ? defenderLastResult.front: new Array(20).fill(undefined);
-    
+    const getFront = (attacker: boolean) => {
+        const results: ArmySnapshot[] = props.results.map(val => val[attacker ? 0 : 1]);
+        return results.at(day)?.front ?? new Array(20).fill(undefined)
+    }
+
     return (
         <div className="battle-grid">
             <div className="selector-panel">
@@ -129,7 +141,7 @@ export default function BattleGrid(props: {results:[ArmySnapshot, ArmySnapshot][
             <table>
                 <tbody>
                     <tr>
-                        {attackerFront.map((regiment, index) => (
+                        {getFront(true).map((regiment, index) => (
                             <RegimentCell 
                                 key={index} 
                                 index={index}
@@ -143,7 +155,7 @@ export default function BattleGrid(props: {results:[ArmySnapshot, ArmySnapshot][
                     </tr>
                     <tr className="grid-gap"/>
                     <tr>
-                        {defenderFront.map((regiment, index) => (
+                        {getFront(false).map((regiment, index) => (
                             <RegimentCell 
                                 key={index} 
                                 index={index}

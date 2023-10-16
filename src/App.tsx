@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useMemo, useReducer } from 'react';
 import { useState } from 'react';
 import Army from './model/Army';
 
@@ -9,13 +9,13 @@ import BattleGrid from './components/BattleGrid';
 import { parseTechs, parseUnits } from './util/Loader';
 import './App.css';
 
-import { Modifiers, createDefaultModifiers } from './types/Modifiers';
+import { Modifiers, createDefaultModifiers, modifiersReducer } from './types/Modifiers';
 import ArmySnapshot from './types/ArmySnapshot';
 import TechGroup from './types/TechGroup';
 import Unit from './types/Unit';
 import { Tech, TechState, defaultTechState } from './types/Tech';
 import TechPanel from './components/TechPanel';
-import { useRegimentsState } from "./types/state/RegimentsState";
+import { defaultRegimentsState, regimentsReducer } from "./state/RegimentsState";
 import { combat } from './Combat';
 
 declare global {
@@ -45,18 +45,13 @@ export default function App() {
   const [defenderModifiers, setDefenderModifiers] = useState(createDefaultModifiers);
   const [attackerTech, setAttackerTech] = useState(defaultTechState);
   const [defenderTech, setDefenderTech] = useState(defaultTechState);
-  const [attackerUnits, setAttackerUnits] = useState(getUnitsAtTech(attackerTech));
-  const [defenderUnits, setDefenderUnits] = useState(getUnitsAtTech(attackerTech));
-  const [attackerRegState, attackerRegSetters] = useRegimentsState();
-  const [defenderRegState, defenderRegSetters] = useRegimentsState();
+  const [attackerRegState, attackerRegsDispatch] = useReducer(regimentsReducer, undefined, defaultRegimentsState)
+  const [defenderRegState, defenderRegsDispatch] = useReducer(regimentsReducer, undefined, defaultRegimentsState)
+  const [testModifiers, modifiersDispatch] = useReducer(modifiersReducer, undefined, createDefaultModifiers);
 
-  useEffect(() => {
-    setAttackerUnits(getUnitsAtTech(attackerTech))
-  }, [attackerTech])
+  const attackerUnits = useMemo(() => getUnitsAtTech(attackerTech), [attackerTech]);
+  const defenderUnits = useMemo(() => getUnitsAtTech(defenderTech), [defenderTech]);
 
-  useEffect(() => {
-    setDefenderUnits(getUnitsAtTech(defenderTech))
-  }, [defenderTech])
 
   const handleSubmit = (event: React.MouseEvent<HTMLElement>) => {
     const attackerModifier: Modifiers = {...attackerModifiers};
@@ -81,8 +76,9 @@ export default function App() {
       </div>
       <div id="regiment-modifiers" className='collapsing-panel'>
         <h3 className='full-width'>Regiments and Regiment Modifiers</h3>
-        <RegimentsPanel state={attackerRegState} units={attackerUnits} setters={attackerRegSetters}/>
-        <RegimentsPanel state={defenderRegState} units={defenderUnits} setters={defenderRegSetters}/>
+        <RegimentsPanel 
+        state={attackerRegState} units={attackerUnits} dispatch={attackerRegsDispatch}/>
+        <RegimentsPanel state={defenderRegState} units={defenderUnits} dispatch={defenderRegsDispatch}/>
       </div>
       <div id="army-modifiers" className='collapsing-panel'>
         <h3 className='full-width'>Army Modifiers</h3>
