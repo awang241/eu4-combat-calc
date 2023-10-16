@@ -1,13 +1,13 @@
 import { useState } from "react";
 import { RegimentTypes } from "../../model/Regiment";
-import Unit, { blankArtillery, blankCavalry, blankInfantry } from "../Unit";
+import Unit, { blankUnit } from "../Unit";
 
 type Units = {[type in RegimentTypes]: Unit}
 type Counts = {[type in RegimentTypes]: number}
 
 export type RegimentsSetters = {
     setCount: (val: number, type: RegimentTypes) => void,
-    setUnit: (val: Unit, type: RegimentTypes) => void,
+    setUnit: (val: Unit) => void,
     setAbility: (val: number, type: RegimentTypes) => void
 }
 
@@ -25,9 +25,9 @@ export function defaultRegimentsState(units?: Units): RegimentsState {
             artillery: 0,
         },
         units: {
-            infantry: units?.infantry ?? blankInfantry(),
-            cavalry: units?.cavalry ?? blankCavalry(),
-            artillery: units?.artillery ?? blankArtillery(),
+            infantry: units?.infantry ?? blankUnit(RegimentTypes.INFANTRY),
+            cavalry: units?.cavalry ?? blankUnit(RegimentTypes.CAVALRY),
+            artillery: units?.artillery ?? blankUnit(RegimentTypes.ARTILLERY),
         },
         abilities: {
             infantry: 0,
@@ -45,8 +45,8 @@ export function useRegimentsState(initialState?: RegimentsState): [RegimentsStat
     const setCount = (val: number, type: RegimentTypes) => {
         setCounts((state) => {return {...state, [type]: val}});
     };
-    const setUnit = (val: Unit, type: RegimentTypes) => {
-        setUnits((state) => {return {...state, [type]: val}});
+    const setUnit = (val: Unit) => {
+        setUnits((state) => {return {...state, [val.type]: val}});
     };
     const setAbility = (val: number, type: RegimentTypes) => {
         setAbilities((state) => {return {...state, [type]: val}});

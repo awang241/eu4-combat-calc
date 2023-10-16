@@ -13,3 +13,10 @@
     margin: 5px 0;
     line-height: 100%;
 }
+
+.regiments-panel .regiments-row{
+    grid-column: 1 / 5;
+    display: grid;
+    grid-template-columns: subgrid;
+}
+

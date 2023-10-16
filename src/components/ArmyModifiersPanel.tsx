@@ -13,8 +13,6 @@ export default function ArmyModifiersPanel(props: {
     const [bonusMoralePercent, setBonusMoralePercent] = useState(0);
     const [bonusTactics, setBonusTactics] = useState(0);
 
-    useEffect(() => {console.log(`tech changed : ${props.tech.level}`)}, [props.tech])
-
 
     const totalMorale = (moraleBonus: number) => {
         return props.tech.morale * toMultiplier(moraleBonus)
