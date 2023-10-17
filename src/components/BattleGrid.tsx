@@ -3,7 +3,7 @@ import "./BattleGrid.css";
 import infIcon from "../assets/Infantry.png"
 import cavIcon from "../assets/Cavalry.png"
 import ArmySnapshot from "../types/ArmySnapshot";
-import { useEffect, useState } from "react";
+import { ChangeEvent, useEffect, useRef, useState } from "react";
 
 type RegimentData = {
     index: number | undefined,
@@ -76,19 +76,30 @@ export default function BattleGrid(props: {results:[ArmySnapshot, ArmySnapshot][
     const maxDay: number = Math.max(props.results.length - 1, 0);
     const [day, setDay] = useState(maxDay); 
     const [focusedData, setFocusedData] = useState(initData);
+    const [animated, setAnimated] = useState(true);
+    const animationId = useRef(setTimeout(() => {}))
+    const animationLoops = useRef(0)
 
     useEffect(() => {
         runThroughDays()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [props.results]);
 
     const runThroughDays = () => {
-        const nextDay = (max: number, current: number) => {
-            if (current <= max) {
-                setDay(current);
-                setTimeout(() => {nextDay(max, current + 1)}, 300);
+        setDay(0);
+        const nextDay = (max: number) => {
+            if (animationLoops.current < max) {
+                setDay((day) => day + 1);
+                animationLoops.current++;
+            } else {
+                clearInterval(animationId.current);
             }
         }
-        nextDay(maxDay, 0);
+        if (animated) {
+            clearInterval(animationId.current);
+            animationLoops.current = 0;
+            animationId.current = setInterval(() => nextDay(maxDay), 200);
+        }
     }
 
     const getCellStyle = (index: number, isAttacker: boolean): React.CSSProperties => {
@@ -136,7 +147,15 @@ export default function BattleGrid(props: {results:[ArmySnapshot, ArmySnapshot][
                     onClick={() => setDay(day + 1)}>
                     &#62;
                 </button>
-                <p> Day {day}</p>
+                <p>Day {day}</p>
+                <label htmlFor="animated-checkbox">Animate?</label>
+
+                <input 
+                    name="animated-checkbox"
+                    type="checkbox" 
+                    checked={animated} 
+                    onChange={e => setAnimated(e.target.checked)}
+                />
             </div>  
             <table>
                 <tbody>

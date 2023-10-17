@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useReducer } from 'react';
+import React, { useMemo, useReducer } from 'react';
 import { useState } from 'react';
 import Army from './model/Army';
 
@@ -9,7 +9,7 @@ import BattleGrid from './components/BattleGrid';
 import { parseTechs, parseUnits } from './util/Loader';
 import './App.css';
 
-import { Modifiers, createDefaultModifiers, modifiersReducer } from './types/Modifiers';
+import { Modifiers, createDefaultModifiers } from './types/Modifiers';
 import ArmySnapshot from './types/ArmySnapshot';
 import TechGroup from './types/TechGroup';
 import Unit from './types/Unit';
@@ -47,7 +47,6 @@ export default function App() {
   const [defenderTech, setDefenderTech] = useState(defaultTechState);
   const [attackerRegState, attackerRegsDispatch] = useReducer(regimentsReducer, undefined, defaultRegimentsState)
   const [defenderRegState, defenderRegsDispatch] = useReducer(regimentsReducer, undefined, defaultRegimentsState)
-  const [testModifiers, modifiersDispatch] = useReducer(modifiersReducer, undefined, createDefaultModifiers);
 
   const attackerUnits = useMemo(() => getUnitsAtTech(attackerTech), [attackerTech]);
   const defenderUnits = useMemo(() => getUnitsAtTech(defenderTech), [defenderTech]);
