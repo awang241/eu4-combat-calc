@@ -26,19 +26,19 @@ export type RegimentsState = {
 export function defaultRegimentsState(units?: Units): RegimentsState {
     return {
         counts: {
-            infantry: 1,
-            cavalry: 0,
-            artillery: 0,
+            [RegimentTypes.INFANTRY]: 1,
+            [RegimentTypes.CAVALRY]: 0,
+            [RegimentTypes.ARTILLERY]: 0,
         },
         units: {
-            infantry: units?.infantry ?? blankUnit(RegimentTypes.INFANTRY),
-            cavalry: units?.cavalry ?? blankUnit(RegimentTypes.CAVALRY),
-            artillery: units?.artillery ?? blankUnit(RegimentTypes.ARTILLERY),
+            [RegimentTypes.INFANTRY]: units?.[RegimentTypes.INFANTRY] ?? blankUnit(RegimentTypes.INFANTRY),
+            [RegimentTypes.CAVALRY]: units?.[RegimentTypes.CAVALRY] ?? blankUnit(RegimentTypes.CAVALRY),
+            [RegimentTypes.ARTILLERY]: units?.[RegimentTypes.ARTILLERY] ?? blankUnit(RegimentTypes.ARTILLERY),
         },
         abilities: {
-            infantry: 0,
-            cavalry: 0,
-            artillery: 0
+            [RegimentTypes.INFANTRY]: 0,
+            [RegimentTypes.CAVALRY]: 0,
+            [RegimentTypes.ARTILLERY]: 0
         }
     }
 }

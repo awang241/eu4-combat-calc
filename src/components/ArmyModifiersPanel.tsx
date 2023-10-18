@@ -8,6 +8,7 @@ import { useEffect, useState } from "react";
 export default function ArmyModifiersPanel(props: {
             modifiers: Modifiers,
             tech: Tech,
+            className?: string,
             callback: (fn: ((state: Modifiers) => Modifiers)) => void,
         }) {
     const [bonusMoralePercent, setBonusMoralePercent] = useState(0);
@@ -52,7 +53,7 @@ export default function ArmyModifiersPanel(props: {
     }
 
     return (
-        <div className="army-modifiers-panel">
+        <div className={`${props.className} army-modifiers-panel`}>
             <div className="top-grid">
                 <div className="two-column-grid">
                     <h4 id="morale-label">Morale</h4>

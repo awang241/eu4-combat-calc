@@ -1,11 +1,10 @@
 .regiments-panel {
     display: grid;
-    grid-template-columns: 3fr 2fr 1fr 1fr;
-    gap: 5px 5px;
+    grid-template-columns: subgrid;
 }
 
 .regiments-panel input{
-    width: 50px;
+    width: 70%;
 }
 
 .regiments-panel h5{
@@ -14,8 +13,12 @@
     line-height: 100%;
 }
 
+.regiments-panel .unit-select{
+    grid-column: span 3;
+}
+
 .regiments-panel .regiments-row{
-    grid-column: 1 / 5;
+    grid-column: span 6;
     display: grid;
     grid-template-columns: subgrid;
 }

@@ -16,7 +16,7 @@ import Unit from './types/Unit';
 import { Tech, TechState, defaultTechState } from './types/Tech';
 import TechPanel from './components/TechPanel';
 import { defaultRegimentsState, regimentsReducer } from "./state/RegimentsState";
-import { combat } from './Combat';
+import { combat } from './model/Combat';
 
 declare global {
   interface Array<T> {
@@ -69,30 +69,52 @@ export default function App() {
       <h2 className="column-heading">Attacker</h2>
       <h2 className="column-heading">Defender</h2>
 
-      <div className='full-width'>
-        <TechPanel level={attackerTech.level} group={attackerTech.group} updater={setAttackerTech}/>
-        <TechPanel level={defenderTech.level} group={defenderTech.group} updater={setDefenderTech}/>
+      <div className='collapsing-panel'>
+        <h3 className='full-width'>Regiments and Regiment Modifiers</h3>
+
+        <TechPanel 
+          className='half-width'
+          tech={techs[attackerTech.level]} 
+          group={attackerTech.group} 
+          updater={setAttackerTech}
+        />
+        <TechPanel 
+          className='half-width'
+          tech={techs[defenderTech.level]} 
+          group={defenderTech.group} 
+          updater={setDefenderTech}/>
       </div>
       <div id="regiment-modifiers" className='collapsing-panel'>
         <h3 className='full-width'>Regiments and Regiment Modifiers</h3>
         <RegimentsPanel 
-        state={attackerRegState} units={attackerUnits} dispatch={attackerRegsDispatch}/>
-        <RegimentsPanel state={defenderRegState} units={defenderUnits} dispatch={defenderRegsDispatch}/>
+          className='half-width'
+          state={attackerRegState} 
+          units={attackerUnits} 
+          dispatch={attackerRegsDispatch}
+        />
+        <RegimentsPanel 
+          className='half-width'
+          state={defenderRegState} 
+          units={defenderUnits} 
+          dispatch={defenderRegsDispatch}
+        />
       </div>
       <div id="army-modifiers" className='collapsing-panel'>
         <h3 className='full-width'>Army Modifiers</h3>
         <ArmyModifiersPanel 
+          className='half-width'
           modifiers={attackerModifiers} 
           callback={setAttackerModifiers} 
           tech={techs[attackerTech.level]}
         />
         <ArmyModifiersPanel 
+          className='half-width'
           modifiers={defenderModifiers} 
           callback={setDefenderModifiers} 
           tech={techs[defenderTech.level]}
         />
       </div>
-      <h2>Day-By-Day Casualties</h2>
+      <h2 className='full-width'>Day-By-Day Casualties</h2>
       <table id="casualty-table" className='full-width'>
         <thead>
           <tr>

@@ -42,12 +42,12 @@ export default class Army {
         this.front = new Row(0)
         this.reserves = new Array<Regiment>();
         this.regiments =  new Array<Regiment>();
-        for (let i = 0; i < regsState.counts.infantry; i++) {
-            this.regiments.push(new Regiment(modifiers.morale, regsState.units.infantry))
+        for (let i = 0; i < regsState.counts[RegimentTypes.INFANTRY]; i++) {
+            this.regiments.push(new Regiment(modifiers.morale, regsState.units[RegimentTypes.INFANTRY]))
         }
-        if (regsState.units.cavalry !== blankUnit(RegimentTypes.CAVALRY)) {
-            for (let i = 0; i < regsState.counts.cavalry; i++) {
-                this.regiments.push(new Regiment(modifiers.morale, regsState.units.cavalry))
+        if (regsState.units[RegimentTypes.CAVALRY] !== blankUnit(RegimentTypes.CAVALRY)) {
+            for (let i = 0; i < regsState.counts[RegimentTypes.CAVALRY]; i++) {
+                this.regiments.push(new Regiment(modifiers.morale, regsState.units[RegimentTypes.CAVALRY]))
             }
         }
         

@@ -1,5 +1,5 @@
-import Army from "./model/Army";
-import ArmySnapshot from "./types/ArmySnapshot";
+import Army from "./Army";
+import ArmySnapshot from "../types/ArmySnapshot";
 
 /**
  * Runs combat between the attacker and defeneder until one side is broken or destroyed,

@@ -6,37 +6,49 @@ import { RegimentTypes, inRegimentTypes } from "../model/Regiment"
 import TechGroup from "../types/TechGroup"
 import { Tech } from "../types/Tech"
 
-function parseUnitType(unitType: string): TechGroup {
-    if (unitType === "western")
+function parseTechGroup(value: string): TechGroup {
+    if (value === "western")
         return TechGroup.WESTERN;
-    else if (unitType === "eastern")
+    else if (value === "eastern")
         return TechGroup.EASTERN;
-    else if (unitType === "ottoman")
+    else if (value === "ottoman")
         return TechGroup.ANATOLIAN;
-    else if (unitType === "muslim")
+    else if (value === "muslim")
         return TechGroup.MUSLIM;
-    else if (unitType === "nomad_group")
+    else if (value === "nomad_group")
         return TechGroup.NOMADIC
-    else if (unitType === "sub_saharan")
+    else if (value === "sub_saharan")
         return TechGroup.AFRICAN;
-    else if (unitType === "chinese")
+    else if (value === "chinese")
         return TechGroup.CHINESE;
-    else if (unitType === "indian") 
+    else if (value === "indian") 
         return TechGroup.INDIAN;
-    else if (unitType === "mesoamerican")
+    else if (value === "mesoamerican")
         return TechGroup.MESOAMERICAN;
-    else if (unitType === "north_american")
+    else if (value === "north_american")
         return TechGroup.NORTH_AMERICAN;
-    else if (unitType === "south_american")
+    else if (value === "south_american")
         return TechGroup.SOUTH_AMERICAN;
-    else if (unitType === "high_american")
+    else if (value === "high_american")
         return TechGroup.HIGH_AMERICAN;
-    else if (unitType === "aboriginal_tech")
+    else if (value === "aboriginal_tech")
         return TechGroup.ABORIGINAL;
-    else if (unitType === "polynesian_tech")
+    else if (value === "polynesian_tech")
         return TechGroup.POLYNESIAN;
     else
         return TechGroup.NONE
+} 
+
+function parseRegType(value: string): RegimentTypes | undefined{
+    if (value === "infantry") {
+        return RegimentTypes.INFANTRY;
+    } else if (value === "cavalry") {
+        return RegimentTypes.CAVALRY;
+    } else if (value === "artillery") {
+        return RegimentTypes.ARTILLERY;
+    } else {
+        return undefined
+    }
 } 
 
 function deepFreeze<T>(obj: T): Readonly<T> {
@@ -53,11 +65,12 @@ function deepFreeze<T>(obj: T): Readonly<T> {
 export function parseUnits(): Map<TechGroup, Unit[]> {
     const unitsByTechGroup: Map<TechGroup, Unit[]> = new Map();
     units.forEach(val => {
-        const group: TechGroup = parseUnitType(val.unitType ?? "");
-        if (inRegimentTypes(val.type) && val.techLevel !== undefined) {
+        const group: TechGroup = parseTechGroup(val.unitType ?? "");
+        const type: RegimentTypes | undefined = parseRegType(val.type);
+        if (type !== undefined && val.techLevel !== undefined) {
             const unit: Unit = {
                 name: val.name,
-                type: val.type as RegimentTypes,
+                type: type,
                 techGroup: group,
                 techLevel: val.techLevel ?? 1,
                 pips: {
@@ -90,17 +103,17 @@ export function parseTechs(): Tech[] {
             width: val.combatWidth,
             flankingRange: val.maneuverValue,   
             damages: {
-                infantry: {
+                [RegimentTypes.INFANTRY]: {
                     fire: val.infantryFire,
                     shock: val.infantryShock
                 },
-                cavalry: {
+                [RegimentTypes.CAVALRY]: {
                     fire: val.cavalryFire,
                     shock: val.cavalryShock
                 },
-                artillery: {
+                [RegimentTypes.ARTILLERY]: {
                     fire: val.artilleryFire,
-                    shock: val.artilleryFire
+                    shock: val.artilleryShock
                 }
             }
         };

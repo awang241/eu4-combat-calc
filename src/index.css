@@ -11,3 +11,21 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+span{
+  font-size: 12pt;
+}
+
+label, input, select, .calc-display{
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 11pt;
+}
+
+.calc-display{
+  background-color: #fafafa;
+  border: 1px solid #dddddd;
+  border-radius: 2px;
+  color: #777;
+  padding: 3px;
+  width: 80%;
+}

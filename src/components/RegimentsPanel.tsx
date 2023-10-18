@@ -6,7 +6,9 @@ import {v4 as uuidv4} from 'uuid';
 import { Dispatch, useEffect, useMemo, useState } from "react";
 
 const USE_LATEST_PREFIX = "Use Latest: ";
-const NONE = "(none)"
+const NONE = "(none)";
+
+const UNIT_SELECT = "unit-select";
 
 
 function handleNumericInput(
@@ -87,7 +89,7 @@ const UnitSelector = (
 
     return (
         <select 
-            className="unit-select"
+            className={UNIT_SELECT}
             value={selected}
             onChange={e => handleUnitSelect(e.target.value, props.units, props.dispatch, setSelected)}
             disabled={options.at(0) === NONE}>
@@ -152,6 +154,7 @@ function RegimentsRow(props: {
 
 
 export default function RegimentsPanel(props: {
+            className?: string,
             state: RegimentsState,
             dispatch: Dispatch<Action>,
             units: Unit[],
@@ -176,9 +179,9 @@ export default function RegimentsPanel(props: {
     
 
     return (
-        <div className="regiments-panel">
+        <div className={`${props.className} regiments-panel`}>
             <span/>
-            <h5>Unit:</h5>
+            <h5 className={UNIT_SELECT}>Unit:</h5>
             <h5>Regiments:</h5>
             <h5>Combat Ability(%):</h5>
 

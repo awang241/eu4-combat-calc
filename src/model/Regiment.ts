@@ -2,9 +2,9 @@ import Pips from "../types/Pips";
 import Unit from "../types/Unit";
 
 export enum RegimentTypes {
-  INFANTRY = "infantry",
-  CAVALRY = "cavalry",
-  ARTILLERY = "artillery",
+  INFANTRY = "Infantry",
+  CAVALRY = "Cavalry",
+  ARTILLERY = "Artillery",
 }
 
 export function inRegimentTypes(name: string) {
