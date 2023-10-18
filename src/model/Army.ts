@@ -42,16 +42,20 @@ export default class Army {
         this.front = new Row(0)
         this.reserves = new Array<Regiment>();
         this.regiments =  new Array<Regiment>();
-        for (let i = 0; i < regsState.counts[RegimentTypes.INFANTRY]; i++) {
-            this.regiments.push(new Regiment(modifiers.morale, regsState.units[RegimentTypes.INFANTRY]))
-        }
-        if (regsState.units[RegimentTypes.CAVALRY] !== blankUnit(RegimentTypes.CAVALRY)) {
-            for (let i = 0; i < regsState.counts[RegimentTypes.CAVALRY]; i++) {
-                this.regiments.push(new Regiment(modifiers.morale, regsState.units[RegimentTypes.CAVALRY]))
+        for (const type of [RegimentTypes.INFANTRY, RegimentTypes.CAVALRY, RegimentTypes.ARTILLERY]) {
+            const regType: RegimentTypes = type as RegimentTypes;
+            if (regsState.units[regType] !== blankUnit(regType)) {
+                for (let i = 0; i < regsState.counts[regType]; i++) {
+                    this.regiments.push(new Regiment(modifiers.morale, regsState.units[regType]))
+                }
             }
         }
         
-        this._modifiers = modifiers;
+        this._modifiers = {...modifiers,
+            infantryCombatAbility: regsState.abilities[RegimentTypes.INFANTRY],
+            cavalryCombatAbility: regsState.abilities[RegimentTypes.CAVALRY],
+            artilleryCombatAbility: regsState.abilities[RegimentTypes.ARTILLERY],
+        };
         this.tech = tech;
         Object.freeze(modifiers);
     }
