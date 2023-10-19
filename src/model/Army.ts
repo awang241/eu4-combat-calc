@@ -18,20 +18,6 @@ export default class Army {
     private reserves: Array<Regiment>;
     private regiments: Array<Regiment>;
 
-    //The damage multipliers for each unit fot the fire/shock combat phases.
-    readonly damage = {
-        infantry: {
-            fire: 0.35,
-            shock: 0.5
-        },
-        cavalry: {
-            fire: 0,
-            shock: 1
-        }
-    };
-    static readonly tactics = 0.5
-
-
     /**
      * Create a new Army object with the given number of infantry regiments.
      * @param infantry The number of infantry regiments.
@@ -267,4 +253,6 @@ export default class Army {
     }
 
     public get modifiers(): Modifiers {return this._modifiers;}
+
+    public get width(): number {return this.tech.width}
 }

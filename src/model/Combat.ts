@@ -16,7 +16,7 @@ export function combat(attacker: Army, defender: Army): [ArmySnapshot, ArmySnaps
     const dayOffset:number = 1;
     const combatPhasePeriod: number = 6;
     const firePhaseCutoff: number = 3;
-    const combatWidth: number = 20;
+    const combatWidth: number = Math.max(attacker.width, defender.width);
     attacker.deploy(combatWidth, defender.frontlineRegimentCount());
     defender.deploy(combatWidth, attacker.frontlineRegimentCount());
     let isAttackerUpdated = true;
