@@ -70,8 +70,7 @@ export default function App() {
       <h2 className="column-heading">Defender</h2>
 
       <div className='collapsing-panel'>
-        <h3 className='full-width'>Regiments and Regiment Modifiers</h3>
-
+        <h3 className='full-width'>Military Technology</h3>
         <TechPanel 
           className='half-width'
           tech={techs[attackerTech.level]} 

@@ -1,11 +1,13 @@
-import { v4 } from "uuid";
 import { RegimentTypes } from "../model/Regiment";
 import { DamageMultipliers } from "../types/DamageMultipliers";
 import { Tech, TechState } from "../types/Tech"
 import TechGroup, { getTechGroupName, isTechGroup } from "../types/TechGroup"
+import { GlobalCSSClasses as CSSClasses } from "../enum/GlobalCSSClasses";
+
+import fireIcon from "../assets/fire.png"
+import shockIcon from "../assets/shock.png"
 
 import "./TechPanel.css";
-import { GlobalCSSClasses as CSSClasses } from "../enum/GlobalCSSClasses";
 
 
 function DamagesRow(props: {
@@ -26,14 +28,17 @@ function SelectorPanel(props: {
         level: number,
         setter: (fn: ((state: TechState) => TechState)) => unknown;
 }) {
-    const id = v4();
     const handleInput = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const newLevel: number = parseInt(event.target.value);
-        if (!isNaN(newLevel) && newLevel >= 1 && newLevel <= 32) {
-            props.setter((state) => {
-                return {...state, level: newLevel};
-            })
+        let newLevel: number;
+        if (event.target.value === "") {
+            props.setter((state) => ({...state, level: 0}));
+        } else {
+            newLevel = parseInt(event.target.value);
+            if (!isNaN(newLevel) && newLevel >= 0 && newLevel <= 32) {
+                props.setter((state) => ({...state, level: newLevel}));
+            }
         }
+        event.target.value = "";
     }
 
     const handleSelect = (event: React.ChangeEvent<HTMLSelectElement>) => {
@@ -47,18 +52,18 @@ function SelectorPanel(props: {
     
     return (
         <>
-            <label htmlFor={id}>Tech Level:</label>
+            <span className={CSSClasses.TWO_COL_SPAN}>Tech Level:</span>
             <input 
-                id={id}
                 name="input"
                 type="number"
-                min={1}
+                min={0}
                 max={32}
                 step={1}
                 value={props.level}
                 onChange={handleInput}
             />
-            <select onChange={handleSelect} value={props.group}>
+            <span>Tech Group:</span>
+            <select className={CSSClasses.TWO_COL_SPAN} onChange={handleSelect} value={props.group}>
                 {Object.values(TechGroup)
                     .filter(group => group !== TechGroup.NONE)
                     .map(group => {
@@ -74,13 +79,40 @@ function SelectorPanel(props: {
     )
 }
 
-function ValuesPanel(props: {multipliers: DamageMultipliers}) {
+function ValuesPanel(props: {tech: Tech}) {
+    const getFlankingRangeString = (): string => {
+        return `+${100 * props.tech.flankingRange}%`
+    }
     return (
         <div className="tech-values-panel">
+            <span className={CSSClasses.TWO_COL_SPAN}>Base Morale:</span>
+            <span className={CSSClasses.CALC_DISPLAY}>{props.tech.morale.toFixed(1)}</span>
+            <span className={CSSClasses.TWO_COL_SPAN}>Base Tactics:</span>
+            <span className={CSSClasses.CALC_DISPLAY}>{props.tech.tactics.toFixed(2)}</span>
+            <span className={CSSClasses.TWO_COL_SPAN}>Combat Width:</span>
+            <span className={CSSClasses.CALC_DISPLAY}>{props.tech.width}</span>
+            <span className={CSSClasses.TWO_COL_SPAN}>Flanking Range:</span>
+            <span className={CSSClasses.CALC_DISPLAY}>{getFlankingRangeString()}</span>
+        </div>
+        
+    )
+}
 
-            <span></span>
-            <h5>Fire:</h5>
-            <h5>Shock:</h5>
+function DamagePanel(props: {multipliers: DamageMultipliers}) {
+    return (
+        <div className="tech-damage-panel">
+            <div className="tech-damage-header">
+                <h4>Damages:</h4>
+                <div>
+                    <img src={fireIcon} alt="Fire icon"/>
+                    <h5>Fire:</h5>  
+                </div>
+                <div>
+                    <img src={shockIcon} alt="Shock icon"/>
+                    <h5>Shock:</h5>
+                </div>
+            </div>
+            
             <DamagesRow 
                 damages={props.multipliers[RegimentTypes.INFANTRY]}
                 type={RegimentTypes.INFANTRY}
@@ -97,6 +129,7 @@ function ValuesPanel(props: {multipliers: DamageMultipliers}) {
         
     )
 }
+
 export default function TechPanel(props: {  
         className?: string,
         group: TechGroup,
@@ -106,6 +139,7 @@ export default function TechPanel(props: {
     return (
     <div className={`${props.className} tech-panel`}>
         <SelectorPanel group={props.group} level={props.tech.level} setter={props.updater}/>
-        <ValuesPanel multipliers={props.tech.damages}/>
+        <ValuesPanel tech={props.tech}/>
+        <DamagePanel multipliers={props.tech.damages}/>
     </div>)
 }

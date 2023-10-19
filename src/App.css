@@ -36,15 +36,12 @@ table {
 
 .half-width {
   grid-column: span var(--half-column-width);
-  margin: 0 20px;
 }
 
 .collapsing-panel {
   display: grid;
   grid-template-columns: subgrid;
+  margin: 10px 0;
 }
 
-input {
-  width: 60px;
-}
 

@@ -3,9 +3,6 @@
     grid-template-columns: subgrid;
 }
 
-.regiments-panel input{
-    width: 70%;
-}
 
 .regiments-panel h5{
     text-wrap: wrap;

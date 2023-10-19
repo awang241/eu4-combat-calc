@@ -1,9 +1,9 @@
 import Regiment, { RegimentTypes } from "../model/Regiment";
 import "./BattleGrid.css";
-import infIcon from "../assets/Infantry.png"
-import cavIcon from "../assets/Cavalry.png"
+import infIcon from "../assets/infantry.png"
+import cavIcon from "../assets/cavalry.png"
 import ArmySnapshot from "../types/ArmySnapshot";
-import { ChangeEvent, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 type RegimentData = {
     index: number | undefined,
@@ -36,9 +36,9 @@ function RegimentCell(props: {
         if (moralePercent > 2) {
             barHeight =  `${moralePercent}%`;
         } else if (moralePercent > 0) {
-            barHeight = "2%"
+            barHeight = "2%";
         } else {
-            barHeight = "0"
+            barHeight = "0";
         }
         data = {
             index: props.index,
