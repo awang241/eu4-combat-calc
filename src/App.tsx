@@ -69,20 +69,6 @@ export default function App() {
       <h2 className="column-heading">Attacker</h2>
       <h2 className="column-heading">Defender</h2>
 
-      <div className='collapsing-panel'>
-        <h3 className='full-width'>Military Technology</h3>
-        <TechPanel 
-          className='half-width'
-          tech={techs[attackerTech.level]} 
-          group={attackerTech.group} 
-          updater={setAttackerTech}
-        />
-        <TechPanel 
-          className='half-width'
-          tech={techs[defenderTech.level]} 
-          group={defenderTech.group} 
-          updater={setDefenderTech}/>
-      </div>
       <div id="regiment-modifiers" className='collapsing-panel'>
         <h3 className='full-width'>Regiments and Regiment Modifiers</h3>
         <RegimentsPanel 
@@ -97,6 +83,20 @@ export default function App() {
           units={defenderUnits} 
           dispatch={defenderRegsDispatch}
         />
+      </div>
+      <div className='collapsing-panel'>
+        <h3 className='full-width'>Military Technology</h3>
+        <TechPanel 
+          className='half-width'
+          tech={techs[attackerTech.level]} 
+          group={attackerTech.group} 
+          updater={setAttackerTech}
+        />
+        <TechPanel 
+          className='half-width'
+          tech={techs[defenderTech.level]} 
+          group={defenderTech.group} 
+          updater={setDefenderTech}/>
       </div>
       <div id="army-modifiers" className='collapsing-panel'>
         <h3 className='full-width'>Army Modifiers</h3>
