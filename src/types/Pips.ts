@@ -1,11 +1,11 @@
-const BLANK_PIPS: Pips = Object.freeze({
+const BLANK_PIPS: Pips = {
     fireOffence: 0,
     fireDefence: 0,
     shockOffence: 0,
     shockDefence: 0,
     moraleOffence: 0,
     moraleDefence: 0
-})
+} as const
 
 export type Pips = {
     fireOffence: number,
@@ -16,16 +16,5 @@ export type Pips = {
     moraleOffence: number,
 }
 
-export function getDefencePips(pips: Pips, isFirePhase: boolean): number {
-    return isFirePhase ? pips.fireDefence: pips.shockDefence;
-}
-
-export function getOffencePips(pips: Pips, isFirePhase: boolean): number {
-    return isFirePhase ? pips.fireOffence: pips.shockOffence;
-}
-
-export function blankPips(): Pips {
-    return BLANK_PIPS;
-}
-
+export function blankPips(): Pips {return BLANK_PIPS};
 export default Pips

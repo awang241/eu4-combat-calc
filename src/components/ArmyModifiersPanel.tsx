@@ -3,7 +3,6 @@ import { ModifierNames, inModifierNames, Modifiers, toMultiplier } from "../type
 import { Tech } from "../types/Tech";
 import { ChangeEventHandler, useEffect, useState } from "react";
 import { GlobalCSSClasses } from "../enum/GlobalCSSClasses";
-import { v4 } from "uuid";
 
 const MoralePanel = (props: {
         baseMorale: number, 

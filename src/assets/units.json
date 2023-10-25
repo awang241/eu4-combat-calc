@@ -1131,7 +1131,7 @@
         "techLevel": 14
     },
     {
-        "name": "1 \"Polynesian Dragoons",
+        "name": "Polynesian Dragoons",
         "id": "pacific_dragoon",
         "unitType": "polynesian_tech",
         "type": "cavalry",
@@ -1340,7 +1340,7 @@
         "techLevel": 28
     },
     {
-        "name": "1 \"Polynesian Island Warriors",
+        "name": "Polynesian Island Warriors",
         "id": "pacific_island_warriors",
         "unitType": "polynesian_tech",
         "type": "infantry",
@@ -1395,7 +1395,7 @@
         "techLevel": 18
     },
     {
-        "name": "1 \"Polynesian Reformed Spearmen",
+        "name": "Polynesian Reformed Spearmen",
         "id": "pacific_reformed_spearman",
         "unitType": "polynesian_tech",
         "type": "infantry",
@@ -2651,7 +2651,7 @@
         "techLevel": 26
     },
     {
-        "name": "1 \"J\u00e4ger Infantry",
+        "name": "J\u00e4ger Infantry",
         "id": "austrian_jaeger",
         "type": "infantry",
         "unitType": "western",
@@ -2705,7 +2705,7 @@
         "techLevel": 9
     },
     {
-        "name": "1 \"Polynesian Horsemen",
+        "name": "Polynesian Horsemen",
         "id": "pacific_horseman",
         "unitType": "polynesian_tech",
         "type": "cavalry",
@@ -2812,7 +2812,7 @@
         "techLevel": 28
     },
     {
-        "name": "1 \"Polynesian Arquebusiers",
+        "name": "Polynesian Arquebusiers",
         "id": "pacific_arquebusier",
         "unitType": "polynesian_tech",
         "type": "infantry",

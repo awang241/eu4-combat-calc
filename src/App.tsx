@@ -53,10 +53,10 @@ export default function App() {
 
 
   const handleSubmit = (event: React.MouseEvent<HTMLElement>) => {
-    const attackerModifier: Modifiers = {...attackerModifiers};
-    const defenderModifier: Modifiers = {...defenderModifiers};
-    const army1 = new Army(attackerRegState, attackerModifier, techs[attackerTech.level]);
-    const army2 = new Army(defenderRegState, defenderModifier, techs[defenderTech.level]);
+    const attackerModifier: Modifiers = {...attackerModifiers, ...attackerRegState.abilities};
+    const defenderModifier: Modifiers = {...defenderModifiers, ...defenderRegState.abilities};
+    const army1 = new Army(attackerRegState.units, attackerRegState.counts, attackerModifier, techs[attackerTech.level]);
+    const army2 = new Army(defenderRegState.units, defenderRegState.counts, defenderModifier, techs[defenderTech.level]);
     setResults(combat(army1, army2));
   }
 

@@ -3,14 +3,16 @@ import Row from "../model/Row";
 
 export default class ArmySnapshot{
     front: (Regiment | undefined)[];
+    back: (Regiment | undefined)[];
     reserves: Regiment[];
     currentStrength: number = 0;
     maxStrength: number = 0;
     currentMorale: number = 0;
     maxMorale: number = 0;
 
-    constructor(front: Row, reserves: Regiment[], regiments: Regiment[]) {
+    constructor(front: Row, back: Row, reserves: Regiment[], regiments: Regiment[]) {
         this.front = front.createSnapshot();
+        this.back = back.createSnapshot();
         this.reserves = reserves.map(val => val.unmodifiableCopy());
         regiments.forEach((value) => {
             this.currentMorale += value.currentMorale;

@@ -1,3 +1,4 @@
+import { toMultiplier } from "../types/Modifiers";
 import Pips from "../types/Pips";
 import Unit from "../types/Unit";
 
@@ -19,7 +20,6 @@ export default class Regiment{
   private _currentMorale: number;
   private _strength: number;
   private _targetIndex?: number;
-  private _target?: Regiment;
   private _unit: Unit;
   private _type: RegimentTypes;
 
@@ -34,7 +34,41 @@ export default class Regiment{
     this._unit = unit;
     this._type = unit.type;
   }
-  
+
+  private getOffencePips(isFire: boolean, isMorale: boolean): number {
+    const phasePips = isFire ? this.unit.pips.fireOffence : this.unit.pips.shockOffence;
+    return isMorale ? phasePips + this.unit.pips.moraleOffence : phasePips
+  }
+
+  private getDefencePips(isFire: boolean, isMorale: boolean): number {
+    const phasePips =  isFire ? this.unit.pips.fireDefence : this.unit.pips.shockDefence;
+    return isMorale ? phasePips + this.unit.pips.moraleDefence : phasePips
+  }
+
+  getStrengthOffencePips(isFire: boolean) {
+    return this.getOffencePips(isFire, true);
+  }
+
+  getStrengthDefencePips(isFire: boolean) {
+    return this.getDefencePips(isFire, true);
+  }
+
+  getMoraleOffencePips(isFire: boolean) {
+    return this.getOffencePips(isFire, false);
+  }
+
+  getMoraleDefencePips(isFire: boolean) {
+    return this.getDefencePips(isFire, false);
+  }
+
+  /**
+     * Returns true if morale or strength are at 0, otherwise returns true.
+     * @returns {boolean} true if morale or strength are at 0, otherwise returns true.
+     */
+  isBroken(): boolean {
+    return this.currentMorale <= 0 || this.strength <= 0;
+  }
+
   /**
    * Subtracts the given number of casualties from this regiment's strength. If the casualties are
    * greater than the regiment's current strength, strength is set to 0 instead.
@@ -64,40 +98,35 @@ export default class Regiment{
     return copy;
   }
 
-  public setTarget(target: Regiment | undefined, index: number | undefined) {
-    if ((target === undefined && index !== undefined) || (target !== undefined && index === undefined)) {
-      throw new Error("A valid target cannot be set without an index or vice versa.")
-    }
-    this._target = target;
+  public setTargetIndex(index: number | undefined) {
     this._targetIndex = index;
   }
 
   public get currentMorale(): number {return this._currentMorale;}
   public set currentMorale(value: number) {this._currentMorale = Math.max(Math.min(this._maxMorale, value), 0)}
 
-  public flankingRange(): number {
-    return Regiment.flankingRange(this.type);
+  public flankingRange(bonusPercent?: number): number {
+    const baseRange = this.type === RegimentTypes.INFANTRY ? 1 : 2; 
+    let strengthPenaltyPercent = 0;
+    if (this.strength < 250) {
+      strengthPenaltyPercent = -75;
+    } else if (this.strength <  500) {
+      strengthPenaltyPercent = -50;
+    } else if (this.strength <  750){
+      strengthPenaltyPercent = -25;
+    }
+    const range = Math.floor(baseRange * toMultiplier((bonusPercent ?? 0) + strengthPenaltyPercent));
+    return Math.min(1, range);
   }
 
-  public static flankingRange(type: RegimentTypes) {
-    return type === RegimentTypes.INFANTRY ? 1 : 2; 
-  }
-
-  public get id(): number {
-    return this._id;
-  }
-
+  public get id(): number {return this._id;}
   public get maxMorale(): number {return this._maxMorale;}
-
   public get pips(): Pips {return this._unit.pips;}
 
   public get strength(): number {return this._strength;}
   public set strength(value: number) {this._strength = Math.max(Math.min(this._maxMorale, value), 0)}
 
-  public get target(): Regiment | undefined {return this._target;}
   public get targetIndex(): number | undefined {return this._targetIndex;} 
-
   public get type(): RegimentTypes {return this._type}
-
   public get unit(): Unit {return this._unit}
 }  
