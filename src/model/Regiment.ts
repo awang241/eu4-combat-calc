@@ -46,19 +46,19 @@ export default class Regiment{
   }
 
   getStrengthOffencePips(isFire: boolean) {
-    return this.getOffencePips(isFire, true);
-  }
-
-  getStrengthDefencePips(isFire: boolean) {
-    return this.getDefencePips(isFire, true);
-  }
-
-  getMoraleOffencePips(isFire: boolean) {
     return this.getOffencePips(isFire, false);
   }
 
-  getMoraleDefencePips(isFire: boolean) {
+  getStrengthDefencePips(isFire: boolean) {
     return this.getDefencePips(isFire, false);
+  }
+
+  getMoraleOffencePips(isFire: boolean) {
+    return this.getOffencePips(isFire, true);
+  }
+
+  getMoraleDefencePips(isFire: boolean) {
+    return this.getDefencePips(isFire, true);
   }
 
   /**
@@ -75,7 +75,8 @@ export default class Regiment{
    * @param casualties The number of casualties to be inflicted on this regiment.
    */
   takeCasualties(casualties: number) {
-    this._strength = this._strength > casualties ? this._strength - casualties: 0;
+    const rounded = Math.floor(casualties);
+    this._strength = this._strength > rounded ? this._strength - rounded: 0;
   }
 
     /**
@@ -98,9 +99,6 @@ export default class Regiment{
     return copy;
   }
 
-  public setTargetIndex(index: number | undefined) {
-    this._targetIndex = index;
-  }
 
   public get currentMorale(): number {return this._currentMorale;}
   public set currentMorale(value: number) {this._currentMorale = Math.max(Math.min(this._maxMorale, value), 0)}
@@ -116,17 +114,26 @@ export default class Regiment{
       strengthPenaltyPercent = -25;
     }
     const range = Math.floor(baseRange * toMultiplier((bonusPercent ?? 0) + strengthPenaltyPercent));
-    return Math.min(1, range);
+    return Math.max(1, range);
   }
 
   public get id(): number {return this._id;}
+
   public get maxMorale(): number {return this._maxMorale;}
+
   public get pips(): Pips {return this._unit.pips;}
 
   public get strength(): number {return this._strength;}
-  public set strength(value: number) {this._strength = Math.max(Math.min(this._maxMorale, value), 0)}
+  public set strength(value: number) {
+    let strength = value > Regiment.MAX_STRENGTH ? Regiment.MAX_STRENGTH : value;
+    strength = strength < 0 ? 0: strength;
+    this._strength = Math.floor(strength);
+  }
 
   public get targetIndex(): number | undefined {return this._targetIndex;} 
+  public set targetIndex(index: number | undefined) {this._targetIndex = index;}
+
   public get type(): RegimentTypes {return this._type}
+  
   public get unit(): Unit {return this._unit}
 }  
