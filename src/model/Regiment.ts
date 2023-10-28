@@ -35,6 +35,20 @@ export default class Regiment{
     this._type = unit.type;
   }
 
+  public flankingRange(bonusPercent?: number): number {
+    const baseRange = this.type === RegimentTypes.INFANTRY ? 1 : 2; 
+    let strengthPenaltyPercent = 0;
+    if (this.strength < 250) {
+      strengthPenaltyPercent = -75;
+    } else if (this.strength <  500) {
+      strengthPenaltyPercent = -50;
+    } else if (this.strength <  750){
+      strengthPenaltyPercent = -25;
+    }
+    const range = Math.floor(baseRange * toMultiplier((bonusPercent ?? 0) + strengthPenaltyPercent));
+    return Math.max(1, range);
+  }
+
   private getOffencePips(isFire: boolean, isMorale: boolean): number {
     const phasePips = isFire ? this.unit.pips.fireOffence : this.unit.pips.shockOffence;
     return isMorale ? phasePips + this.unit.pips.moraleOffence : phasePips
@@ -85,14 +99,14 @@ export default class Regiment{
    * @param damage The amount of morale damage to be inflicted on this regiment.
    */
   takeMoraleDamage(damage: number) {
-    this.currentMorale = this.currentMorale > damage ? this.currentMorale - damage: 0;
+    this._currentMorale = this.currentMorale > damage ? this.currentMorale - damage: 0;
   }
 
   /**
    * Creates a unmodifiable copy of this regiment as of 
    * @returns an unmodifiable copy of this 
    */
-  public unmodifiableCopy(): Regiment {
+  unmodifiableCopy(): Regiment {
     const copy = new Regiment(this.maxMorale, this._unit);
     Object.assign(copy, this);
     Object.freeze(copy);
@@ -101,21 +115,6 @@ export default class Regiment{
 
 
   public get currentMorale(): number {return this._currentMorale;}
-  public set currentMorale(value: number) {this._currentMorale = Math.max(Math.min(this._maxMorale, value), 0)}
-
-  public flankingRange(bonusPercent?: number): number {
-    const baseRange = this.type === RegimentTypes.INFANTRY ? 1 : 2; 
-    let strengthPenaltyPercent = 0;
-    if (this.strength < 250) {
-      strengthPenaltyPercent = -75;
-    } else if (this.strength <  500) {
-      strengthPenaltyPercent = -50;
-    } else if (this.strength <  750){
-      strengthPenaltyPercent = -25;
-    }
-    const range = Math.floor(baseRange * toMultiplier((bonusPercent ?? 0) + strengthPenaltyPercent));
-    return Math.max(1, range);
-  }
 
   public get id(): number {return this._id;}
 
@@ -124,14 +123,9 @@ export default class Regiment{
   public get pips(): Pips {return this._unit.pips;}
 
   public get strength(): number {return this._strength;}
-  public set strength(value: number) {
-    let strength = value > Regiment.MAX_STRENGTH ? Regiment.MAX_STRENGTH : value;
-    strength = strength < 0 ? 0: strength;
-    this._strength = Math.floor(strength);
-  }
 
   public get targetIndex(): number | undefined {return this._targetIndex;} 
-  public set targetIndex(index: number | undefined) {this._targetIndex = index;}
+  public setTargetIndex(index: number | undefined) {this._targetIndex = index;}
 
   public get type(): RegimentTypes {return this._type}
   

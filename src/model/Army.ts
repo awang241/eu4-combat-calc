@@ -169,7 +169,7 @@ export default class Army {
         const combatWidth = Math.max(enemyMaxWidth, this.tech.width);
         const targetWidth = Math.min(combatWidth, numEnemyInfAndCav);
 
-        if (this.numInfAndCavRegiments() <= targetWidth) {
+        if (this.numInfantryAndCavalry() <= targetWidth) {
             numCentreInfantry = infantry.length;
             numCavalry = cavalry.length;
         } else if (numEnemyInfAndCav < enemyMaxWidth / 2 || infantry.length < enemyMaxWidth / 2) {
@@ -192,7 +192,7 @@ export default class Army {
     /**
      * Returns the total number of infantry and cavalry regiments in this army.
      */
-    numInfAndCavRegiments(): number {
+    numInfantryAndCavalry(): number {
         return this._regiments[RegimentTypes.INFANTRY].length + this._regiments[RegimentTypes.CAVALRY].length;
     }
 
@@ -205,14 +205,6 @@ export default class Army {
         } else {
             return this.numRegiments(RegimentTypes.INFANTRY) + this.numRegiments(RegimentTypes.CAVALRY) + this.numRegiments(RegimentTypes.ARTILLERY);
         }
-    }
-
-    /**
-     * Returns the start and end indices of this army's frontage (i.e. the start and end indices that would give the smallest 
-     * array slice containing the leftmost and rightmost regiments in the front row)
-     */
-    getFrontageIndices(): [number, number] {
-        return this.front.getStartEndIndices();
     }
 
     getRegimentDataAtIndex(index: number): Regiment | undefined {

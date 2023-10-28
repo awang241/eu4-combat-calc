@@ -230,13 +230,12 @@ export default class Row implements Iterable<Regiment | undefined> {
      */
     removeBrokenRegiments(): boolean {
         let updated = false;
-        for (let i = 0; i < this.row.length; i++) {
-            const regiment = this.row[i];
-            if (regiment !== undefined && !regiment.isBroken) {
+        this.row.forEach((regiment, index) => {
+            if (regiment !== undefined && regiment.isBroken()) {
                 updated = true;
-                this.set(i, undefined);
+                this.set(index, undefined);
             }
-        }
+        });
         return updated;
     }
 
@@ -249,7 +248,8 @@ export default class Row implements Iterable<Regiment | undefined> {
      */
     regimentsByCentreDistance(reversed?: boolean): RegimentRowIndexPair[] {
         let pairs: RegimentRowIndexPair[] = this.row.map((val, index) => {return {regiment: val, rowIndex: index}});
-        return pairs.sort((a, b) => this.centreDistanceComparator(a.rowIndex, b.rowIndex));
+        const multiplier = (reversed ?? false) ? -1 : 1;
+        return pairs.sort((a, b) => multiplier * this.centreDistanceComparator(a.rowIndex, b.rowIndex));
     }
 
     get centreIndex(): number {

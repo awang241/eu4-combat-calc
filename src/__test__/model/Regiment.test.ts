@@ -2,14 +2,9 @@ import Regiment, { RegimentTypes } from "../../model/Regiment";
 import Pips, { blankPips } from "../../types/Pips";
 import TechGroup from "../../types/TechGroup";
 import Unit from "../../types/Unit";
+import { DUMMY_INFANTRY } from "../DummyTypes";
 
-const DUMMY_INFANTRY: Unit = {
-    name: "", 
-    type: RegimentTypes.INFANTRY,
-    techGroup: TechGroup.NONE,
-    techLevel: 0,
-    pips: blankPips()
-} as const;
+
 const MAX_MORALE = 3;
 
 describe("flankingRange", () => {
@@ -86,39 +81,10 @@ describe.each([
     });
 })
 
-describe.each([
-    [-1, 0],
-    [0, 0],
-    [1000, 1000],
-    [1001, 1000],
-    [500.9123, 500],   
-])("Setting strength", (newVal, expected) => {
-    let regiment: Regiment;
-    beforeEach(() => regiment = new Regiment(MAX_MORALE, DUMMY_INFANTRY))
-    test(`with value ${newVal} sets strength to ${expected}`, () => {
-        regiment.strength = newVal;
-        expect(regiment.strength).toBe(expected);
-    });
-})
-
-describe.each([
-    [-0.001, 0],
-    [0, 0],
-    [MAX_MORALE, MAX_MORALE],
-    [MAX_MORALE + 0.001, MAX_MORALE],
-])("Setting currentMorale", (newVal, expected) => {
-    let regiment: Regiment;
-    beforeEach(() => regiment = new Regiment(MAX_MORALE, DUMMY_INFANTRY))
-    test(`with value ${newVal} sets morale to ${expected}`, () => {
-        regiment.currentMorale = newVal;
-        expect(regiment.currentMorale).toBe(expected);
-    });
-})
-
-test("Regiment created by unmodifiableCopy throws an error when assigning a property", () => {
+test("unmodifiableCopy return value throws an error when assigning a property", () => {
     const original = new Regiment(3, DUMMY_INFANTRY);
     const copy = original.unmodifiableCopy();
-    const illegalSet = () => copy.currentMorale = 1.5;
+    const illegalSet = () => copy.takeCasualties(123);
     expect(illegalSet).toThrowError();
 })
 
