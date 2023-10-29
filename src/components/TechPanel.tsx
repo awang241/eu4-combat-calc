@@ -1,4 +1,4 @@
-import { RegimentTypes } from "../model/Regiment";
+import { RegimentTypes } from "../enum/RegimentTypes";
 import { DamageMultipliers } from "../types/DamageMultipliers";
 import { Tech, TechState } from "../types/Tech"
 import TechGroup, { getTechGroupName, isTechGroup } from "../types/TechGroup"

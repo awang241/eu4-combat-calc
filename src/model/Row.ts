@@ -1,4 +1,5 @@
-import Regiment, { RegimentTypes } from "./Regiment";
+import Regiment from "./Regiment";
+import { RegimentTypes } from "../enum/RegimentTypes";
 
 type RegimentRowIndexPair = {
     regiment: Regiment | undefined,
@@ -10,11 +11,9 @@ type RegimentRowIndexPair = {
  */
 export default class Row implements Iterable<Regiment | undefined> {
     private row: (Regiment | undefined)[];
-    private isFront: boolean;
 
-    constructor(width: number, isFront?: boolean) {
+    constructor(width: number) {
         this.row = new Array(width).fill(undefined);
-        this.isFront = isFront ?? true;
     }
 
     [Symbol.iterator](): Iterator<Regiment | undefined> {
@@ -69,9 +68,6 @@ export default class Row implements Iterable<Regiment | undefined> {
      * @returns The number of regiments moved into the row.
      */
     moveInRegiments(source: Regiment[], max?: number, indices?: [number, number]): number {
-        if (!this.isFront && source.some(reg => reg.type !== RegimentTypes.ARTILLERY)) {
-            throw Error("Cannot add infantry or cavalry regiments to a back row.")
-        }
         const [startIndex, endIndex] = indices ?? [0, this.row.length]
         const limit: number = Math.min(source.length, max ?? this.row.length);
         let added: number = 0;
@@ -213,8 +209,7 @@ export default class Row implements Iterable<Regiment | undefined> {
 
     /**
      * Wrapper around the Array slice funtion for the row. Returns the regiments between the start (inclusive)
-     * and end (exclusive) indices
-     * indices.
+     * and end (exclusive) indices.
      * @param start Start index, 0 if not provided.
      * @param end End index, end of the array if not provided.
      * @returns A new array containing the values between the given indices.

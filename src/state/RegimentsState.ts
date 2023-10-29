@@ -1,4 +1,4 @@
-import { RegimentTypes } from "../model/Regiment";
+import { RegimentTypes } from "../enum/RegimentTypes";
 import Unit, { blankUnit } from "../types/Unit";
 
 type Units = {[type in RegimentTypes]: Unit}

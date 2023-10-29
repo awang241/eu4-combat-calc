@@ -1,4 +1,4 @@
-import { RegimentTypes } from "../model/Regiment";
+import { RegimentTypes } from "../enum/RegimentTypes";
 
 export type DamageMultipliers = {
     [Type in RegimentTypes]: {

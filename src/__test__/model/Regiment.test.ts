@@ -1,4 +1,5 @@
-import Regiment, { RegimentTypes } from "../../model/Regiment";
+import Regiment from "../../model/Regiment";
+import { RegimentTypes } from "../../enum/RegimentTypes";
 import Pips, { blankPips } from "../../types/Pips";
 import TechGroup from "../../types/TechGroup";
 import Unit from "../../types/Unit";

@@ -1,4 +1,5 @@
-import Regiment, { RegimentTypes } from "../model/Regiment";
+import Regiment from "../model/Regiment";
+import { RegimentTypes } from "../enum/RegimentTypes";
 import "./BattleGrid.css";
 import infIcon from "../assets/infantry.png"
 import cavIcon from "../assets/cavalry.png"

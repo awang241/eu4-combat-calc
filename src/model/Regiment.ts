@@ -1,16 +1,7 @@
 import { toMultiplier } from "../types/Modifiers";
 import Pips from "../types/Pips";
 import Unit from "../types/Unit";
-
-export enum RegimentTypes {
-  INFANTRY = "Infantry",
-  CAVALRY = "Cavalry",
-  ARTILLERY = "Artillery",
-}
-
-export function inRegimentTypes(name: string) {
-  return Object.values(RegimentTypes).includes(name as RegimentTypes);
-}
+import { RegimentTypes } from "../enum/RegimentTypes";
 
 export default class Regiment{
   static id = 0;

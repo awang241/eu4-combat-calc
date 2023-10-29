@@ -1,7 +1,8 @@
 import ArmySnapshot from "../types/ArmySnapshot";
 import { Modifiers, toMultiplier } from "../types/Modifiers";
 import { Tech } from "../types/Tech";
-import Regiment, { RegimentTypes } from "./Regiment";
+import Regiment from "./Regiment";
+import { RegimentTypes } from "../enum/RegimentTypes";
 import Row from "./Row";
 import Unit, { blankUnit } from "../types/Unit";
 

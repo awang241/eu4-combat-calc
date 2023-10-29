@@ -1,5 +1,5 @@
 import "./RegimentsPanel.css";
-import { RegimentTypes } from "../model/Regiment";
+import { RegimentTypes } from "../enum/RegimentTypes";
 import Unit, { blankUnit, unitCompare } from "../types/Unit";
 import { Action, ActionType, RegimentsState } from "../state/RegimentsState";
 import {v4 as uuidv4} from 'uuid';

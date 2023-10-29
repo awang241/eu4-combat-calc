@@ -2,7 +2,7 @@ import techs from "../assets/techs.json"
 import units from "../assets/units.json"
 
 import Unit from "../types/Unit"
-import { RegimentTypes, inRegimentTypes } from "../model/Regiment"
+import { RegimentTypes, inRegimentTypes } from "../enum/RegimentTypes"
 import TechGroup from "../types/TechGroup"
 import { Tech } from "../types/Tech"
 
