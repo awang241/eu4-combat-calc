@@ -11,31 +11,31 @@ import ArmySnapshot from "../types/ArmySnapshot";
  */
 export function combat(attacker: Army, defender: Army): [ArmySnapshot, ArmySnapshot][] {
     let days = 1;
-  
-    const loopLimit:number = 100;
+
+    const loopLimit: number = 100;
     const combatWidth: number = Math.max(attacker.maxWidth, defender.maxWidth);
-    attacker.deploy(combatWidth, defender.numInfAndCavRegiments());
-    defender.deploy(combatWidth, attacker.numInfAndCavRegiments());
+    attacker.deploy(combatWidth, defender.numInfantryAndCavalry());
+    defender.deploy(combatWidth, attacker.numInfantryAndCavalry());
     let isAttackerUpdated = true;
     let isDefenderUpdated = true;
     const dailyStrengths: [ArmySnapshot, ArmySnapshot][] = [];
     dailyStrengths.push([attacker.getSnapshot(), defender.getSnapshot()]);
     while (!attacker.isBroken() && !defender.isBroken() && days < loopLimit) {
-      let roll = 5;
-      if (isDefenderUpdated || isAttackerUpdated) {
-        attacker.setTargets(defender);
-        defender.setTargets(attacker);
-      }
-      //N.B. Do not collapse - casualties must be calculated for both sides before applying them.
-      const defenderCasualties = attacker.calculateCasualtiesArray(roll, days, defender);
-      const attackerCasualties = defender.calculateCasualtiesArray(roll, days, attacker);
-      attacker.applyCasualtiesAndMoraleDamage(attackerCasualties, defender.modifiers.morale);
-      defender.applyCasualtiesAndMoraleDamage(defenderCasualties, attacker.modifiers.morale);
-      dailyStrengths.push([attacker.getSnapshot(), defender.getSnapshot()]);
-      isAttackerUpdated = attacker.replaceRegiments();
-      isDefenderUpdated = defender.replaceRegiments();
-  
-      days++;
+        let roll = 5;
+        if (isDefenderUpdated || isAttackerUpdated) {
+            attacker.setTargets(defender);
+            defender.setTargets(attacker);
+        }
+        //N.B. Do not collapse - casualties must be calculated for both sides before applying them.
+        const defenderCasualties = attacker.calculateCasualtiesArray(roll, days, defender);
+        const attackerCasualties = defender.calculateCasualtiesArray(roll, days, attacker);
+        attacker.applyCasualtiesAndMoraleDamage(attackerCasualties, defender.modifiers.morale);
+        defender.applyCasualtiesAndMoraleDamage(defenderCasualties, attacker.modifiers.morale);
+        dailyStrengths.push([attacker.getSnapshot(), defender.getSnapshot()]);
+        isAttackerUpdated = attacker.replaceRegiments();
+        isDefenderUpdated = defender.replaceRegiments();
+
+        days++;
     }
     return dailyStrengths;
-  }
+}

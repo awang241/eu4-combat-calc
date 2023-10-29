@@ -116,7 +116,7 @@ export default class Regiment{
   public get strength(): number {return this._strength;}
 
   public get targetIndex(): number | undefined {return this._targetIndex;} 
-  public setTargetIndex(index: number | undefined) {this._targetIndex = index;}
+  public set targetIndex(value: number | undefined) {this._targetIndex = value;} 
 
   public get type(): RegimentTypes {return this._type}
   

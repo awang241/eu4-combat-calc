@@ -116,7 +116,10 @@ export default class Row implements Iterable<Regiment | undefined> {
     }
 
     set(index: number, regiment: Regiment | undefined): void {
-        this.row[index]?.setTargetIndex(undefined);
+        const currentRegiment = this.row[index];
+        if (currentRegiment !== undefined) {
+            currentRegiment.targetIndex = undefined;
+        }
         this.row[index] = regiment;
     }
 
@@ -137,7 +140,7 @@ export default class Row implements Iterable<Regiment | undefined> {
             let regiment = this.at(i);
             if (regiment !== undefined) {
                 if (enemyFront.at(i) !== undefined) {
-                    regiment.setTargetIndex(i);
+                    regiment.targetIndex = i;
                 } else {
                     const cavBonus = (regiment.type === RegimentTypes.CAVALRY) ? (cavFlankingBonus ?? 0) : 0
                     const flankingRange = regiment.flankingRange((techFlankingBonus ?? 0) + cavBonus);
@@ -162,7 +165,7 @@ export default class Row implements Iterable<Regiment | undefined> {
                         });
                         targetIndex = outmost.rowIndex;
                     }                   
-                    regiment.setTargetIndex(targetIndex); 
+                    regiment.targetIndex = targetIndex; 
                 }
             }
         }
