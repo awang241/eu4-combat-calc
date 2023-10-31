@@ -20,6 +20,30 @@ export default class Row implements Iterable<Regiment | undefined> {
         return this.regimentsByCentreDistance().map(val => val.regiment).values();
     }  
 
+    /**
+     * Adds regiments from the given source array to the specified row. By default, regiments are moved the
+     * row is full or the source has all been copied.
+     * @param source The source array of regiments. Regiments are copied from the start of the array
+     *      to this row.
+     * @param max If provided, the function will .
+     * @returns The list of regiments copied into the row.
+     */
+    addRegiments(source: Regiment[], max?: number): Regiment[] {
+        const limit: number = Math.min(source.length, max ?? this.row.length);
+        let added: Regiment[] = [];
+        let indexNum: number = 0;
+        const indexOrder: number[] = this.regimentsByCentreDistance().map(val => val.rowIndex);
+        while (added.length < limit && indexNum < indexOrder.length) {
+            const index = indexOrder[indexNum++];
+            if (this.row[index] === undefined) {
+                const regiment = source[added.length]
+                this.row[index] = regiment;
+                added.push(regiment);
+            }
+        }
+        return added;
+    }
+
     at(index: number): Regiment | undefined {
         return this.row.at(index);
     }
@@ -56,34 +80,6 @@ export default class Row implements Iterable<Regiment | undefined> {
         return this.centreDistanceComparator(indexA, indexB) > 0;
     }
 
-    /**
-     * Moves regiments from the given source array to the specified row. The number of regiments is
-     * controlled by the optional arguments; by default, regiments are moved until the source is 
-     * empty or the row is full.
-     * @param source The source array of regiments. Regiments are removed from the start of the array
-     *      to this row.
-     * @param max The maximum number of regiments to be moved.
-     * @param indices The start and end indices. If provided, the row will only fill slots between these
-     *      indices.
-     * @returns The number of regiments moved into the row.
-     */
-    moveInRegiments(source: Regiment[], max?: number, indices?: [number, number]): number {
-        const [startIndex, endIndex] = indices ?? [0, this.row.length]
-        const limit: number = Math.min(source.length, max ?? this.row.length);
-        let added: number = 0;
-        let indexNum: number = 0;
-        const indexOrder: number[] = this.regimentsByCentreDistance()
-                                        .map(val => val.rowIndex)
-                                        .filter(index => index >= startIndex && index < endIndex);
-        while (added < limit && indexNum < indexOrder.length) {
-            const index = indexOrder[indexNum++];
-            if (this.row[index] === undefined) {
-                this.row[index] = source[added++];
-            }
-        }
-        source.splice(0, added);
-        return added;
-    }
     
     /**
      * If there are any gaps in the row (one or more undefineds between two regiments), fills the centremost undefined with 
@@ -131,7 +127,7 @@ export default class Row implements Iterable<Regiment | undefined> {
      * @param enemyFront The enemy army's front line as an array on regiments. This must be the same length as this army's front line.
      * @throws Will throw an error if the enemy front and this army's front are different lengths.
      */
-    setTargets(enemyFront: Row, techFlankingBonus?: number, cavFlankingBonus?: number) {
+    setTargets(enemyFront: Row, techFlankingBonus: number = 0, cavFlankingBonus: number = 0) {
         if (enemyFront.length !== this.length) {
             throw Error("Mismatched front lengths.")
         }
@@ -142,8 +138,8 @@ export default class Row implements Iterable<Regiment | undefined> {
                 if (enemyFront.at(i) !== undefined) {
                     regiment.targetIndex = i;
                 } else {
-                    const cavBonus = (regiment.type === RegimentTypes.CAVALRY) ? (cavFlankingBonus ?? 0) : 0
-                    const flankingRange = regiment.flankingRange((techFlankingBonus ?? 0) + cavBonus);
+                    const cavBonus = (regiment.type === RegimentTypes.CAVALRY) ? cavFlankingBonus : 0
+                    const flankingRange = regiment.flankingRange(techFlankingBonus + cavBonus);
                     const startIndex = Math.max(0, i - flankingRange);
                     const endIndex = Math.min(enemyFront.length, i + flankingRange + 1);
                     let potentialTargets: RegimentRowIndexPair[];

@@ -6,6 +6,7 @@ import { RegimentTypes } from "../enum/RegimentTypes";
 import Row from "./Row";
 import Unit, { blankUnit } from "../types/Unit";
 
+
 const BACK_ROW_MORALE_DAMAGE_FACTOR = 0.4;
 const BASE_BACKROW_REINFORCE_LIMIT = 2;
 const BASE_RESERVES_MORALE_DAMAGE_FACTOR = 2;
@@ -21,10 +22,13 @@ export default class Army {
     private _modifiers: Modifiers;
     private tech: Tech;
     private front: Row = new Row(0);
-    private back: Row = new Row(0, false);
-    private frontReserves: Array<Regiment> = [];
-    private artilleryReserves: Array<Regiment> = [];
-    private _regiments: {[type in RegimentTypes]: Regiment[]} = {
+    private back: Row = new Row(0);
+    private reserves: {[type in RegimentTypes]: Regiment[]} = {
+        [RegimentTypes.INFANTRY]: [],
+        [RegimentTypes.CAVALRY]: [],
+        [RegimentTypes.ARTILLERY]: [],
+    };
+    private regiments: {[type in RegimentTypes]: Regiment[]} = {
         [RegimentTypes.INFANTRY]: [],
         [RegimentTypes.CAVALRY]: [],
         [RegimentTypes.ARTILLERY]: [],
@@ -40,7 +44,7 @@ export default class Army {
             const regType: RegimentTypes = type as RegimentTypes;
             if (units[regType] !== blankUnit(regType)) {
                 for (let i = 0; i < counts[regType]; i++) {
-                    this._regiments[regType].push(new Regiment(modifiers.morale, units[regType]))
+                    this.regiments[regType].push(new Regiment(modifiers.morale, units[regType]))
                 }
             }
         }
@@ -69,8 +73,7 @@ export default class Army {
             }
         }
         const reservePassiveMoraleDamage = BASE_RESERVES_MORALE_DAMAGE_FACTOR * passiveMoraleDamage
-        this.frontReserves.forEach(regiment => regiment.takeMoraleDamage(reservePassiveMoraleDamage));
-        this.artilleryReserves.forEach(regiment => regiment.takeMoraleDamage(reservePassiveMoraleDamage));
+        this.allReserves.forEach(regiment => regiment.takeMoraleDamage(reservePassiveMoraleDamage));
     }
 
     private calculateCasualties(
@@ -132,7 +135,6 @@ export default class Army {
                 casualtyArray[attacker.targetIndex].morale += casualties.morale * 0.5;
             }
         }
-
         return casualtyArray;
     }
 
@@ -164,9 +166,15 @@ export default class Army {
         this.back = new Row(enemyMaxWidth);
         let numCentreInfantry: number;
         let numCavalry: number;
-        const infantry = this._regiments[RegimentTypes.INFANTRY].slice();
-        const cavalry = this._regiments[RegimentTypes.INFANTRY].slice();
-        const artillery = this._regiments[RegimentTypes.INFANTRY].slice();
+
+        const infantry = this.regiments[RegimentTypes.INFANTRY].slice();
+        const cavalry = this.regiments[RegimentTypes.CAVALRY].slice();
+        const artillery = this.regiments[RegimentTypes.ARTILLERY].slice();
+        this.reserves = {
+            [RegimentTypes.INFANTRY]: infantry,
+            [RegimentTypes.CAVALRY]: cavalry,
+            [RegimentTypes.ARTILLERY]: artillery,
+        };
         const combatWidth = Math.max(enemyMaxWidth, this.tech.width);
         const targetWidth = Math.min(combatWidth, numEnemyInfAndCav);
 
@@ -180,29 +188,23 @@ export default class Army {
             numCavalry = Math.min(cavalry.length, Math.floor(enemyMaxWidth / 2));
             numCentreInfantry = Math.min(infantry.length, numEnemyInfAndCav, enemyMaxWidth - numCavalry)
         }
-        this.front.moveInRegiments(infantry, numCentreInfantry);
-        this.front.moveInRegiments(cavalry, numCavalry);
-        this.frontReserves = infantry.concat(cavalry);
-        this.front.moveInRegiments(this.frontReserves);
-
-        this.back.moveInRegiments(artillery);
+        this.reinforceFront(RegimentTypes.INFANTRY, numCentreInfantry);
+        this.reinforceFront(RegimentTypes.CAVALRY, numCavalry);
+        this.reinforceFront();
+        this.reinforceBack(true);
         this.moveArtilleryToFront();
-        this.artilleryReserves = artillery.slice();
-    }
+    }  
 
     /**
      * Returns the total number of infantry and cavalry regiments in this army.
      */
     numInfantryAndCavalry(): number {
-        return this._regiments[RegimentTypes.INFANTRY].length + this._regiments[RegimentTypes.CAVALRY].length;
+        return this.regiments[RegimentTypes.INFANTRY].length + this.regiments[RegimentTypes.CAVALRY].length;
     }
 
-    /**
-     * Returns the total number of infantry and cavalry regiments in this army.
-     */
     numRegiments(type?: RegimentTypes): number {
         if (type !== undefined) {
-            return this._regiments[type].length;
+            return this.regiments[type].length;
         } else {
             return this.numRegiments(RegimentTypes.INFANTRY) + this.numRegiments(RegimentTypes.CAVALRY) + this.numRegiments(RegimentTypes.ARTILLERY);
         }
@@ -213,7 +215,7 @@ export default class Army {
     }
 
     getSnapshot(): ArmySnapshot {
-        return new ArmySnapshot(this.front, this.back, this.frontReserves, this.regiments);
+        return new ArmySnapshot(this.front, this.back, this.allReserves, this.allRegiments);
     }
 
     /**
@@ -274,35 +276,57 @@ export default class Army {
      * @returns {number} the total strength of all regiments in this army.
      */
     strength(): number {
-        return this.regiments.reduce((prev, curr) => prev + curr.strength, 0);
+        return this.allRegiments.reduce((prev, curr) => prev + curr.strength, 0);
     }
 
     /**
-     * Given the front line of an enemy army as an array of regiments, sets the target for each regiment in this army.
-     * Regiments will prioritize enemy regiments opposite them; if there isn't one there, they will pick an enemy regiment within their flanking range
-     * (e.g a regiment at index 7 and flanking range 2 can hit enemy regiments from index 5 to 9.).
-     * If there are no available targets, the regiment's target will be set to undefined.
-     * @param enemyFront The enemy army's front line as an array on regiments. This must be the same length as this army's front line.
-     * @throws Will throw an error if the enemy front and this army's front are different lengths.
+     * Sets targets for all regiments in front and back rows. See Row for more detail.
+     * @param enemyArmy The enemy army.
      */
     setTargets(enemyArmy: Army) {
         this.front.setTargets(enemyArmy.front);
         this.back.setTargets(enemyArmy.front);
     } 
 
+    private moveReservesToRow(useFront: boolean, type: RegimentTypes, limit?: number): Regiment[] {
+        const row = useFront ? this.front : this.back;
+        const added = row.addRegiments(this.reserves[type], limit);
+        this.reserves[type] = this.reserves[type].filter(reg => !added.includes(reg));
+        return added;
+    }
+
+    private reinforceFront(type?: RegimentTypes, limit?: number): Regiment[] {
+        const addedRegs: Regiment[] = []
+        if (type === undefined) {
+            addedRegs.concat(this.moveReservesToRow(true, RegimentTypes.INFANTRY));
+            if (addedRegs.length !== 0) {
+                addedRegs.concat(this.moveReservesToRow(true, RegimentTypes.CAVALRY));
+            }
+        } else if (type === RegimentTypes.ARTILLERY) {
+            throw Error("not yet implemented");
+        } else {
+            addedRegs.concat(this.moveReservesToRow(true, type, limit));
+        }
+        return addedRegs;
+    }
+
+    private reinforceBack(isDeploying: boolean = false): Regiment[] {
+        const limit = isDeploying ? BASE_BACKROW_REINFORCE_LIMIT: undefined
+        return this.moveReservesToRow(false, RegimentTypes.ARTILLERY, limit)
+    }
+
     /**
      * Moves destroyed/routed regiments out of combat, and replaces them with reserves if any are available.
      * @returns true if the front was changed, false otherwise.
      */
     replaceRegiments(): boolean {
-        const backrowReinforceLimit = BASE_BACKROW_REINFORCE_LIMIT
         let changed = false;
         changed = this.front.removeBrokenRegiments() || changed; 
         changed = this.back.removeBrokenRegiments() || changed;
-        changed = this.front.moveInRegiments(this.frontReserves) > 0 || changed;
+        changed = this.reinforceFront().length > 0 || changed;
         changed = this.front.moveOutmostRegimentToInmostGap() || changed;
         changed = this.moveArtilleryToFront() || changed;    
-        changed = this.back.moveInRegiments(this.artilleryReserves, backrowReinforceLimit) > 0 || changed;
+        changed = this.reinforceBack().length > 0 || changed;
         changed = this.front.shiftRegiments() || changed;
         return changed;
     }
@@ -313,16 +337,19 @@ export default class Army {
      * @returns the average morale of all regiments. If there are no regiments, returns 0.
      */
     totalMorale() {
-        return this.regiments.reduce((prev, curr) => prev + curr.currentMorale, 0);
+        return this.allRegiments.reduce((prev, curr) => prev + curr.currentMorale, 0);
     }
 
 
     get modifiers(): Modifiers {return this._modifiers;}
     get maxWidth(): number {return this.tech.width};
 
-    get regiments(): Regiment[] {
-        const emptyArray: Regiment[] = [];
-        return emptyArray.concat(...Object.values(this._regiments))
+    get allRegiments(): Regiment[] {
+        return ([] as Regiment[]).concat(...Object.values(this.regiments))
     };
+
+    get allReserves(): Regiment[] {
+        return ([] as Regiment[]).concat(...Object.values(this.reserves))
+    }
 
 }
