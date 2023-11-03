@@ -9,16 +9,12 @@ type RegimentRowIndexPair = {
 /**
  * Represents the a row of an army during battle. 
  */
-export default class Row implements Iterable<Regiment | undefined> {
+export default class Row {
     private row: (Regiment | undefined)[];
 
     constructor(width: number) {
         this.row = new Array(width).fill(undefined);
     }
-
-    [Symbol.iterator](): Iterator<Regiment | undefined> {
-        return this.regimentsByCentreDistance().map(val => val.regiment).values();
-    }  
 
     /**
      * Adds regiments from the given source array to the specified row. By default, regiments are moved the
@@ -28,8 +24,8 @@ export default class Row implements Iterable<Regiment | undefined> {
      * @param max If provided, the function will .
      * @returns The list of regiments copied into the row.
      */
-    addRegiments(source: Regiment[], max?: number): Regiment[] {
-        const limit: number = Math.min(source.length, max ?? this.row.length);
+    addRegiments(source: Regiment[], max: number = this.row.length): Regiment[] {
+        const limit: number = Math.min(source.length, max);
         let added: Regiment[] = [];
         let indexNum: number = 0;
         const indexOrder: number[] = this.regimentsByCentreDistance().map(val => val.rowIndex);
@@ -60,23 +56,12 @@ export default class Row implements Iterable<Regiment | undefined> {
      * @param indexB Second index to be compared.
      * @returns 0 if the indices are equal, a negative value if index A is closer to the centre, and a positive value if B is closer 
      */
-    centreDistanceComparator(indexA: number, indexB: number): number {
+    private centreDistanceComparator(indexA: number, indexB: number): number {
         const centreDistanceDifference = Math.abs(2 * indexA - this.row.length + 1) - Math.abs(2 * indexB - this.row.length + 1);
         return (centreDistanceDifference === 0 ? indexB - indexA: centreDistanceDifference);
     }
 
-    /**
-     * Returns the index of the first unbroken regiment and the index after the last 
-     * unbroken regiment. 
-     */
-    getStartEndIndices(): [number, number] {
-        const predicate = (slot: Regiment | undefined) => slot !== undefined && !slot.isBroken();
-        const startIndex = this.row.findIndex(predicate);
-        const endIndex = this.row.findLastIndex(predicate) + 1;
-        return [startIndex, endIndex];
-    }
-
-    isAFurtherFromCentreThanB(indexA: number, indexB: number): boolean {
+    private isAFurtherFromCentreThanB(indexA: number, indexB: number): boolean {
         return this.centreDistanceComparator(indexA, indexB) > 0;
     }
 
@@ -97,7 +82,7 @@ export default class Row implements Iterable<Regiment | undefined> {
         }
         const inmostGapRowIndex = regimentsByDistanceToCentre[inmostGapCentreIndex].rowIndex;
         const outmostRegiment: RegimentRowIndexPair | undefined = regimentsByDistanceToCentre.findLast(
-            (pair, index) => pair.regiment !== undefined && pair.regiment.targetIndex !== -1 && index > inmostGapCentreIndex);
+            (pair, index) => pair.regiment !== undefined && pair.regiment.targetIndex === undefined && index > inmostGapCentreIndex);
         if (outmostRegiment === undefined) {
             return false;
         } else {
@@ -105,10 +90,6 @@ export default class Row implements Iterable<Regiment | undefined> {
             this.row[inmostGapRowIndex] = outmostRegiment.regiment;
             return true;
         }
-    }
-
-    indexOf(value: Regiment | undefined): number {
-        return this.row.indexOf(value);
     }
 
     set(index: number, regiment: Regiment | undefined): void {
@@ -121,11 +102,12 @@ export default class Row implements Iterable<Regiment | undefined> {
 
     /**
      * Given the front line of an enemy army as an array of regiments, sets the target for each regiment in this army.
-     * Regiments will prioritize enemy regiments opposite them; if there isn't one there, they will pick the closest an enemy regiment within their flanking range
+     * Regiments will prioritize enemy regiments opposite them; if there isn't one there, they will pick the closest enemy 
+     * regiment within their flanking range. In case of ties, the regiment will target the outmost enemy regiment.
      * (e.g a regiment at index 7 and flanking range 2 can hit enemy regiments from index 5 to 9.).
      * If there are no available targets, the regiment's target will be set to undefined.
      * @param enemyFront The enemy army's front line as an array on regiments. This must be the same length as this army's front line.
-     * @throws Will throw an error if the enemy front and this army's front are different lengths.
+     * @throws Will throw an error if the enemy front and this row are different lengths.
      */
     setTargets(enemyFront: Row, techFlankingBonus: number = 0, cavFlankingBonus: number = 0) {
         if (enemyFront.length !== this.length) {
@@ -240,9 +222,9 @@ export default class Row implements Iterable<Regiment | undefined> {
      * otherwise returns them in descending order.
      * @returns The regiments/empty slots and their indices in the row, sorted by their distance to the centre.
      */
-    regimentsByCentreDistance(reversed?: boolean): RegimentRowIndexPair[] {
+    regimentsByCentreDistance(reversed: boolean = false): RegimentRowIndexPair[] {
         let pairs: RegimentRowIndexPair[] = this.row.map((val, index) => {return {regiment: val, rowIndex: index}});
-        const multiplier = (reversed ?? false) ? -1 : 1;
+        const multiplier = reversed ? -1 : 1;
         return pairs.sort((a, b) => multiplier * this.centreDistanceComparator(a.rowIndex, b.rowIndex));
     }
 

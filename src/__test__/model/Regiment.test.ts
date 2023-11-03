@@ -89,7 +89,8 @@ test("unmodifiableCopy return value throws an error when assigning a property", 
     expect(illegalSet).toThrowError();
 })
 
-describe("Pips getters with pips with values {1, 2, 4, 8, 16, 32}", () => {
+//Pips getters
+describe("Given pips with values {1, 2, 4, 8, 16, 32}", () => {
     let regiment: Regiment;
     const pips: Pips = {
         fireOffence: 1,
@@ -102,28 +103,34 @@ describe("Pips getters with pips with values {1, 2, 4, 8, 16, 32}", () => {
     beforeEach(() => {
         regiment = new Regiment(MAX_MORALE, {...DUMMY_INFANTRY, pips: pips})
     });
-    test(`getStrengthOffencePips when isFire is true returns ${pips.fireOffence}`, () => {
-        expect(regiment.getStrengthOffencePips(true)).toBe(pips.fireOffence)
+    describe("when isFire is true", () => {
+        const isFire = true;
+        test(`getStrengthOffencePips returns fire offence pips`, () => {
+            expect(regiment.getStrengthOffencePips(isFire)).toBe(pips.fireOffence)
+        });
+        test(`getStrengthDefencePips returns fire defence pips`, () => {
+            expect(regiment.getStrengthDefencePips(true)).toBe(pips.fireDefence)
+        });
+        test(`getMoraleOffencePips returns fire offence plus morale offence`, () => {
+            expect(regiment.getMoraleOffencePips(true)).toBe(pips.moraleOffence + pips.fireOffence)
+        });
+        test(`getMoraleDefencePips returns fire defence plus morale defence`, () => {
+            expect(regiment.getMoraleDefencePips(true)).toBe(pips.moraleDefence + pips.fireDefence)
+        });
     });
-    test(`getStrengthOffencePips when isFire is false returns ${pips.shockOffence}`, () => {
-        expect(regiment.getStrengthOffencePips(false)).toBe(pips.shockOffence)
-    });
-    test(`getStrengthDefencePips when isFire is true returns ${pips.fireDefence}`, () => {
-        expect(regiment.getStrengthDefencePips(true)).toBe(pips.fireDefence)
-    });
-    test(`getStrengthDefencePips when isFire is false returns ${pips.shockDefence}`, () => {
-        expect(regiment.getStrengthDefencePips(false)).toBe(pips.shockDefence)
-    });
-    test(`getMoraleOffencePips when isFire is true returns ${pips.moraleOffence + pips.fireOffence}`, () => {
-        expect(regiment.getMoraleOffencePips(true)).toBe(pips.moraleOffence + pips.fireOffence)
-    });
-    test(`getMoraleOffencePips when isFire is false returns ${pips.moraleOffence + pips.shockOffence}`, () => {
-        expect(regiment.getMoraleOffencePips(false)).toBe(pips.moraleOffence + pips.shockOffence)
-    });
-    test(`getMoraleDefencePips when isFire is true returns ${pips.moraleDefence + pips.fireDefence}`, () => {
-        expect(regiment.getMoraleDefencePips(true)).toBe(pips.moraleDefence + pips.fireDefence)
-    });
-    test(`getMoraleDefencePips when isFire is false returns ${pips.moraleDefence + pips.shockDefence}`, () => {
-        expect(regiment.getMoraleDefencePips(false)).toBe(pips.moraleDefence + pips.shockDefence)
-    });
+    describe("when isFire is false", () => {
+        const isFire = false;
+        test(`getStrengthOffencePips returns shock offence pips`, () => {
+            expect(regiment.getStrengthOffencePips(isFire)).toBe(pips.shockOffence)
+        });
+        test(`getStrengthDefencePips returns shock defence pips`, () => {
+            expect(regiment.getStrengthDefencePips(isFire)).toBe(pips.shockDefence)
+        });
+        test(`getMoraleOffencePips returns shock offence plus morale offence`, () => {
+            expect(regiment.getMoraleOffencePips(isFire)).toBe(pips.moraleOffence + pips.shockOffence)
+        });
+        test(`getMoraleDefencePips returns shock defence plus morale defence`, () => {
+            expect(regiment.getMoraleDefencePips(isFire)).toBe(pips.moraleDefence + pips.shockDefence)
+        });
+    })
 })

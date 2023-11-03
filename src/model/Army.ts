@@ -76,6 +76,14 @@ export default class Army {
         this.allReserves.forEach(regiment => regiment.takeMoraleDamage(reservePassiveMoraleDamage));
     }
 
+    atBack(index: number): Regiment | undefined {
+        return this.back.at(index);
+    }
+
+    atFront(index: number): Regiment | undefined {
+        return this.front.at(index);
+    }
+
     private calculateCasualties(
             attacker: Regiment,
             isFirePhase: boolean, 
@@ -93,7 +101,7 @@ export default class Army {
         const damageMultiplier = isFirePhase ? this.tech.damages[attacker.type].fire: this.tech.damages[attacker.type].shock;
         const strengthMultiplier = attacker.strength / Regiment.MAX_STRENGTH;
         const combatAbilityMultiplier = toMultiplier(this.combatAbility(attacker.type));
-        const totalMultipliers = strengthMultiplier * damageMultiplier * combatAbilityMultiplier * roundMultiplier;
+        const totalMultipliers = strengthMultiplier * damageMultiplier * combatAbilityMultiplier * roundMultiplier / enemyArmy.modifiers.tactics;
 
         const baseMoraleMultiplier = this.modifiers.morale / MORALE_DIVISOR;
         const moraleDamageBonus = toMultiplier(this.modifiers.moraleDamage);
@@ -347,6 +355,10 @@ export default class Army {
     get allRegiments(): Regiment[] {
         return ([] as Regiment[]).concat(...Object.values(this.regiments))
     };
+
+    get deployedRegiments(): Regiment[] {
+        return this.back.slice().concat(this.front.slice()).filter(reg => reg !== undefined) as Regiment[];
+    }
 
     get allReserves(): Regiment[] {
         return ([] as Regiment[]).concat(...Object.values(this.reserves))
