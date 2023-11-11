@@ -1,5 +1,5 @@
 import UnitTypes, { UnitType } from "../enum/UnitTypes";
-import { DamageMultipliers } from "../types/DamageMultipliers";
+import { DamageTable } from "../types/DamageTable";
 import { Tech, TechState } from "../types/Tech"
 import TechGroups, { TechGroup } from "../enum/TechGroups";
 import { GlobalCSSClasses as CSSClasses } from "../enum/GlobalCSSClasses";
@@ -96,7 +96,7 @@ function ValuesPanel(props: {tech: Tech}) {
     )
 }
 
-function DamagePanel(props: {multipliers: DamageMultipliers}) {
+function DamagePanel(props: {multipliers: DamageTable}) {
     return (
         <div className="tech-damage-panel">
             <div className="tech-damage-header">
