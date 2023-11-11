@@ -3,40 +3,28 @@ import units from "../assets/units.json"
 
 import Unit from "../types/Unit"
 import { RegimentTypes, inRegimentTypes } from "../enum/RegimentTypes"
-import TechGroup from "../types/TechGroup"
+import TechGroups, { TechGroup } from "../enum/TechGroups"
 import { Tech } from "../types/Tech"
 
-function parseTechGroup(value: string): TechGroup {
-    if (value === "western")
-        return TechGroup.WESTERN;
-    else if (value === "eastern")
-        return TechGroup.EASTERN;
-    else if (value === "ottoman")
-        return TechGroup.ANATOLIAN;
-    else if (value === "muslim")
-        return TechGroup.MUSLIM;
-    else if (value === "nomad_group")
-        return TechGroup.NOMADIC
-    else if (value === "sub_saharan")
-        return TechGroup.AFRICAN;
-    else if (value === "chinese")
-        return TechGroup.CHINESE;
-    else if (value === "indian") 
-        return TechGroup.INDIAN;
-    else if (value === "mesoamerican")
-        return TechGroup.MESOAMERICAN;
-    else if (value === "north_american")
-        return TechGroup.NORTH_AMERICAN;
-    else if (value === "south_american")
-        return TechGroup.SOUTH_AMERICAN;
-    else if (value === "high_american")
-        return TechGroup.HIGH_AMERICAN;
-    else if (value === "aboriginal_tech")
-        return TechGroup.ABORIGINAL;
-    else if (value === "polynesian_tech")
-        return TechGroup.POLYNESIAN;
-    else
-        return TechGroup.NONE
+const TECH_GROUP_NAMES = {
+        "western": TechGroups.WESTERN,
+        "eastern": TechGroups.EASTERN,
+        "ottoman": TechGroups.ANATOLIAN,
+        "muslim": TechGroups.MUSLIM,
+        "nomad_group": TechGroups.NOMADIC,
+        "sub_saharan": TechGroups.AFRICAN,
+        "chinese": TechGroups.CHINESE,
+        "indian": TechGroups.INDIAN,
+        "mesoamerican": TechGroups.MESOAMERICAN,
+        "north_american": TechGroups.NORTH_AMERICAN,
+        "south_american": TechGroups.SOUTH_AMERICAN,
+        "high_american": TechGroups.HIGH_AMERICAN,
+        "aboriginal_tech": TechGroups.ABORIGINAL,
+        "polynesian_tech": TechGroups.POLYNESIAN,
+} as const
+
+function parseTechGroup(value: string): TechGroup | undefined {
+    return value in TECH_GROUP_NAMES ? TECH_GROUP_NAMES[value as keyof typeof TECH_GROUP_NAMES]: undefined;
 } 
 
 function parseRegType(value: string): RegimentTypes | undefined{
@@ -65,9 +53,9 @@ function deepFreeze<T>(obj: T): Readonly<T> {
 export function parseUnits(): Map<TechGroup, Unit[]> {
     const unitsByTechGroup: Map<TechGroup, Unit[]> = new Map();
     units.forEach(val => {
-        const group: TechGroup = parseTechGroup(val.unitType ?? "");
+        const group: TechGroup | undefined = parseTechGroup(val.unitType ?? "");
         const type: RegimentTypes | undefined = parseRegType(val.type);
-        if (type !== undefined && val.techLevel !== undefined) {
+        if (type !== undefined && val.techLevel !== undefined && group !== undefined) {
             const unit: Unit = {
                 name: val.name,
                 type: type,

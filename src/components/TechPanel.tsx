@@ -1,7 +1,7 @@
 import { RegimentTypes } from "../enum/RegimentTypes";
 import { DamageMultipliers } from "../types/DamageMultipliers";
 import { Tech, TechState } from "../types/Tech"
-import TechGroup, { getTechGroupName, isTechGroup } from "../types/TechGroup"
+import TechGroups, { TechGroup } from "../enum/TechGroups";
 import { GlobalCSSClasses as CSSClasses } from "../enum/GlobalCSSClasses";
 
 import fireIcon from "../assets/fire.png"
@@ -42,10 +42,10 @@ function SelectorPanel(props: {
     }
 
     const handleSelect = (event: React.ChangeEvent<HTMLSelectElement>) => {
-        if (isTechGroup(event.target.value)) {
+        const group: TechGroup | undefined = TechGroups.byDescription(event.target.value);
+        if (group !== undefined) {
             props.setter((state) => {
-                [].reverse()
-                return {...state, group: event.target.value as TechGroup};
+                return {...state, group};
             })
         }
     }
@@ -63,13 +63,11 @@ function SelectorPanel(props: {
                 onChange={handleInput}
             />
             <span>Tech Group:</span>
-            <select className={CSSClasses.TWO_COL_SPAN} onChange={handleSelect} value={props.group}>
-                {Object.values(TechGroup)
-                    .filter(group => group !== TechGroup.NONE)
-                    .map(group => {
+            <select className={CSSClasses.TWO_COL_SPAN} onChange={handleSelect} value={props.group.description}>
+                {TechGroups.values.map(group => {
                         return (
-                            <option key={group} value={group}>
-                                {getTechGroupName(group)}
+                            <option key={group.propName} value={group.description}>
+                                {group.description}
                             </option>
                         )
                     })

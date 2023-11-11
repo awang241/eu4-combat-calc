@@ -1,10 +1,8 @@
 import Regiment from "../../model/Regiment";
 import { RegimentTypes } from "../../enum/RegimentTypes";
-import Pips, { blankPips } from "../../types/Pips";
-import TechGroup from "../../types/TechGroup";
+import Pips from "../../types/Pips";
 import Unit from "../../types/Unit";
-import { DUMMY_INFANTRY } from "../DummyTypes";
-
+import { blankUnit } from "../../types/Unit";
 
 const MAX_MORALE = 3;
 
@@ -14,7 +12,7 @@ describe("flankingRange", () => {
         [RegimentTypes.CAVALRY, 2],
         [RegimentTypes.ARTILLERY, 2],
     ])("without any bonus returns base flanking ranges correctly",(type, expected) => {
-        const regiment = new Regiment(MAX_MORALE, {...DUMMY_INFANTRY, type: type})
+        const regiment = new Regiment(MAX_MORALE, blankUnit(type));
         test(`when regiment type is ${type}, returns ${expected}`, () => {
             expect(regiment.flankingRange()).toBeCloseTo(expected, 8)
         });
@@ -28,7 +26,7 @@ describe("flankingRange", () => {
         [99.9, 3],
         [100, 4],
     ])("bonus is applied correctly", (bonusPercent, expected) => {
-        const regiment = new Regiment(MAX_MORALE, {...DUMMY_INFANTRY, type: RegimentTypes.CAVALRY})
+        const regiment = new Regiment(MAX_MORALE, blankUnit(RegimentTypes.CAVALRY));
         test(`with a cavalry regiment and ${bonusPercent}% bonus range, returns ${expected}`, () => {
             expect(regiment.flankingRange(bonusPercent)).toBeCloseTo(expected, 8)
         });
@@ -50,13 +48,7 @@ describe("flankingRange", () => {
         {strength: 249, bonusPercent: 74, expected: 1},
         {strength: 249, bonusPercent: 75, expected: 2},
     ])("strength penalties are applied correctly", ({strength, bonusPercent, expected}) => {
-        const dummyUnit: Unit = {
-            name: "", 
-            type: RegimentTypes.CAVALRY,
-            techGroup: TechGroup.NONE,
-            techLevel: 0,
-            pips: blankPips()
-        };
+        const dummyUnit: Unit = blankUnit(RegimentTypes.CAVALRY);
         test(`Cavalry with strength of ${strength} and ${bonusPercent}% bonus range returns ${expected}`, () => {
             const cav = new Regiment(0, dummyUnit);
             cav.takeCasualties(Regiment.MAX_STRENGTH - strength)
@@ -74,7 +66,7 @@ describe.each([
     {strength: 0, morale: 0, expected: true},
 ])("isBroken", ({strength, morale, expected}) => {
     let regiment: Regiment;
-    beforeEach(() => regiment = new Regiment(MAX_MORALE, DUMMY_INFANTRY))
+    beforeEach(() => regiment = new Regiment(MAX_MORALE, blankUnit()))
     test(`with ${strength} men and ${morale} morale returns ${expected}`, () => {
         regiment.takeMoraleDamage(MAX_MORALE - morale);
         regiment.takeCasualties(Regiment.MAX_STRENGTH - strength);
@@ -83,7 +75,7 @@ describe.each([
 })
 
 test("unmodifiableCopy return value throws an error when assigning a property", () => {
-    const original = new Regiment(3, DUMMY_INFANTRY);
+    const original = new Regiment(3, blankUnit());
     const copy = original.unmodifiableCopy();
     const illegalSet = () => copy.takeCasualties(123);
     expect(illegalSet).toThrowError();
@@ -101,7 +93,7 @@ describe("Given pips with values {1, 2, 4, 8, 16, 32}", () => {
         moraleDefence: 32,
     }
     beforeEach(() => {
-        regiment = new Regiment(MAX_MORALE, {...DUMMY_INFANTRY, pips: pips})
+        regiment = new Regiment(MAX_MORALE, {...blankUnit(), pips: pips})
     });
     describe("when isFire is true", () => {
         const isFire = true;

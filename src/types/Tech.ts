@@ -1,12 +1,11 @@
 import { DamageMultipliers } from "./DamageMultipliers"
-import TechGroup from "./TechGroup"
-
+import TechGroups, { TechGroup } from "../enum/TechGroups"
 export type TechState = {
     level: number,
     group: TechGroup
 }
 
-export function defaultTechState(): TechState { return {level: 3, group: TechGroup.WESTERN}}
+export function defaultTechState(): TechState { return {level: 3, group: TechGroups.WESTERN}}
 
 
 export type Tech = {

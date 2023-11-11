@@ -1,7 +1,8 @@
 import { RegimentTypes } from "../../enum/RegimentTypes";
 import Regiment from "../../model/Regiment";
 import Row from "../../model/Row"
-import { DUMMY_INFANTRY } from "../DummyTypes";
+import { blankUnit } from "../../types/Unit";
+const DUMMY_INFANTRY = blankUnit();
 
 jest.mock("../../model/Regiment")
 const ROW_WIDTH_NORMAL = 5;

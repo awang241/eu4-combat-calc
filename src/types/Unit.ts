@@ -1,13 +1,8 @@
 import { RegimentTypes } from "../enum/RegimentTypes";
 import Pips, { blankPips } from "./Pips"
-import TechGroup from "./TechGroup"
+import TechGroups, { TechGroup } from "../enum/TechGroups";
 
-const blankProps = {name: "", techGroup: TechGroup.NONE, techLevel: 0, pips: blankPips()};
-const BLANKS: {[type in RegimentTypes]: Unit} = Object.freeze({
-    [RegimentTypes.INFANTRY]: Object.freeze({...blankProps, type: RegimentTypes.INFANTRY}),
-    [RegimentTypes.CAVALRY]: Object.freeze({...blankProps, type: RegimentTypes.CAVALRY}),
-    [RegimentTypes.ARTILLERY]: Object.freeze({...blankProps, type: RegimentTypes.ARTILLERY}),
-});
+const blankProps = {name: "", techGroup: TechGroups.WESTERN, techLevel: 0, pips: blankPips()};
 
 type Unit = {
     name: string,
@@ -40,8 +35,8 @@ export function unitsOfType(source: Unit[], type: RegimentTypes) {
     return source.filter((unit) => unit.type === type);
 }
 
-export function blankUnit(type: RegimentTypes): Unit {
-    return BLANKS[type];
+export function blankUnit(type: RegimentTypes = RegimentTypes.INFANTRY): Unit {
+    return {...blankProps, type: type}
 }
 
 export default Unit
