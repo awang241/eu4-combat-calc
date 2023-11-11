@@ -29,8 +29,8 @@ export function combat(attacker: Army, defender: Army): [ArmySnapshot, ArmySnaps
         //N.B. Do not collapse - casualties must be calculated for both sides before applying them.
         const defenderCasualties = attacker.calculateCasualtiesArray(roll, days, defender);
         const attackerCasualties = defender.calculateCasualtiesArray(roll, days, attacker);
-        attacker.applyCasualtiesAndMoraleDamage(attackerCasualties, defender.modifiers.morale);
-        defender.applyCasualtiesAndMoraleDamage(defenderCasualties, attacker.modifiers.morale);
+        attacker.applyCasualtiesAndMoraleDamage(attackerCasualties, defender.morale);
+        defender.applyCasualtiesAndMoraleDamage(defenderCasualties, attacker.morale);
         dailyStrengths.push([attacker.getSnapshot(), defender.getSnapshot()]);
         isAttackerUpdated = attacker.replaceRegiments();
         isDefenderUpdated = defender.replaceRegiments();

@@ -98,8 +98,9 @@ export default class Army {
         const moralePips = battlePips + attacker.getMoraleOffencePips(isFirePhase) - targetPips.morale;
         
         const regHealthMultiplier = attacker.strength / Regiment.MAX_STRENGTH;
-        const strengthMultiplier = this.modifiers.strengthMultipliers(attacker.type, isFirePhase) * roundMultiplier * regHealthMultiplier;
-        const moraleMultiplier = this.modifiers.moraleMultipliers(attacker.type, isFirePhase) * roundMultiplier * regHealthMultiplier;
+        const commonMults = regHealthMultiplier * roundMultiplier / enemyArmy.tactics; 
+        const strengthMultiplier = this.modifiers.strengthMultipliers(attacker.type, isFirePhase) * commonMults;
+        const moraleMultiplier = this.modifiers.moraleMultipliers(attacker.type, isFirePhase) * commonMults;
 
         return {
             strength: (15 + 5 * strengthPips) * strengthMultiplier,
@@ -328,7 +329,8 @@ export default class Army {
 
 
     get maxWidth(): number {return this.tech.width};
-    get tacticsMultiplier(): number {return this.modifiers.tacticsMultiplier}
+    get morale(): number {return this.modifiers.morale};
+    get tactics(): number {return this.modifiers.tactics}
     get allRegiments(): Regiment[] {
         return ([] as Regiment[]).concat(...Object.values(this.regiments))
     };

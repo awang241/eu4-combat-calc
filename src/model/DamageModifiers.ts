@@ -61,8 +61,8 @@ export class DamageModifiers {
     get moraleDefenseMultiplier() {
         return this.modifiers.moraleDamageReceived
     }
-    get tacticsMultiplier() {
-        return 1 / this.modifiers.tactics
+    get tactics() {
+        return this.modifiers.tactics
     };
 }
 
