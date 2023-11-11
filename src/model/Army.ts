@@ -1,5 +1,5 @@
 import ArmySnapshot from "../types/ArmySnapshot";
-import { Modifiers, toMultiplier } from "../types/Modifiers";
+import { ArmyModifiers, toMultiplier } from "../types/ArmyModifiers";
 import { Tech } from "../types/Tech";
 import Regiment from "./Regiment";
 import UnitTypes, { UnitType } from "../enum/UnitTypes";
@@ -19,7 +19,7 @@ export default class Army {
     private static readonly STRENGTH_CASUALTIES_INDEX: number = 0;
     private static readonly MORALE_DAMAGES_INDEX: number = 1;
 
-    private _modifiers: Modifiers;
+    private _modifiers: ArmyModifiers;
     private tech: Tech;
     private front: Row = new Row(0);
     private back: Row = new Row(0);
@@ -39,7 +39,7 @@ export default class Army {
      * @param regsState The count and unit template for each regiment type.
      * @param modifiers The army-level modifiers (morale, discipline, etc...) for this army.
      */
-    constructor(units: {[type in UnitType]: Unit}, counts: {[type in UnitType]: number}, modifiers: Modifiers, tech: Tech) {
+    constructor(units: {[type in UnitType]: Unit}, counts: {[type in UnitType]: number}, modifiers: ArmyModifiers, tech: Tech) {
         for (const type of Object.values(UnitTypes)) {
             const regType: UnitType = type;
             if (units[regType] !== blankUnit(regType)) {
@@ -345,7 +345,7 @@ export default class Army {
     }
 
 
-    get modifiers(): Modifiers {return this._modifiers;}
+    get modifiers(): ArmyModifiers {return this._modifiers;}
     get maxWidth(): number {return this.tech.width};
 
     get allRegiments(): Regiment[] {

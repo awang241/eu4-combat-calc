@@ -1,12 +1,13 @@
 import "./ArmyModifiersPanel.css";
-import { ModifierNames, inModifierNames, Modifiers, toMultiplier } from "../types/Modifiers";
+import { ArmyModifiers, toMultiplier } from "../types/ArmyModifiers";
+import Modifiers, { Modifier, isModifier } from "../enum/Modifiers";
 import { Tech } from "../types/Tech";
 import { ChangeEventHandler, useEffect, useState } from "react";
 import { GlobalCSSClasses } from "../enum/GlobalCSSClasses";
 
 const MoralePanel = (props: {
         baseMorale: number, 
-        setter: (type: ModifierNames, value: number) => void,
+        setter: (type: Modifier, value: number) => void,
 }): JSX.Element => {
     const [bonusMoralePercent, setBonusMoralePercent] = useState(0);
 
@@ -14,14 +15,14 @@ const MoralePanel = (props: {
         return props.baseMorale * toMultiplier(bonusPercent ?? bonusMoralePercent)
     }
 
-    useEffect(() => props.setter(ModifierNames.MORALE, totalMorale()),
+    useEffect(() => props.setter(Modifiers.MORALE, totalMorale()),
         // eslint-disable-next-line react-hooks/exhaustive-deps
         [props.baseMorale])
 
     const handleInput: ChangeEventHandler<HTMLInputElement> = (e) => {
         const value: number = (e.target.value === "") ? 0 : parseFloat(e.target.value);
         if (!isNaN(value)) {
-            props.setter(ModifierNames.MORALE, totalMorale(value));
+            props.setter(Modifiers.MORALE, totalMorale(value));
             setBonusMoralePercent(value);
         }
         e.target.value = "";
@@ -41,7 +42,7 @@ const MoralePanel = (props: {
                     type="number"
                     min={0}
                     step={0.1} 
-                    name={ModifierNames.MORALE} 
+                    name={Modifiers.MORALE} 
                     onChange={handleInput} 
                     value={bonusMoralePercent}
                 />
@@ -57,7 +58,7 @@ const MoralePanel = (props: {
 const TacticsPanel = (props: {
         discipline: number,
         baseTactics: number,
-        setter: (type: ModifierNames, value: number) => void,
+        setter: (type: Modifier, value: number) => void,
 }): JSX.Element => {
     const [bonusTactics, setBonusTactics] = useState(0);
 
@@ -66,17 +67,17 @@ const TacticsPanel = (props: {
         return base * toMultiplier(discipline ?? props.discipline);
     }
 
-    useEffect(() => props.setter(ModifierNames.TACTICS, totalTactics()),
+    useEffect(() => props.setter(Modifiers.TACTICS, totalTactics()),
         // eslint-disable-next-line react-hooks/exhaustive-deps
         [props.baseTactics, props.discipline])
 
     const handleInput: ChangeEventHandler<HTMLInputElement> = (e) => {
-        const name: ModifierNames = e.target.name as ModifierNames
+        const name: Modifier = e.target.name as Modifier
         const value: number = (e.target.value === "") ? 0 : parseFloat(e.target.value);
         if (!isNaN(value)) {
-            if (name === ModifierNames.DISCIPLINE) {
-                props.setter(ModifierNames.DISCIPLINE, value);
-            } else if (name === ModifierNames.TACTICS) {
+            if (name === Modifiers.DISCIPLINE) {
+                props.setter(Modifiers.DISCIPLINE, value);
+            } else if (name === Modifiers.TACTICS) {
                 props.setter(name, totalTactics(value));
                 setBonusTactics(value);
             }
@@ -98,7 +99,7 @@ const TacticsPanel = (props: {
                 type="number" 
                 min={0}
                 step={0.1} 
-                name={ModifierNames.TACTICS} 
+                name={Modifiers.TACTICS} 
                 onChange={handleInput} 
                 value={bonusTactics}
             />
@@ -111,7 +112,7 @@ const TacticsPanel = (props: {
                     type="number" 
                     min={0}
                     step={0.5} 
-                    name={ModifierNames.DISCIPLINE} 
+                    name={Modifiers.DISCIPLINE} 
                     onChange={handleInput} 
                     value={props.discipline}
                 />
@@ -125,19 +126,19 @@ const TacticsPanel = (props: {
 }
 
 export default function ArmyModifiersPanel(props: {
-            modifiers: Modifiers,
+            modifiers: ArmyModifiers,
             tech: Tech,
             className?: string,
-            callback: (fn: ((state: Modifiers) => Modifiers)) => void,
+            callback: (fn: ((state: ArmyModifiers) => ArmyModifiers)) => void,
         }) { 
-    const setModifier = (name: ModifierNames, value: number) => {
+    const setModifier = (name: Modifier, value: number) => {
         props.callback(state => ({...state, [name]: value}));
     }
 
     const handleModifierInput = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const name: ModifierNames = event.target.name as ModifierNames
+        const name: Modifier = event.target.name as Modifier
         const value: number = (event.target.value === "") ? 0 : parseFloat(event.target.value);
-        if (inModifierNames(name) && !isNaN(value)) {
+        if (isModifier(name) && !isNaN(value)) {
             setModifier(name, value);
         }
     }
@@ -160,9 +161,9 @@ export default function ArmyModifiersPanel(props: {
                         type="number" 
                         step={1} 
                         min={0}
-                        name={ModifierNames.FIRE_DAMAGE} 
+                        name={Modifiers.FIRE_DAMAGE} 
                         onChange={handleModifierInput} 
-                        value={props.modifiers[ModifierNames.FIRE_DAMAGE] ?? 0}/>
+                        value={props.modifiers.fireDamage ?? 0}/>
                     <label>%</label>
                 </div>
                 <div>
@@ -171,9 +172,9 @@ export default function ArmyModifiersPanel(props: {
                         step={1}
                         min={-99}
                         max={0} 
-                        name={ModifierNames.FIRE_DAMAGE_RECEIVED} 
+                        name={Modifiers.FIRE_DAMAGE_RECEIVED} 
                         onChange={handleModifierInput} 
-                        value={props.modifiers[ModifierNames.FIRE_DAMAGE_RECEIVED] ?? 0}
+                        value={props.modifiers.fireDamageReceived ?? 0}
                     />
                     <label>%</label>
                 </div>
@@ -184,9 +185,9 @@ export default function ArmyModifiersPanel(props: {
                         type="number" 
                         step={1} 
                         min={0}
-                        name={ModifierNames.SHOCK_DAMAGE} 
+                        name={Modifiers.SHOCK_DAMAGE} 
                         onChange={handleModifierInput} 
-                        value={props.modifiers[ModifierNames.SHOCK_DAMAGE] ?? 0}
+                        value={props.modifiers.shockDamage ?? 0}
                     />
                     <label>%</label>
                 </div>
@@ -196,9 +197,9 @@ export default function ArmyModifiersPanel(props: {
                         step={1}
                         min={-99}
                         max={0}
-                        name={ModifierNames.SHOCK_DAMAGE_RECEIVED} 
+                        name={Modifiers.SHOCK_DAMAGE_RECEIVED} 
                         onChange={handleModifierInput} 
-                        value={props.modifiers[ModifierNames.SHOCK_DAMAGE_RECEIVED] ?? 0}
+                        value={props.modifiers.shockDamageReceived ?? 0}
                     />
                     <label>%</label>
                 </div>
@@ -210,9 +211,9 @@ export default function ArmyModifiersPanel(props: {
                         type="number" 
                         min={0}
                         step={0} 
-                        name={ModifierNames.MORALE_DAMAGE} 
+                        name={Modifiers.MORALE_DAMAGE} 
                         onChange={handleModifierInput} 
-                        value={props.modifiers[ModifierNames.MORALE_DAMAGE] ?? 0}/>
+                        value={props.modifiers.moraleDamage ?? 0}/>
                     <label>%</label>
                 </div>
                 <div>
@@ -220,9 +221,9 @@ export default function ArmyModifiersPanel(props: {
                         type="number" 
                         min={-99}
                         max={0}
-                        name={ModifierNames.MORALE_DAMAGE_RECEIVED} 
+                        name={Modifiers.MORALE_DAMAGE_RECEIVED} 
                         onChange={handleModifierInput} 
-                        value={props.modifiers[ModifierNames.MORALE_DAMAGE_RECEIVED] ?? 0}
+                        value={props.modifiers.moraleDamageReceived ?? 0}
                     />
                     <label>%</label>
                 </div>

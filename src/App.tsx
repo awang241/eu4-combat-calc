@@ -9,7 +9,7 @@ import BattleGrid from './components/BattleGrid';
 import { parseTechs, parseUnits } from './util/Loader';
 import './App.css';
 
-import { Modifiers, createDefaultModifiers } from './types/Modifiers';
+import { ArmyModifiers, createDefaultModifiers } from './types/ArmyModifiers';
 import ArmySnapshot from './types/ArmySnapshot';
 import { TechGroup } from './enum/TechGroups';
 import Unit from './types/Unit';
@@ -53,8 +53,8 @@ export default function App() {
 
 
   const handleSubmit = (event: React.MouseEvent<HTMLElement>) => {
-    const attackerModifier: Modifiers = {...attackerModifiers, ...attackerRegState.abilities};
-    const defenderModifier: Modifiers = {...defenderModifiers, ...defenderRegState.abilities};
+    const attackerModifier: ArmyModifiers = {...attackerModifiers, ...attackerRegState.abilities};
+    const defenderModifier: ArmyModifiers = {...defenderModifiers, ...defenderRegState.abilities};
     const army1 = new Army(attackerRegState.units, attackerRegState.counts, attackerModifier, techs[attackerTech.level]);
     const army2 = new Army(defenderRegState.units, defenderRegState.counts, defenderModifier, techs[defenderTech.level]);
     setResults(combat(army1, army2));
