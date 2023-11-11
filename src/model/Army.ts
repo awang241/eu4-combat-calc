@@ -1,16 +1,15 @@
 import ArmySnapshot from "../types/ArmySnapshot";
-import { ArmyModifiers, toMultiplier } from "../types/ArmyModifiers";
+import { DamageModifiers } from "./DamageModifiers";
 import { Tech } from "../types/Tech";
 import Regiment from "./Regiment";
 import UnitTypes, { UnitType } from "../enum/UnitTypes";
 import Row from "./Row";
 import Unit, { blankUnit } from "../types/Unit";
-
+import { Modifier } from "../enum/Modifiers";
 
 const BACK_ROW_MORALE_DAMAGE_FACTOR = 0.4;
 const BASE_BACKROW_REINFORCE_LIMIT = 2;
 const BASE_RESERVES_MORALE_DAMAGE_FACTOR = 2;
-const MORALE_DIVISOR = 540;
 
 type StrengthAndMoraleVals = {morale: number, strength: number};   
 
@@ -19,7 +18,7 @@ export default class Army {
     private static readonly STRENGTH_CASUALTIES_INDEX: number = 0;
     private static readonly MORALE_DAMAGES_INDEX: number = 1;
 
-    private _modifiers: ArmyModifiers;
+    private modifiers: DamageModifiers;
     private tech: Tech;
     private front: Row = new Row(0);
     private back: Row = new Row(0);
@@ -39,7 +38,7 @@ export default class Army {
      * @param regsState The count and unit template for each regiment type.
      * @param modifiers The army-level modifiers (morale, discipline, etc...) for this army.
      */
-    constructor(units: {[type in UnitType]: Unit}, counts: {[type in UnitType]: number}, modifiers: ArmyModifiers, tech: Tech) {
+    constructor(units: {[type in UnitType]: Unit}, counts: {[type in UnitType]: number}, modifiers: Record<Modifier, number>, tech: Tech) {
         for (const type of Object.values(UnitTypes)) {
             const regType: UnitType = type;
             if (units[regType] !== blankUnit(regType)) {
@@ -49,7 +48,7 @@ export default class Army {
             }
         }
         
-        this._modifiers = {...modifiers} as const;
+        this.modifiers = new DamageModifiers(tech, modifiers);
         this.tech = {...tech} as const;
     }
 
@@ -98,20 +97,13 @@ export default class Army {
         const strengthPips = battlePips + attacker.getStrengthOffencePips(isFirePhase) - targetPips.strength;
         const moralePips = battlePips + attacker.getMoraleOffencePips(isFirePhase) - targetPips.morale;
         
-        const damageMultiplier = isFirePhase ? this.tech.damages[attacker.type].fire: this.tech.damages[attacker.type].shock;
-        const strengthMultiplier = attacker.strength / Regiment.MAX_STRENGTH;
-        const combatAbilityMultiplier = toMultiplier(this.combatAbility(attacker.type));
-        const totalMultipliers = strengthMultiplier * damageMultiplier * combatAbilityMultiplier * roundMultiplier / enemyArmy.modifiers.tactics;
-
-        const baseMoraleMultiplier = this.modifiers.morale / MORALE_DIVISOR;
-        const moraleDamageBonus = toMultiplier(this.modifiers.moraleDamage);
-        const moraleDamageReduction = toMultiplier(enemyArmy.modifiers.moraleDamageReceived);
-        const casualtyBonus = toMultiplier(isFirePhase ? this.modifiers.fireDamage: this.modifiers.shockDamage);
-        const casualtyReduction = toMultiplier(isFirePhase ? enemyArmy.modifiers.fireDamageReceived : enemyArmy.modifiers.shockDamageReceived);
+        const regHealthMultiplier = attacker.strength / Regiment.MAX_STRENGTH;
+        const strengthMultiplier = this.modifiers.strengthMultipliers(attacker.type, isFirePhase) * roundMultiplier * regHealthMultiplier;
+        const moraleMultiplier = this.modifiers.moraleMultipliers(attacker.type, isFirePhase) * roundMultiplier * regHealthMultiplier;
 
         return {
-            strength: (15 + 5 * strengthPips) * totalMultipliers * casualtyBonus * casualtyReduction,
-            morale: (15 + 5 * moralePips) * totalMultipliers * baseMoraleMultiplier * moraleDamageBonus * moraleDamageReduction,
+            strength: (15 + 5 * strengthPips) * strengthMultiplier,
+            morale: (15 + 5 * moralePips) * moraleMultiplier,
         };
     }
 
@@ -144,16 +136,6 @@ export default class Army {
             }
         }
         return casualtyArray;
-    }
-
-    combatAbility(type: UnitType) {
-        if (type === UnitTypes.INFANTRY) {
-            return this.modifiers.infantryCombatAbility;
-        } else if (type === UnitTypes.CAVALRY) {
-            return this.modifiers.cavalryCombatAbility;
-        } else {
-            return this.modifiers.artilleryCombatAbility;
-        }
     }
 
     /**
@@ -345,9 +327,8 @@ export default class Army {
     }
 
 
-    get modifiers(): ArmyModifiers {return this._modifiers;}
     get maxWidth(): number {return this.tech.width};
-
+    get tacticsMultiplier(): number {return this.modifiers.tacticsMultiplier}
     get allRegiments(): Regiment[] {
         return ([] as Regiment[]).concat(...Object.values(this.regiments))
     };

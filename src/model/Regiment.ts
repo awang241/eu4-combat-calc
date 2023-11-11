@@ -1,4 +1,4 @@
-import { toMultiplier } from "../types/ArmyModifiers";
+import { toMultiplier } from "./DamageModifiers";
 import Pips from "../types/Pips";
 import Unit from "../types/Unit";
 import UnitTypes, { UnitType } from "../enum/UnitTypes";

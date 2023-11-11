@@ -1,5 +1,5 @@
 import "./ArmyModifiersPanel.css";
-import { ArmyModifiers, toMultiplier } from "../types/ArmyModifiers";
+import { toMultiplier } from "../model/DamageModifiers";
 import Modifiers, { Modifier, isModifier } from "../enum/Modifiers";
 import { Tech } from "../types/Tech";
 import { ChangeEventHandler, useEffect, useState } from "react";
@@ -126,10 +126,10 @@ const TacticsPanel = (props: {
 }
 
 export default function ArmyModifiersPanel(props: {
-            modifiers: ArmyModifiers,
+            modifiers: Record<Modifier, number>,
             tech: Tech,
             className?: string,
-            callback: (fn: ((state: ArmyModifiers) => ArmyModifiers)) => void,
+            callback: (fn: ((state: Record<Modifier, number>) => Record<Modifier, number>)) => void,
         }) { 
     const setModifier = (name: Modifier, value: number) => {
         props.callback(state => ({...state, [name]: value}));

@@ -9,7 +9,6 @@ import BattleGrid from './components/BattleGrid';
 import { parseTechs, parseUnits } from './util/Loader';
 import './App.css';
 
-import { ArmyModifiers, createDefaultModifiers } from './types/ArmyModifiers';
 import ArmySnapshot from './types/ArmySnapshot';
 import { TechGroup } from './enum/TechGroups';
 import Unit from './types/Unit';
@@ -17,6 +16,8 @@ import { Tech, TechState, defaultTechState } from './types/Tech';
 import TechPanel from './components/TechPanel';
 import { defaultRegimentsState, regimentsReducer } from "./state/RegimentsState";
 import { combat } from './model/Combat';
+import { createEnumRecord } from './util/StringEnumUtils';
+import Modifiers, { Modifier } from './enum/Modifiers';
 
 declare global {
   interface Array<T> {
@@ -41,8 +42,8 @@ function getUnitsAtTech(state: TechState): Unit[] {
 
 export default function App() {
   const [results, setResults] = useState<[ArmySnapshot, ArmySnapshot][]>([]);
-  const [attackerModifiers, setAttackerModifiers] = useState(createDefaultModifiers);
-  const [defenderModifiers, setDefenderModifiers] = useState(createDefaultModifiers);
+  const [attackerModifiers, setAttackerModifiers] = useState(createEnumRecord(0, Modifiers));
+  const [defenderModifiers, setDefenderModifiers] = useState(createEnumRecord(0, Modifiers));
   const [attackerTech, setAttackerTech] = useState(defaultTechState);
   const [defenderTech, setDefenderTech] = useState(defaultTechState);
   const [attackerRegState, attackerRegsDispatch] = useReducer(regimentsReducer, undefined, defaultRegimentsState)
@@ -53,8 +54,8 @@ export default function App() {
 
 
   const handleSubmit = (event: React.MouseEvent<HTMLElement>) => {
-    const attackerModifier: ArmyModifiers = {...attackerModifiers, ...attackerRegState.abilities};
-    const defenderModifier: ArmyModifiers = {...defenderModifiers, ...defenderRegState.abilities};
+    const attackerModifier: Record<Modifier, number> = {...attackerModifiers, ...attackerRegState.abilities};
+    const defenderModifier: Record<Modifier, number> = {...defenderModifiers, ...defenderRegState.abilities};
     const army1 = new Army(attackerRegState.units, attackerRegState.counts, attackerModifier, techs[attackerTech.level]);
     const army2 = new Army(defenderRegState.units, defenderRegState.counts, defenderModifier, techs[defenderTech.level]);
     setResults(combat(army1, army2));
