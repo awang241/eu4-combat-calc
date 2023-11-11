@@ -1,4 +1,4 @@
-import { RegimentTypes } from "../enum/RegimentTypes";
+import UnitTypes, { UnitType } from "../enum/UnitTypes";
 import { DamageMultipliers } from "../types/DamageMultipliers";
 import { Tech, TechState } from "../types/Tech"
 import TechGroups, { TechGroup } from "../enum/TechGroups";
@@ -12,7 +12,7 @@ import "./TechPanel.css";
 
 function DamagesRow(props: {
         damages: {fire: number, shock: number},
-        type: RegimentTypes
+        type: UnitType
 }): JSX.Element {
     return (
         <>
@@ -112,16 +112,16 @@ function DamagePanel(props: {multipliers: DamageMultipliers}) {
             </div>
             
             <DamagesRow 
-                damages={props.multipliers[RegimentTypes.INFANTRY]}
-                type={RegimentTypes.INFANTRY}
+                damages={props.multipliers[UnitTypes.INFANTRY]}
+                type={UnitTypes.INFANTRY}
             />
             <DamagesRow 
-                damages={props.multipliers[RegimentTypes.CAVALRY]}
-                type={RegimentTypes.CAVALRY}
+                damages={props.multipliers[UnitTypes.CAVALRY]}
+                type={UnitTypes.CAVALRY}
             />
             <DamagesRow 
-                damages={props.multipliers[RegimentTypes.ARTILLERY]}
-                type={RegimentTypes.ARTILLERY}
+                damages={props.multipliers[UnitTypes.ARTILLERY]}
+                type={UnitTypes.ARTILLERY}
             />
         </div>
         

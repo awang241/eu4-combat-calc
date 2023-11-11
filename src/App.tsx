@@ -11,7 +11,7 @@ import './App.css';
 
 import { Modifiers, createDefaultModifiers } from './types/Modifiers';
 import ArmySnapshot from './types/ArmySnapshot';
-import TechGroups, { TechGroup } from './enum/TechGroups';
+import { TechGroup } from './enum/TechGroups';
 import Unit from './types/Unit';
 import { Tech, TechState, defaultTechState } from './types/Tech';
 import TechPanel from './components/TechPanel';

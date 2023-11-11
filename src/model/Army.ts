@@ -2,7 +2,7 @@ import ArmySnapshot from "../types/ArmySnapshot";
 import { Modifiers, toMultiplier } from "../types/Modifiers";
 import { Tech } from "../types/Tech";
 import Regiment from "./Regiment";
-import { RegimentTypes } from "../enum/RegimentTypes";
+import UnitTypes, { UnitType } from "../enum/UnitTypes";
 import Row from "./Row";
 import Unit, { blankUnit } from "../types/Unit";
 
@@ -23,15 +23,15 @@ export default class Army {
     private tech: Tech;
     private front: Row = new Row(0);
     private back: Row = new Row(0);
-    private reserves: {[type in RegimentTypes]: Regiment[]} = {
-        [RegimentTypes.INFANTRY]: [],
-        [RegimentTypes.CAVALRY]: [],
-        [RegimentTypes.ARTILLERY]: [],
+    private reserves: Record<UnitType, Regiment[]> = {
+        infantry: [],
+        cavalry: [],
+        artillery: [],
     };
-    private regiments: {[type in RegimentTypes]: Regiment[]} = {
-        [RegimentTypes.INFANTRY]: [],
-        [RegimentTypes.CAVALRY]: [],
-        [RegimentTypes.ARTILLERY]: [],
+    private regiments: Record<UnitType, Regiment[]> = {
+        infantry: [],
+        cavalry: [],
+        artillery: [],
     };
 
     /**
@@ -39,9 +39,9 @@ export default class Army {
      * @param regsState The count and unit template for each regiment type.
      * @param modifiers The army-level modifiers (morale, discipline, etc...) for this army.
      */
-    constructor(units: {[type in RegimentTypes]: Unit}, counts: {[type in RegimentTypes]: number}, modifiers: Modifiers, tech: Tech) {
-        for (const type of [RegimentTypes.INFANTRY, RegimentTypes.CAVALRY, RegimentTypes.ARTILLERY]) {
-            const regType: RegimentTypes = type as RegimentTypes;
+    constructor(units: {[type in UnitType]: Unit}, counts: {[type in UnitType]: number}, modifiers: Modifiers, tech: Tech) {
+        for (const type of Object.values(UnitTypes)) {
+            const regType: UnitType = type;
             if (units[regType] !== blankUnit(regType)) {
                 for (let i = 0; i < counts[regType]; i++) {
                     this.regiments[regType].push(new Regiment(modifiers.morale, units[regType]))
@@ -146,10 +146,10 @@ export default class Army {
         return casualtyArray;
     }
 
-    combatAbility(type: RegimentTypes) {
-        if (type === RegimentTypes.INFANTRY) {
+    combatAbility(type: UnitType) {
+        if (type === UnitTypes.INFANTRY) {
             return this.modifiers.infantryCombatAbility;
-        } else if (type === RegimentTypes.CAVALRY) {
+        } else if (type === UnitTypes.CAVALRY) {
             return this.modifiers.cavalryCombatAbility;
         } else {
             return this.modifiers.artilleryCombatAbility;
@@ -175,14 +175,10 @@ export default class Army {
         let numCentreInfantry: number;
         let numCavalry: number;
 
-        const infantry = this.regiments[RegimentTypes.INFANTRY].slice();
-        const cavalry = this.regiments[RegimentTypes.CAVALRY].slice();
-        const artillery = this.regiments[RegimentTypes.ARTILLERY].slice();
-        this.reserves = {
-            [RegimentTypes.INFANTRY]: infantry,
-            [RegimentTypes.CAVALRY]: cavalry,
-            [RegimentTypes.ARTILLERY]: artillery,
-        };
+        const infantry = this.regiments[UnitTypes.INFANTRY].slice();
+        const cavalry = this.regiments[UnitTypes.CAVALRY].slice();
+        const artillery = this.regiments[UnitTypes.ARTILLERY].slice();
+        this.reserves = { infantry, cavalry, artillery };
         const combatWidth = Math.max(enemyMaxWidth, this.tech.width);
         const targetWidth = Math.min(combatWidth, numEnemyInfAndCav);
 
@@ -196,8 +192,8 @@ export default class Army {
             numCavalry = Math.min(cavalry.length, Math.floor(enemyMaxWidth / 2));
             numCentreInfantry = Math.min(infantry.length, numEnemyInfAndCav, enemyMaxWidth - numCavalry)
         }
-        this.reinforceFront(RegimentTypes.INFANTRY, numCentreInfantry);
-        this.reinforceFront(RegimentTypes.CAVALRY, numCavalry);
+        this.reinforceFront(UnitTypes.INFANTRY, numCentreInfantry);
+        this.reinforceFront(UnitTypes.CAVALRY, numCavalry);
         this.reinforceFront();
         this.reinforceBack(true);
         this.moveArtilleryToFront();
@@ -207,14 +203,14 @@ export default class Army {
      * Returns the total number of infantry and cavalry regiments in this army.
      */
     numInfantryAndCavalry(): number {
-        return this.regiments[RegimentTypes.INFANTRY].length + this.regiments[RegimentTypes.CAVALRY].length;
+        return this.regiments[UnitTypes.INFANTRY].length + this.regiments[UnitTypes.CAVALRY].length;
     }
 
-    numRegiments(type?: RegimentTypes): number {
+    numRegiments(type?: UnitType): number {
         if (type !== undefined) {
             return this.regiments[type].length;
         } else {
-            return this.numRegiments(RegimentTypes.INFANTRY) + this.numRegiments(RegimentTypes.CAVALRY) + this.numRegiments(RegimentTypes.ARTILLERY);
+            return this.numRegiments(UnitTypes.INFANTRY) + this.numRegiments(UnitTypes.CAVALRY) + this.numRegiments(UnitTypes.ARTILLERY);
         }
     }
 
@@ -296,21 +292,21 @@ export default class Army {
         this.back.setTargets(enemyArmy.front);
     } 
 
-    private moveReservesToRow(useFront: boolean, type: RegimentTypes, limit?: number): Regiment[] {
+    private moveReservesToRow(useFront: boolean, type: UnitType, limit?: number): Regiment[] {
         const row = useFront ? this.front : this.back;
         const added = row.addRegiments(this.reserves[type], limit);
         this.reserves[type] = this.reserves[type].filter(reg => !added.includes(reg));
         return added;
     }
 
-    private reinforceFront(type?: RegimentTypes, limit?: number): Regiment[] {
+    private reinforceFront(type?: UnitType, limit?: number): Regiment[] {
         const addedRegs: Regiment[] = []
         if (type === undefined) {
-            addedRegs.concat(this.moveReservesToRow(true, RegimentTypes.INFANTRY));
+            addedRegs.concat(this.moveReservesToRow(true, UnitTypes.INFANTRY));
             if (addedRegs.length !== 0) {
-                addedRegs.concat(this.moveReservesToRow(true, RegimentTypes.CAVALRY));
+                addedRegs.concat(this.moveReservesToRow(true, UnitTypes.CAVALRY));
             }
-        } else if (type === RegimentTypes.ARTILLERY) {
+        } else if (type === UnitTypes.ARTILLERY) {
             throw Error("not yet implemented");
         } else {
             addedRegs.concat(this.moveReservesToRow(true, type, limit));
@@ -320,7 +316,7 @@ export default class Army {
 
     private reinforceBack(isDeploying: boolean = false): Regiment[] {
         const limit = isDeploying ? BASE_BACKROW_REINFORCE_LIMIT: undefined
-        return this.moveReservesToRow(false, RegimentTypes.ARTILLERY, limit)
+        return this.moveReservesToRow(false, UnitTypes.ARTILLERY, limit)
     }
 
     /**

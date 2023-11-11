@@ -2,7 +2,7 @@ import techs from "../assets/techs.json"
 import units from "../assets/units.json"
 
 import Unit from "../types/Unit"
-import { RegimentTypes, inRegimentTypes } from "../enum/RegimentTypes"
+import UnitTypes, { UnitType } from "../enum/UnitTypes"
 import TechGroups, { TechGroup } from "../enum/TechGroups"
 import { Tech } from "../types/Tech"
 
@@ -27,13 +27,13 @@ function parseTechGroup(value: string): TechGroup | undefined {
     return value in TECH_GROUP_NAMES ? TECH_GROUP_NAMES[value as keyof typeof TECH_GROUP_NAMES]: undefined;
 } 
 
-function parseRegType(value: string): RegimentTypes | undefined{
+function parseRegType(value: string): UnitType | undefined {
     if (value === "infantry") {
-        return RegimentTypes.INFANTRY;
+        return UnitTypes.INFANTRY;
     } else if (value === "cavalry") {
-        return RegimentTypes.CAVALRY;
+        return UnitTypes.CAVALRY;
     } else if (value === "artillery") {
-        return RegimentTypes.ARTILLERY;
+        return UnitTypes.ARTILLERY;
     } else {
         return undefined
     }
@@ -54,7 +54,7 @@ export function parseUnits(): Map<TechGroup, Unit[]> {
     const unitsByTechGroup: Map<TechGroup, Unit[]> = new Map();
     units.forEach(val => {
         const group: TechGroup | undefined = parseTechGroup(val.unitType ?? "");
-        const type: RegimentTypes | undefined = parseRegType(val.type);
+        const type: UnitType | undefined = parseRegType(val.type);
         if (type !== undefined && val.techLevel !== undefined && group !== undefined) {
             const unit: Unit = {
                 name: val.name,
@@ -91,15 +91,15 @@ export function parseTechs(): Tech[] {
             width: val.combatWidth,
             flankingRange: val.maneuverValue,   
             damages: {
-                [RegimentTypes.INFANTRY]: {
+                infantry: {
                     fire: val.infantryFire,
                     shock: val.infantryShock
                 },
-                [RegimentTypes.CAVALRY]: {
+                cavalry: {
                     fire: val.cavalryFire,
                     shock: val.cavalryShock
                 },
-                [RegimentTypes.ARTILLERY]: {
+                artillery: {
                     fire: val.artilleryFire,
                     shock: val.artilleryShock
                 }

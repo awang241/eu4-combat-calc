@@ -1,4 +1,4 @@
-import { RegimentTypes } from "../enum/RegimentTypes";
+import { UnitType } from "../enum/UnitTypes";
 import Pips, { blankPips } from "./Pips"
 import TechGroups, { TechGroup } from "../enum/TechGroups";
 
@@ -6,7 +6,7 @@ const blankProps = {name: "", techGroup: TechGroups.WESTERN, techLevel: 0, pips:
 
 type Unit = {
     name: string,
-    type: RegimentTypes,
+    type: UnitType,
     techGroup: TechGroup,
     techLevel: number,
     pips: Pips
@@ -31,11 +31,11 @@ export function unitCompare(techAscending? : boolean) {
     }
 }
 
-export function unitsOfType(source: Unit[], type: RegimentTypes) {
+export function unitsOfType(source: Unit[], type: UnitType) {
     return source.filter((unit) => unit.type === type);
 }
 
-export function blankUnit(type: RegimentTypes = RegimentTypes.INFANTRY): Unit {
+export function blankUnit(type: UnitType = "infantry"): Unit {
     return {...blankProps, type: type}
 }
 

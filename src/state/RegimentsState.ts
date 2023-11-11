@@ -1,8 +1,5 @@
-import { RegimentTypes } from "../enum/RegimentTypes";
+import { UnitType } from "../enum/UnitTypes";
 import Unit, { blankUnit } from "../types/Unit";
-
-type Units = {[type in RegimentTypes]: Unit}
-type Counts = {[type in RegimentTypes]: number}
 
 export enum ActionType{
     SET_COUNT = "SET_COUNT",
@@ -13,33 +10,34 @@ export enum ActionType{
 export type Action = {
     type: ActionType,
     value?: number,
-    regType?: RegimentTypes,
+    regType?: UnitType,
     unit?: Unit
 }
 
 export type RegimentsState = {
-    counts: Counts,
-    units: Units,
-    abilities: Counts,
+    counts: Record<UnitType, number>,
+    units: Record<UnitType, Unit>,
+    abilities: Record<UnitType, number>,
 };
 
-export function defaultRegimentsState(units?: Units): RegimentsState {
-    return {
+const defaultUnits = {
+    infantry: blankUnit(),
+    cavalry: blankUnit("cavalry"),
+    artillery: blankUnit("artillery"),
+}
+export function defaultRegimentsState(units: Record<UnitType, Unit> = defaultUnits): RegimentsState {
+    return { 
         counts: {
-            [RegimentTypes.INFANTRY]: 1,
-            [RegimentTypes.CAVALRY]: 0,
-            [RegimentTypes.ARTILLERY]: 0,
+            infantry: 1,
+            cavalry: 0,
+            artillery: 0,
         },
-        units: {
-            [RegimentTypes.INFANTRY]: units?.[RegimentTypes.INFANTRY] ?? blankUnit(RegimentTypes.INFANTRY),
-            [RegimentTypes.CAVALRY]: units?.[RegimentTypes.CAVALRY] ?? blankUnit(RegimentTypes.CAVALRY),
-            [RegimentTypes.ARTILLERY]: units?.[RegimentTypes.ARTILLERY] ?? blankUnit(RegimentTypes.ARTILLERY),
-        },
+        units: {...units},
         abilities: {
-            [RegimentTypes.INFANTRY]: 0,
-            [RegimentTypes.CAVALRY]: 0,
-            [RegimentTypes.ARTILLERY]: 0
-        }
+            infantry: 1,
+            cavalry: 0,
+            artillery: 0,
+        },
     }
 }
 
@@ -55,13 +53,13 @@ export function regimentsReducer(
         }
     } else if (action.type === ActionType.SET_COUNT) {
         if (action.value !== undefined) {
-            return {...state, counts: {...state.counts, [action.regType as RegimentTypes]: action.value}}
+            return {...state, counts: {...state.counts, [action.regType as UnitType]: action.value}}
         } else {
             throw Error("Cannot set count to undefined")
         }
     } else if (action.type === ActionType.SET_ABILITY) {
         if (action.value !== undefined || action.regType !== undefined) {
-            return {...state, abilities: {...state.abilities, [action.regType as RegimentTypes]: action.value}}
+            return {...state, abilities: {...state.abilities, [action.regType as UnitType]: action.value}}
         } else {
             throw Error("Cannot set combat ability to undefined")
         }

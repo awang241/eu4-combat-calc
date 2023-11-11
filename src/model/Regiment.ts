@@ -1,7 +1,7 @@
 import { toMultiplier } from "../types/Modifiers";
 import Pips from "../types/Pips";
 import Unit from "../types/Unit";
-import { RegimentTypes } from "../enum/RegimentTypes";
+import UnitTypes, { UnitType } from "../enum/UnitTypes";
 
 export default class Regiment{
   static id = 0;
@@ -12,8 +12,6 @@ export default class Regiment{
   private _strength: number;
   private _targetIndex?: number;
   private _unit: Unit;
-  private _type: RegimentTypes;
-
 
   constructor(morale: number, unit: Unit) {
     Regiment.id++;
@@ -23,11 +21,10 @@ export default class Regiment{
     this._strength = Regiment.MAX_STRENGTH;
     this._targetIndex = undefined;
     this._unit = unit;
-    this._type = unit.type;
   }
 
   public flankingRange(bonusPercent?: number): number {
-    const baseRange = this.type === RegimentTypes.INFANTRY ? 1 : 2; 
+    const baseRange = this.type === UnitTypes.INFANTRY ? 1 : 2; 
     let strengthPenaltyPercent = 0;
     if (this.strength < 250) {
       strengthPenaltyPercent = -75;
@@ -118,7 +115,7 @@ export default class Regiment{
   public get targetIndex(): number | undefined {return this._targetIndex;} 
   public set targetIndex(value: number | undefined) {this._targetIndex = value;} 
 
-  public get type(): RegimentTypes {return this._type}
+  public get type(): UnitType {return this._unit.type}
   
   public get unit(): Unit {return this._unit}
 }  

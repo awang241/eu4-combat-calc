@@ -1,5 +1,5 @@
 import Regiment from "../model/Regiment";
-import { RegimentTypes } from "../enum/RegimentTypes";
+import UnitTypes from "../enum/UnitTypes";
 import "./BattleGrid.css";
 import infIcon from "../assets/infantry.png"
 import cavIcon from "../assets/cavalry.png"
@@ -27,9 +27,9 @@ function RegimentCell(props: {
     let icon: string = "";
     let data: RegimentData | undefined;
     if (props.regiment !== undefined) {
-        if (props.regiment.type === RegimentTypes.INFANTRY) {
+        if (props.regiment.type === UnitTypes.INFANTRY) {
             icon = infIcon;
-        } else if (props.regiment.type === RegimentTypes.CAVALRY) {
+        } else if (props.regiment.type === UnitTypes.CAVALRY) {
             icon = cavIcon;
         }
         iconOpacity = `${MIN_OPACITY + (100 - MIN_OPACITY) * (props.regiment.strength / Regiment.MAX_STRENGTH)}%`;

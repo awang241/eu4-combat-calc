@@ -1,9 +1,9 @@
 import "./RegimentsPanel.css";
-import { RegimentTypes } from "../enum/RegimentTypes";
+import UnitTypes, { UnitType } from "../enum/UnitTypes";
 import Unit, { blankUnit, unitCompare } from "../types/Unit";
 import { Action, ActionType, RegimentsState } from "../state/RegimentsState";
 import {v4 as uuidv4} from 'uuid';
-import { ChangeEvent, ChangeEventHandler, Dispatch, useEffect, useMemo, useState } from "react";
+import { ChangeEvent, Dispatch, useEffect, useMemo, useState } from "react";
 
 const USE_LATEST_PREFIX = "Use Latest: ";
 const NONE = "(none)";
@@ -23,7 +23,7 @@ function getLatestUnit(unitsList: Unit[]): Unit | undefined {
 //Sub-components start here
 const UnitSelector = (
     props: {
-        regType: RegimentTypes, 
+        regType: UnitType, 
         units: Unit[], 
         dispatch: Dispatch<Action>
     }
@@ -85,7 +85,7 @@ const UnitSelector = (
 const CombatAbilityInput = (
     props: {
         value: number, 
-        type: RegimentTypes, 
+        type: UnitType, 
         handler: (e: ChangeEvent<HTMLInputElement>, action: ActionType) => void
     }
 ): JSX.Element => {
@@ -107,7 +107,7 @@ const CombatAbilityInput = (
 function RegimentsRow(props: {
     state: RegimentsState,
     dispatch: Dispatch<Action>,
-    type: RegimentTypes
+    type: UnitType,
     units: Unit[],
 }): JSX.Element {
 
@@ -154,9 +154,9 @@ export default function RegimentsPanel(props: {
         let cavalry: Unit[] = [];
         let artillery: Unit[] = [];
         props.units.forEach(unit => {
-            if (unit.type === RegimentTypes.INFANTRY) {
+            if (unit.type === UnitTypes.INFANTRY) {
                 infantry.push(unit);
-            } else if (unit.type === RegimentTypes.CAVALRY) {
+            } else if (unit.type === UnitTypes.CAVALRY) {
                 cavalry.push(unit);
             } else {
                 artillery.push(unit);
@@ -179,14 +179,14 @@ export default function RegimentsPanel(props: {
                 state={props.state} 
                 dispatch={props.dispatch} 
                 units={infantry} 
-                type={RegimentTypes.INFANTRY} 
+                type={UnitTypes.INFANTRY} 
             />
 
             <RegimentsRow 
                 state={props.state} 
                 dispatch={props.dispatch} 
                 units={cavalry} 
-                type={RegimentTypes.CAVALRY} 
+                type={UnitTypes.CAVALRY} 
             />
         </div>
     );

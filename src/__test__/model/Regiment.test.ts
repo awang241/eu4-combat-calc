@@ -1,5 +1,5 @@
 import Regiment from "../../model/Regiment";
-import { RegimentTypes } from "../../enum/RegimentTypes";
+import UnitTypes from "../../enum/UnitTypes";
 import Pips from "../../types/Pips";
 import Unit from "../../types/Unit";
 import { blankUnit } from "../../types/Unit";
@@ -8,9 +8,9 @@ const MAX_MORALE = 3;
 
 describe("flankingRange", () => {
     describe.each([
-        [RegimentTypes.INFANTRY, 1],
-        [RegimentTypes.CAVALRY, 2],
-        [RegimentTypes.ARTILLERY, 2],
+        [UnitTypes.INFANTRY, 1],
+        [UnitTypes.CAVALRY, 2],
+        [UnitTypes.ARTILLERY, 2],
     ])("without any bonus returns base flanking ranges correctly",(type, expected) => {
         const regiment = new Regiment(MAX_MORALE, blankUnit(type));
         test(`when regiment type is ${type}, returns ${expected}`, () => {
@@ -26,7 +26,7 @@ describe("flankingRange", () => {
         [99.9, 3],
         [100, 4],
     ])("bonus is applied correctly", (bonusPercent, expected) => {
-        const regiment = new Regiment(MAX_MORALE, blankUnit(RegimentTypes.CAVALRY));
+        const regiment = new Regiment(MAX_MORALE, blankUnit(UnitTypes.CAVALRY));
         test(`with a cavalry regiment and ${bonusPercent}% bonus range, returns ${expected}`, () => {
             expect(regiment.flankingRange(bonusPercent)).toBeCloseTo(expected, 8)
         });
@@ -48,7 +48,7 @@ describe("flankingRange", () => {
         {strength: 249, bonusPercent: 74, expected: 1},
         {strength: 249, bonusPercent: 75, expected: 2},
     ])("strength penalties are applied correctly", ({strength, bonusPercent, expected}) => {
-        const dummyUnit: Unit = blankUnit(RegimentTypes.CAVALRY);
+        const dummyUnit: Unit = blankUnit(UnitTypes.CAVALRY);
         test(`Cavalry with strength of ${strength} and ${bonusPercent}% bonus range returns ${expected}`, () => {
             const cav = new Regiment(0, dummyUnit);
             cav.takeCasualties(Regiment.MAX_STRENGTH - strength)

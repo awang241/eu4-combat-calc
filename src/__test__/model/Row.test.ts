@@ -1,11 +1,12 @@
-import { RegimentTypes } from "../../enum/RegimentTypes";
+import UnitTypes, { UnitType } from "../../enum/UnitTypes";
 import Regiment from "../../model/Regiment";
 import Row from "../../model/Row"
 import { blankUnit } from "../../types/Unit";
-const DUMMY_INFANTRY = blankUnit();
 
 jest.mock("../../model/Regiment")
 const ROW_WIDTH_NORMAL = 5;
+const DUMMY_INFANTRY = blankUnit();
+
 let mockTargetIndexSetter: jest.Mock;
 
 function createMockRegiment(): Regiment {
@@ -275,7 +276,7 @@ describe("setTargets method", () => {
             ["tech and cavalry flanking ranges", 50, 25, "passes total of both ranges to cavalry only, and tech range to other regiments"],
         ])("and %s", (name, techRangeArg, cavRangeArg, testName) => {
             test(`${testName}`, () => {
-                const types: RegimentTypes[] = Object.values(RegimentTypes);
+                const types: UnitType[] = Object.values(UnitTypes);
                 const row = createRow(types.length);
                 const techRange = techRangeArg ?? 0;
                 const cavRange = cavRangeArg ?? 0;
@@ -284,9 +285,9 @@ describe("setTargets method", () => {
                 row.setTargets(new Row(types.length), techRange, cavRange);
 
                 const expectedRanges = {
-                    [RegimentTypes.INFANTRY]: techRange,
-                    [RegimentTypes.CAVALRY]: techRange + cavRange,
-                    [RegimentTypes.ARTILLERY]: techRange,
+                    [UnitTypes.INFANTRY]: techRange,
+                    [UnitTypes.CAVALRY]: techRange + cavRange,
+                    [UnitTypes.ARTILLERY]: techRange,
                 };
                 row.slice().forEach(reg => expect(reg?.flankingRange).toHaveBeenCalledWith(expectedRanges[(reg as Regiment).type]))
             })

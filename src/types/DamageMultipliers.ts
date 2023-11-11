@@ -1,7 +1,7 @@
-import { RegimentTypes } from "../enum/RegimentTypes";
+import { UnitType } from "../enum/UnitTypes";
 
 export type DamageMultipliers = {
-    [Type in RegimentTypes]: {
+    [Type in UnitType]: {
         fire: number,
         shock: number
     }

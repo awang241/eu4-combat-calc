@@ -1,5 +1,5 @@
 import Regiment from "./Regiment";
-import { RegimentTypes } from "../enum/RegimentTypes";
+import UnitTypes from "../enum/UnitTypes";
 
 type RegimentRowIndexPair = {
     regiment: Regiment | undefined,
@@ -120,7 +120,7 @@ export default class Row {
                 if (enemyFront.at(i) !== undefined) {
                     regiment.targetIndex = i;
                 } else {
-                    const cavBonus = (regiment.type === RegimentTypes.CAVALRY) ? cavFlankingBonus : 0
+                    const cavBonus = (regiment.type === UnitTypes.CAVALRY) ? cavFlankingBonus : 0
                     const flankingRange = regiment.flankingRange(techFlankingBonus + cavBonus);
                     const startIndex = Math.max(0, i - flankingRange);
                     const endIndex = Math.min(enemyFront.length, i + flankingRange + 1);
