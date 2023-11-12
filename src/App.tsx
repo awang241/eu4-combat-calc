@@ -15,7 +15,7 @@ import Unit from './types/Unit';
 import { Tech, TechState, defaultTechState } from './types/Tech';
 import TechPanel from './components/TechPanel';
 import { defaultRegimentsState, regimentsReducer } from "./state/RegimentsState";
-import { combat } from './model/Combat';
+import Combat from './model/Combat';
 import { createEnumRecord } from './util/StringEnumUtils';
 import Modifiers, { Modifier } from './enum/Modifiers';
 
@@ -58,7 +58,9 @@ export default function App() {
     const defenderModifier: Record<Modifier, number> = {...defenderModifiers, ...defenderRegState.abilities};
     const army1 = new Army(attackerRegState.units, attackerRegState.counts, attackerModifier, techs[attackerTech.level]);
     const army2 = new Army(defenderRegState.units, defenderRegState.counts, defenderModifier, techs[defenderTech.level]);
-    setResults(combat(army1, army2));
+    const combat = new Combat(army1, army2);
+    combat.run();
+    setResults(combat.dailyResults);
   }
 
   return (

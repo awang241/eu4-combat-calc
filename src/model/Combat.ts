@@ -1,41 +1,113 @@
 import Army from "./Army";
 import ArmySnapshot from "../types/ArmySnapshot";
+import Regiment from "./Regiment";
 
-/**
- * Runs combat between the attacker and defeneder until one side is broken or destroyed,
- * then returns snapshots of both armies for each day of combat.
- * @param {Army} attacker
- * @param {Army} defender 
- * @returns An array of snapshots of both armies at the end of each day of combat. The index
- * corresponds to the day, and day 0 is the initial state of both armies.
- */
-export function combat(attacker: Army, defender: Army): [ArmySnapshot, ArmySnapshot][] {
-    let days = 1;
 
-    const loopLimit: number = 100;
-    const combatWidth: number = Math.max(attacker.maxWidth, defender.maxWidth);
-    attacker.deploy(combatWidth, defender.numInfantryAndCavalry());
-    defender.deploy(combatWidth, attacker.numInfantryAndCavalry());
-    let isAttackerUpdated = true;
-    let isDefenderUpdated = true;
-    const dailyStrengths: [ArmySnapshot, ArmySnapshot][] = [];
-    dailyStrengths.push([attacker.getSnapshot(), defender.getSnapshot()]);
-    while (!attacker.isBroken() && !defender.isBroken() && days < loopLimit) {
-        let roll = 5;
-        if (isDefenderUpdated || isAttackerUpdated) {
-            attacker.setTargets(defender);
-            defender.setTargets(attacker);
-        }
-        //N.B. Do not collapse - casualties must be calculated for both sides before applying them.
-        const defenderCasualties = attacker.calculateCasualtiesArray(roll, days, defender);
-        const attackerCasualties = defender.calculateCasualtiesArray(roll, days, attacker);
-        attacker.applyCasualtiesAndMoraleDamage(attackerCasualties, defender.morale);
-        defender.applyCasualtiesAndMoraleDamage(defenderCasualties, attacker.morale);
-        dailyStrengths.push([attacker.getSnapshot(), defender.getSnapshot()]);
-        isAttackerUpdated = attacker.replaceRegiments();
-        isDefenderUpdated = defender.replaceRegiments();
+type Casualties = {strength: number, morale: number};
 
-        days++;
+export default class Combat {
+    static readonly LOOP_LIMIT = 100;
+    readonly attacker: Army;
+    readonly defender: Army;
+    readonly terrain: string;
+    day: number = 0;
+    width: number;
+    private _results: [ArmySnapshot, ArmySnapshot][] = [];
+    
+    constructor(attacker: Army, defender: Army, terrain?: string) {
+        this.attacker = attacker;
+        this.defender = defender;
+        this.width = Math.max(this.attacker.maxWidth, this.defender.maxWidth);
+        this.terrain = terrain ?? "";
     }
-    return dailyStrengths;
+
+    private addDailyResult(){
+        this._results[this.day] = [this.attacker.getSnapshot(), this.defender.getSnapshot()];
+    } 
+
+    private calculateCasualties(regiment: Regiment, regimentInAttackingArmy: boolean): Casualties{
+        const [regimentArmy, targetArmy] = regimentInAttackingArmy ? [this.attacker, this.defender] : [this.defender, this.attacker];
+        const casualties: Casualties = {strength: 0, morale: 0};
+        if (regiment.targetIndex !== undefined) {
+            const target = targetArmy.atFront(regiment.targetIndex)
+            if (target === undefined) {
+                throw Error("Regiment target cannot be set to an empty space.")
+            }
+            const strengthPips = regimentArmy.roll + regiment.getStrengthOffencePips(this.isFirePhase) - target.getStrengthDefencePips(this.isFirePhase);
+            const moralePips = regimentArmy.roll + regiment.getMoraleOffencePips(this.isFirePhase) - target.getMoraleDefencePips(this.isFirePhase);
+            const commonMults = this.roundMultiplier * (regiment.strength / Regiment.MAX_STRENGTH) / targetArmy.tactics;
+            const strengthMults = commonMults * regimentArmy.strengthMultipliers(regiment.type, this.isFirePhase) * targetArmy.phaseDefenseMultiplier(this.isFirePhase);
+            const moraleMults = commonMults * regimentArmy.moraleMultipliers(regiment.type, this.isFirePhase) * targetArmy.moraleDefenseMultiplier();
+            
+            casualties.strength = Math.floor((15 + 5 * strengthPips) * strengthMults);
+            casualties.morale = (15 + 5 * moralePips) * moraleMults;
+        }
+        return casualties;
+    } 
+    
+    private fightCurrentDay(): void {  
+        const emptyCasualties = {strength: 0, morale: 0};
+        const attackerCasualties: Casualties[] = Array(this.width).fill(undefined).map(_ => ({...emptyCasualties}));
+        const defenderCasualties: Casualties[] = Array(this.width).fill(undefined).map(_ => ({...emptyCasualties}));
+        const argCombos = [
+            {front: true, isAttacker: true, targetArray: defenderCasualties},
+            {front: false, isAttacker: true, targetArray: defenderCasualties},
+            {front: true, isAttacker: false, targetArray: attackerCasualties}, 
+            {front: false, isAttacker: false, targetArray: attackerCasualties}
+        ];
+        for (let i = 0; i < this.width; i++) {
+            for (const args of argCombos) {
+                const army = args.isAttacker ? this.attacker : this.defender;
+                const regiment = args.front ? army.atFront(i) : army.atBack(i);
+                if (regiment?.targetIndex !== undefined) {
+                    const {strength, morale} = this.calculateCasualties(regiment, args.isAttacker);
+                    const rowMultiplier = args.front ? 1 : 0.5;
+
+                    args.targetArray[regiment.targetIndex].strength += Math.floor(strength * rowMultiplier);
+                    args.targetArray[regiment.targetIndex].morale += morale * rowMultiplier;
+                }
+            }
+        }
+
+        this.attacker.applyCasualtiesAndMoraleDamage(attackerCasualties, 0.01 * this.defender.morale);
+        this.defender.applyCasualtiesAndMoraleDamage(defenderCasualties, 0.01 * this.attacker.morale);
+    }
+
+    run(): void {
+        this.attacker.deploy(this.width, this.defender.numInfantryAndCavalry());
+        this.defender.deploy(this.width, this.attacker.numInfantryAndCavalry());
+        let setTargets = true;
+        this.addDailyResult();
+        while (!this.attacker.isBroken() && !this.defender.isBroken() && this.day < Combat.LOOP_LIMIT) {
+            setTargets = this.runNextDay(setTargets);
+        }
+    }
+
+    private runNextDay(setTargets: boolean): boolean {
+        this.day++;
+        this.attacker.roll = 5;
+        this.defender.roll = 5;
+
+        if (setTargets) {
+            this.attacker.setTargets(this.defender);
+            this.defender.setTargets(this.attacker);
+        }
+        this.fightCurrentDay();
+        this.addDailyResult();
+        const isAttackerUpdated = this.attacker.replaceRegiments();
+        const isDefenderUpdated = this.defender.replaceRegiments();
+        return (isDefenderUpdated || isAttackerUpdated)
+    }
+
+    get dailyResults(): [ArmySnapshot, ArmySnapshot][] {
+        return this._results.slice();
+    }
+
+    private get roundMultiplier(): number {
+        return 1 + this.day / 100;
+    }
+
+    private get isFirePhase(): boolean {
+        return (this.day - 1) % 6 < 3;
+    }
 }

@@ -77,7 +77,8 @@ export default class Regiment{
    * @param casualties The number of casualties to be inflicted on this regiment.
    */
   takeCasualties(casualties: number) {
-    const rounded = Math.floor(casualties);
+    const totalCasualties = casualties * (this.type === "artillery" ? 2 : 1)
+    const rounded = Math.floor(totalCasualties);
     this._strength = this._strength > rounded ? this._strength - rounded: 0;
   }
 

@@ -18,6 +18,7 @@ export default class Army {
     private static readonly STRENGTH_CASUALTIES_INDEX: number = 0;
     private static readonly MORALE_DAMAGES_INDEX: number = 1;
 
+    roll = 5;
     private modifiers: DamageModifiers;
     private tech: Tech;
     private front: Row = new Row(0);
@@ -32,6 +33,7 @@ export default class Army {
         cavalry: [],
         artillery: [],
     };
+
 
     /**
      * Create a new Army object with the given number of infantry regiments.
@@ -59,11 +61,10 @@ export default class Army {
      * @param casualtiesList The number of casualties to be applied to each front line regiment.
      * @param moraleDamages The amount of morale damage to be applied to each front line regiment.
      */
-    applyCasualtiesAndMoraleDamage(casualtiesList: StrengthAndMoraleVals[], enemyMorale: number){
+    applyCasualtiesAndMoraleDamage(casualtiesList: StrengthAndMoraleVals[], passiveMoraleDamage: number){
         if (casualtiesList.length !== this.front.length) {
             throw new Error("The frontline and casualty arrays have mismatched lengths.");
         }
-        const passiveMoraleDamage = 0.01 * enemyMorale;
         for (let i = 0; i < casualtiesList.length; i++) {
             if (this.front.at(i) !== undefined) {
                 this.front.at(i)?.takeCasualties(Math.floor(casualtiesList[i].strength));
@@ -83,62 +84,6 @@ export default class Army {
         return this.front.at(index);
     }
 
-    private calculateCasualties(
-            attacker: Regiment,
-            isFirePhase: boolean, 
-            battlePips: number,
-            roundMultiplier: number, 
-            enemyArmy: Army
-    ): StrengthAndMoraleVals {
-        const targetPips = (attacker.targetIndex !== undefined) ? enemyArmy.pipsAt(attacker.targetIndex, isFirePhase): undefined;
-        if (targetPips === undefined) {
-            return {strength: 0, morale: 0};
-        }
-        const strengthPips = battlePips + attacker.getStrengthOffencePips(isFirePhase) - targetPips.strength;
-        const moralePips = battlePips + attacker.getMoraleOffencePips(isFirePhase) - targetPips.morale;
-        
-        const regHealthMultiplier = attacker.strength / Regiment.MAX_STRENGTH;
-        const commonMults = regHealthMultiplier * roundMultiplier / enemyArmy.tactics; 
-        const strengthMultiplier = this.modifiers.strengthMultipliers(attacker.type, isFirePhase) * commonMults;
-        const moraleMultiplier = this.modifiers.moraleMultipliers(attacker.type, isFirePhase) * commonMults;
-
-        return {
-            strength: (15 + 5 * strengthPips) * strengthMultiplier,
-            morale: (15 + 5 * moralePips) * moraleMultiplier,
-        };
-    }
-
-
-    /**
-     * Calculates the morale and strength casualties inflicted by this army for the given day of combat, then returns these values in an array.
-     * @param battlePips the total number of pips from factors not from armies/units (e.g. dice roll, terrain)
-     * @param days the current day of the battle.
-     * @param enemyModifiers the average maximum morale of the enemy army.
-     * @returns an array of the morale and strength casualties inflicted by this army.
-     *  Each index corresponds to a regiment in the enemy frontline, starting with index 0 for the
-     *  leftmost enemy regiment.
-     */
-    calculateCasualtiesArray(battlePips: number, days: number, enemyArmy: Army): StrengthAndMoraleVals[] {
-        const casualtyArray: StrengthAndMoraleVals[] = Array(this.front.length).fill(undefined).map(() => ({strength: 0, morale: 0}));
-        const isFirePhase = (days - 1) % 6 < 3;
-        const roundMultiplier = 1 + (days / 100);
-        for (let i = 0; i < this.front.length; i++) {
-            let attacker = this.front.at(i);
-            if (attacker?.targetIndex !== undefined) {
-                const casualties = this.calculateCasualties(attacker, isFirePhase, battlePips, roundMultiplier, enemyArmy)
-                casualtyArray[attacker.targetIndex].strength += casualties.strength;
-                casualtyArray[attacker.targetIndex].morale += casualties.morale;
-            }
-            attacker = this.back.at(i);
-            if (attacker?.targetIndex !== undefined) {
-                const casualties = this.calculateCasualties(attacker, isFirePhase, battlePips, roundMultiplier, enemyArmy)
-                casualtyArray[attacker.targetIndex].strength += casualties.strength * 0.5;
-                casualtyArray[attacker.targetIndex].morale += casualties.morale * 0.5;
-            }
-        }
-        return casualtyArray;
-    }
-
     /**
      * Sets the army's front row to the given combat width and deploys this army's regiments to it. Any excess regiments are 
      * placed in the army's reserves.
@@ -146,15 +91,15 @@ export default class Army {
      * If there are not enough regiments to fill the given width, all regiments are deployed from the centre outwards. If the 
      * number of regiments does not split evenly (even number of regiments with odd width or vice versa), the extra regiment is
      * placed on the right. 
-     * @param {number} enemyMaxWidth combat width.
-     * @param {number} numEnemyInfAndCav the total number of cavalry and infantry regiments of the enemy army.
+     * @param {number} combatWidth combat width.
+     * @param {number} enemyFrontage the total number of cavalry and infantry regiments of the enemy army.
      */
-    deploy(enemyMaxWidth: number, numEnemyInfAndCav: number) {
+    deploy(combatWidth: number, enemyFrontage: number) {
         if (this.front.length > 0 ||  this.back.length > 0) {
             throw new Error("Cannot deploy an army that has already been deployed.")
         }
-        this.front = new Row(enemyMaxWidth);
-        this.back = new Row(enemyMaxWidth);
+        this.front = new Row(combatWidth);
+        this.back = new Row(combatWidth);
         let numCentreInfantry: number;
         let numCavalry: number;
 
@@ -162,18 +107,17 @@ export default class Army {
         const cavalry = this.regiments[UnitTypes.CAVALRY].slice();
         const artillery = this.regiments[UnitTypes.ARTILLERY].slice();
         this.reserves = { infantry, cavalry, artillery };
-        const combatWidth = Math.max(enemyMaxWidth, this.tech.width);
-        const targetWidth = Math.min(combatWidth, numEnemyInfAndCav);
+        const targetWidth = Math.min(combatWidth, enemyFrontage);
 
         if (this.numInfantryAndCavalry() <= targetWidth) {
             numCentreInfantry = infantry.length;
             numCavalry = cavalry.length;
-        } else if (numEnemyInfAndCav < enemyMaxWidth / 2 || infantry.length < enemyMaxWidth / 2) {
-            numCentreInfantry = Math.min(infantry.length, numEnemyInfAndCav);
-            numCavalry = Math.min(cavalry.length, enemyMaxWidth - numCentreInfantry);
+        } else if (enemyFrontage < combatWidth / 2 || infantry.length < combatWidth / 2) {
+            numCentreInfantry = Math.min(infantry.length, enemyFrontage);
+            numCavalry = Math.min(cavalry.length, combatWidth - numCentreInfantry);
         } else {
-            numCavalry = Math.min(cavalry.length, Math.floor(enemyMaxWidth / 2));
-            numCentreInfantry = Math.min(infantry.length, numEnemyInfAndCav, enemyMaxWidth - numCavalry)
+            numCavalry = Math.min(cavalry.length, Math.floor(combatWidth / 2));
+            numCentreInfantry = Math.min(infantry.length, enemyFrontage, combatWidth - numCavalry)
         }
         this.reinforceFront(UnitTypes.INFANTRY, numCentreInfantry);
         this.reinforceFront(UnitTypes.CAVALRY, numCavalry);
@@ -195,10 +139,6 @@ export default class Army {
         } else {
             return this.numRegiments(UnitTypes.INFANTRY) + this.numRegiments(UnitTypes.CAVALRY) + this.numRegiments(UnitTypes.ARTILLERY);
         }
-    }
-
-    getRegimentDataAtIndex(index: number): Regiment | undefined {
-        return this.front.at(index)?.unmodifiableCopy();
     }
 
     getSnapshot(): ArmySnapshot {
@@ -226,6 +166,14 @@ export default class Army {
             }
         }
         return changed
+    }
+
+    moraleDefenseMultiplier(): number {
+        return this.modifiers.moraleDefenseMultiplier;
+    }
+
+    moraleMultipliers(type: UnitType, isFire: boolean): number {
+        return this.modifiers.moraleMultipliers(type, isFire);
     }
 
 
@@ -257,6 +205,8 @@ export default class Army {
             }
         }
     }
+
+    
         
     /**
      * Returns the total number of soldiers in the army.
@@ -264,6 +214,14 @@ export default class Army {
      */
     strength(): number {
         return this.allRegiments.reduce((prev, curr) => prev + curr.strength, 0);
+    }
+
+    strengthMultipliers(type: UnitType, isFire: boolean): number {
+        return this.modifiers.strengthMultipliers(type, isFire);
+    }
+
+    phaseDefenseMultiplier(isFire: boolean): number {
+        return this.modifiers.phaseDefenseMultiplier(isFire);
     }
 
     /**
@@ -275,8 +233,8 @@ export default class Army {
         this.back.setTargets(enemyArmy.front);
     } 
 
-    private moveReservesToRow(useFront: boolean, type: UnitType, limit?: number): Regiment[] {
-        const row = useFront ? this.front : this.back;
+    private moveReservesToRow(toFront: boolean, type: UnitType, limit?: number): Regiment[] {
+        const row = toFront ? this.front : this.back;
         const added = row.addRegiments(this.reserves[type], limit);
         this.reserves[type] = this.reserves[type].filter(reg => !added.includes(reg));
         return added;
@@ -285,14 +243,14 @@ export default class Army {
     private reinforceFront(type?: UnitType, limit?: number): Regiment[] {
         const addedRegs: Regiment[] = []
         if (type === undefined) {
-            addedRegs.concat(this.moveReservesToRow(true, UnitTypes.INFANTRY));
-            if (addedRegs.length !== 0) {
-                addedRegs.concat(this.moveReservesToRow(true, UnitTypes.CAVALRY));
+            addedRegs.push(...this.moveReservesToRow(true, UnitTypes.INFANTRY));
+            if (addedRegs.length > 0) {
+                addedRegs.push(...this.moveReservesToRow(true, UnitTypes.CAVALRY));
             }
         } else if (type === UnitTypes.ARTILLERY) {
             throw Error("not yet implemented");
         } else {
-            addedRegs.concat(this.moveReservesToRow(true, type, limit));
+            addedRegs.push(...this.moveReservesToRow(true, type, limit));
         }
         return addedRegs;
     }
@@ -308,13 +266,13 @@ export default class Army {
      */
     replaceRegiments(): boolean {
         let changed = false;
-        changed = this.front.removeBrokenRegiments() || changed; 
-        changed = this.back.removeBrokenRegiments() || changed;
-        changed = this.reinforceFront().length > 0 || changed;
-        changed = this.front.moveOutmostRegimentToInmostGap() || changed;
-        changed = this.moveArtilleryToFront() || changed;    
-        changed = this.reinforceBack().length > 0 || changed;
-        changed = this.front.shiftRegiments() || changed;
+        changed = this.front.removeBrokenRegiments() ? true : changed; 
+        changed = this.back.removeBrokenRegiments() ? true : changed; 
+        changed = this.reinforceFront().length > 0 ? true : changed; 
+        changed = this.front.moveOutmostRegimentToInmostGap() ? true : changed; 
+        changed = this.moveArtilleryToFront() ? true : changed;     
+        changed = this.reinforceBack().length > 0 ? true : changed; 
+        changed = this.front.shiftRegiments() ? true : changed; 
         return changed;
     }
 
