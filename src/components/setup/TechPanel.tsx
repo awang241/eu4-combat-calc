@@ -1,11 +1,11 @@
-import UnitTypes, { UnitType } from "../enum/UnitTypes";
-import { DamageTable } from "../types/DamageTable";
-import { Tech, TechState } from "../types/Tech"
-import TechGroups, { TechGroup } from "../enum/TechGroups";
-import { GlobalCSSClasses as CSSClasses } from "../enum/GlobalCSSClasses";
+import UnitTypes, { UnitType } from "../../enum/UnitTypes";
+import { DamageTable } from "../../types/DamageTable";
+import { Tech, TechState } from "../../types/Tech"
+import TechGroups, { TechGroup } from "../../enum/TechGroups";
+import { GlobalCSSClasses as CSSClasses } from "../../enum/GlobalCSSClasses";
 
-import fireIcon from "../assets/fire.png"
-import shockIcon from "../assets/shock.png"
+import fireIcon from "../../assets/fire.png"
+import shockIcon from "../../assets/shock.png"
 
 import "./TechPanel.css";
 

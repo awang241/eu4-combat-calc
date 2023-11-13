@@ -2,8 +2,8 @@ import React, { useMemo, useReducer } from 'react';
 import { useState } from 'react';
 import Army from './model/Army';
 
-import ArmyModifiersPanel from './components/ArmyModifiersPanel';
-import RegimentsPanel from './components/RegimentsPanel';
+import ArmyModifiersPanel from './components/setup/ArmyModifiersPanel';
+import RegimentsPanel from './components/setup/RegimentsPanel';
 import BattleGrid from './components/BattleGrid';
 
 import { parseTechs, parseUnits } from './util/Loader';
@@ -13,7 +13,7 @@ import ArmySnapshot from './types/ArmySnapshot';
 import { TechGroup } from './enum/TechGroups';
 import Unit from './types/Unit';
 import { Tech, TechState, defaultTechState } from './types/Tech';
-import TechPanel from './components/TechPanel';
+import TechPanel from './components/setup/TechPanel';
 import { defaultRegimentsState, regimentsReducer } from "./state/RegimentsState";
 import Combat from './model/Combat';
 import { createEnumRecord } from './util/StringEnumUtils';

@@ -1,7 +1,7 @@
 import "./RegimentsPanel.css";
-import UnitTypes, { UnitType } from "../enum/UnitTypes";
-import Unit, { blankUnit, unitCompare } from "../types/Unit";
-import { Action, ActionType, RegimentsState } from "../state/RegimentsState";
+import UnitTypes, { UnitType } from "../../enum/UnitTypes";
+import Unit, { blankUnit, unitCompare } from "../../types/Unit";
+import { Action, ActionType, RegimentsState } from "../../state/RegimentsState";
 import {v4 as uuidv4} from 'uuid';
 import { ChangeEvent, Dispatch, useEffect, useMemo, useState } from "react";
 

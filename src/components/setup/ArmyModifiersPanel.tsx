@@ -1,9 +1,9 @@
 import "./ArmyModifiersPanel.css";
-import { toMultiplier } from "../model/DamageModifiers";
-import Modifiers, { Modifier, isModifier } from "../enum/Modifiers";
-import { Tech } from "../types/Tech";
+import { toMultiplier } from "../../model/DamageModifiers";
+import Modifiers, { Modifier, isModifier } from "../../enum/Modifiers";
+import { Tech } from "../../types/Tech";
 import { ChangeEventHandler, useEffect, useState } from "react";
-import { GlobalCSSClasses } from "../enum/GlobalCSSClasses";
+import { GlobalCSSClasses } from "../../enum/GlobalCSSClasses";
 
 const MoralePanel = (props: {
         baseMorale: number, 
