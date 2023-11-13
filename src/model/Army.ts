@@ -244,9 +244,7 @@ export default class Army {
         const addedRegs: Regiment[] = []
         if (type === undefined) {
             addedRegs.push(...this.moveReservesToRow(true, UnitTypes.INFANTRY));
-            if (addedRegs.length > 0) {
-                addedRegs.push(...this.moveReservesToRow(true, UnitTypes.CAVALRY));
-            }
+            addedRegs.push(...this.moveReservesToRow(true, UnitTypes.CAVALRY));
         } else if (type === UnitTypes.ARTILLERY) {
             throw Error("not yet implemented");
         } else {

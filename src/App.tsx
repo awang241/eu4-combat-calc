@@ -18,6 +18,7 @@ import { defaultRegimentsState, regimentsReducer } from "./state/RegimentsState"
 import Combat from './model/Combat';
 import { createEnumRecord } from './util/StringEnumUtils';
 import Modifiers, { Modifier } from './enum/Modifiers';
+import { UnitType } from './enum/UnitTypes';
 
 declare global {
   interface Array<T> {
@@ -52,10 +53,17 @@ export default function App() {
   const attackerUnits = useMemo(() => getUnitsAtTech(attackerTech), [attackerTech]);
   const defenderUnits = useMemo(() => getUnitsAtTech(defenderTech), [defenderTech]);
 
+  const mapToModifiers = (abilitiesByType: Record<UnitType, number>) => {
+    return {
+      [Modifiers.INFANTRY_COMBAT_ABILITY]: abilitiesByType.infantry,
+      [Modifiers.CAVALRY_COMBAT_ABILITY]: abilitiesByType.cavalry,
+      [Modifiers.ARTILLERY_COMBAT_ABILITY]: abilitiesByType.artillery
+    }
+  }
 
   const handleSubmit = (event: React.MouseEvent<HTMLElement>) => {
-    const attackerModifier: Record<Modifier, number> = {...attackerModifiers, ...attackerRegState.abilities};
-    const defenderModifier: Record<Modifier, number> = {...defenderModifiers, ...defenderRegState.abilities};
+    const attackerModifier: Record<Modifier, number> = {...attackerModifiers, ...mapToModifiers(attackerRegState.abilities)};
+    const defenderModifier: Record<Modifier, number> = {...defenderModifiers, ...mapToModifiers(defenderRegState.abilities)};
     const army1 = new Army(attackerRegState.units, attackerRegState.counts, attackerModifier, techs[attackerTech.level]);
     const army2 = new Army(defenderRegState.units, defenderRegState.counts, defenderModifier, techs[defenderTech.level]);
     const combat = new Combat(army1, army2);
