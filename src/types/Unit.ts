@@ -7,7 +7,7 @@ const blankProps = {name: "", techGroup: TechGroups.WESTERN, techLevel: 0, pips:
 type Unit = {
     name: string,
     type: UnitType,
-    techGroup: TechGroup,
+    techGroup?: TechGroup,
     techLevel: number,
     pips: Pips
 }

@@ -33,11 +33,12 @@ declare global {
   }
 }
 
-const units: Map<TechGroup, Unit[]> = parseUnits();
+const [units, artilleryUnits] = parseUnits();
 const techs: Tech[] = parseTechs();
 
 function getUnitsAtTech(state: TechState): Unit[] {
   const source: Unit[] = units.get(state.group) ?? [];
+  source.push(...artilleryUnits);
   return source.filter(unit => (unit.techLevel <= state.level)).sort((a, b) => b.techLevel - a.techLevel);
 }
 

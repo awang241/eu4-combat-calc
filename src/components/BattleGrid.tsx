@@ -1,8 +1,9 @@
 import Regiment from "../model/Regiment";
 import UnitTypes from "../enum/UnitTypes";
 import "./BattleGrid.css";
-import infIcon from "../assets/infantry.png"
-import cavIcon from "../assets/cavalry.png"
+import infIcon from "../assets/infantry.png";
+import cavIcon from "../assets/cavalry.png";
+import artIcon from "../assets/artillery.png";
 import ArmySnapshot from "../types/ArmySnapshot";
 import { useEffect, useRef, useState } from "react";
 
@@ -20,7 +21,7 @@ function RegimentCell(props: {
         regiment: Regiment | undefined, 
         index: number, 
         isAttacker: boolean,
-        cellStyle: React.CSSProperties, 
+        cellStyle?: React.CSSProperties, 
         hoverCb: (state: any) => unknown}) {
     let barHeight: string = "";
     let iconOpacity: string = "";
@@ -31,6 +32,8 @@ function RegimentCell(props: {
             icon = infIcon;
         } else if (props.regiment.type === UnitTypes.CAVALRY) {
             icon = cavIcon;
+        } else if (props.regiment.type === "artillery") {
+            icon = artIcon;
         }
         iconOpacity = `${MIN_OPACITY + (100 - MIN_OPACITY) * (props.regiment.strength / Regiment.MAX_STRENGTH)}%`;
         let moralePercent: number = 100 * (props.regiment.currentMorale / props.regiment.maxMorale);
@@ -112,22 +115,26 @@ export default function BattleGrid(props: {results:[ArmySnapshot, ArmySnapshot][
                 outline: "none",
                 borderColor: "red",
                 borderStyle: "double",
-                boxShadow: "0 0 10px red"
+                boxShadow: "0 0 12px red"
             }
         } else {
             style = {
                 outline: "none",
                 borderColor: "#80aacc",
                 borderRightStyle: "solid",
-                boxShadow: "0 0 10px #80aacc",
+                boxShadow: "0 0 6px #80aacc",
             }
         }
         return style;
     }
 
-    const getFront = (attacker: boolean) => {
+    const getFront = (attacker: boolean) => getRow(attacker, true);
+    const getBack = (attacker: boolean) => getRow(attacker, false);
+
+    const getRow = (attacker: boolean, front: boolean) => {
         const results: ArmySnapshot[] = props.results.map(val => val[attacker ? 0 : 1]);
-        return results.at(day)?.front ?? new Array(20).fill(undefined)
+        const row = front ? results.at(day)?.front : results.at(day)?.back;
+        return row ?? new Array(20).fill(undefined)
     }
 
     return (
@@ -161,6 +168,18 @@ export default function BattleGrid(props: {results:[ArmySnapshot, ArmySnapshot][
             <table>
                 <tbody>
                     <tr>
+                        {getBack(true).map((regiment, index) => (
+                            <RegimentCell 
+                                key={index} 
+                                index={index}
+                                regiment={regiment}
+                                isAttacker={true}
+                                hoverCb={setFocusedData}
+                            />
+                            )
+                        )}
+                    </tr>
+                    <tr>
                         {getFront(true).map((regiment, index) => (
                             <RegimentCell 
                                 key={index} 
@@ -182,6 +201,18 @@ export default function BattleGrid(props: {results:[ArmySnapshot, ArmySnapshot][
                                 regiment={regiment}
                                 isAttacker={false}
                                 cellStyle={getCellStyle(index, false)}
+                                hoverCb={setFocusedData}
+                            />
+                            )
+                        )}
+                    </tr>
+                    <tr>
+                        {getBack(false).map((regiment, index) => (
+                            <RegimentCell 
+                                key={index} 
+                                index={index}
+                                regiment={regiment}
+                                isAttacker={false}
                                 hoverCb={setFocusedData}
                             />
                             )

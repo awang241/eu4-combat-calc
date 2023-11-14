@@ -254,7 +254,7 @@ export default class Army {
     }
 
     private reinforceBack(isDeploying: boolean = false): Regiment[] {
-        const limit = isDeploying ? BASE_BACKROW_REINFORCE_LIMIT: undefined
+        const limit = isDeploying ? undefined: BASE_BACKROW_REINFORCE_LIMIT
         return this.moveReservesToRow(false, UnitTypes.ARTILLERY, limit)
     }
 

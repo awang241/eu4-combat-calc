@@ -188,6 +188,13 @@ export default function RegimentsPanel(props: {
                 units={cavalry} 
                 type={UnitTypes.CAVALRY} 
             />
+
+            <RegimentsRow 
+                state={props.state} 
+                dispatch={props.dispatch} 
+                units={artillery} 
+                type="artillery" 
+            />
         </div>
     );
 }

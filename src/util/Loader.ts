@@ -50,35 +50,40 @@ function deepFreeze<T>(obj: T): Readonly<T> {
   return Object.freeze(obj);
 }
 
-export function parseUnits(): Map<TechGroup, Unit[]> {
+export function parseUnits(): [Map<TechGroup, Unit[]>, Unit[]] {
     const unitsByTechGroup: Map<TechGroup, Unit[]> = new Map();
+    const artillery: Unit[] = [];
     units.forEach(val => {
-        const group: TechGroup | undefined = parseTechGroup(val.unitType ?? "");
         const type: UnitType | undefined = parseRegType(val.type);
-        if (type !== undefined && val.techLevel !== undefined && group !== undefined) {
-            const unit: Unit = {
-                name: val.name,
-                type: type,
-                techGroup: group,
-                techLevel: val.techLevel ?? 1,
-                pips: {
-                    fireOffence: val.offensiveFire ?? 0,
-                    fireDefence: val.defensiveFire ?? 0,
-                    shockOffence: val.offensiveShock ?? 0,
-                    shockDefence: val.defensiveShock ?? 0,
-                    moraleOffence: val.offensiveMorale ?? 0,
-                    moraleDefence: val.defensiveMorale ?? 0,
+        if (type !== undefined && val.techLevel !== undefined) {
+            const group: TechGroup | undefined = parseTechGroup(val.unitType ?? "");
+            if (type === "artillery" || group !== undefined) {
+                const unit: Unit = {
+                    name: val.name,
+                    type: type,
+                    techGroup: group,
+                    techLevel: val.techLevel ?? 1,
+                    pips: {
+                        fireOffence: val.offensiveFire ?? 0,
+                        fireDefence: val.defensiveFire ?? 0,
+                        shockOffence: val.offensiveShock ?? 0,
+                        shockDefence: val.defensiveShock ?? 0,
+                        moraleOffence: val.offensiveMorale ?? 0,
+                        moraleDefence: val.defensiveMorale ?? 0,
+                    }
                 }
-            }
-            if (unitsByTechGroup.has(group)) {
-                unitsByTechGroup.get(group)?.push(unit);
-            } else {
-                unitsByTechGroup.set(group, [unit]);
+                if (group === undefined) {
+                    artillery.push(unit)
+                } else if (unitsByTechGroup.has(group)) {
+                    unitsByTechGroup.get(group)?.push(unit);
+                } else {
+                    unitsByTechGroup.set(group, [unit]);
+                }
             }
         }
     })
     unitsByTechGroup.forEach(val => val.sort((a, b) => b.techLevel - a.techLevel))
-    return unitsByTechGroup;
+    return [unitsByTechGroup, artillery];
 }
 
 export function parseTechs(): Tech[] {
