@@ -30,6 +30,15 @@ table {
   grid-column: span var(--half-column-width);
 }
 
+#setup {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  column-gap: 50px;
+  grid-column: span calc(2 * var(--half-column-width));
+
+  
+}
+
 .full-width, .collapsing-panel {
   grid-column: span calc(2 * var(--half-column-width));
 }

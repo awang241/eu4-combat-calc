@@ -1,0 +1,5 @@
+.army-setup {
+    grid-column: span 1;
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+}
