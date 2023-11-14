@@ -5,18 +5,20 @@ import infIcon from "../assets/infantry.png";
 import cavIcon from "../assets/cavalry.png";
 import artIcon from "../assets/artillery.png";
 import ArmySnapshot from "../types/ArmySnapshot";
-import { useEffect, useRef, useState } from "react";
+import { MouseEventHandler, useEffect, useLayoutEffect, useRef, useState } from "react";
 
 type RegimentData = {
-    index: number | undefined,
-    targetIndex: number | undefined,
-    flankingRange: number,
-    isAttacker: boolean
+    index: number,
+    isAttacker: boolean,
+    regiment: Regiment,
 }
 
 const MIN_OPACITY: number = 5;
-const initData: RegimentData = {index: undefined, targetIndex: undefined, flankingRange: 0, isAttacker: false};
-
+const icons = {
+    [UnitTypes.INFANTRY]: infIcon,
+    [UnitTypes.CAVALRY]: cavIcon,
+    [UnitTypes.ARTILLERY]: artIcon,
+} as const;
 function RegimentCell(props: {
         regiment: Regiment | undefined, 
         index: number, 
@@ -28,13 +30,7 @@ function RegimentCell(props: {
     let icon: string = "";
     let data: RegimentData | undefined;
     if (props.regiment !== undefined) {
-        if (props.regiment.type === UnitTypes.INFANTRY) {
-            icon = infIcon;
-        } else if (props.regiment.type === UnitTypes.CAVALRY) {
-            icon = cavIcon;
-        } else if (props.regiment.type === "artillery") {
-            icon = artIcon;
-        }
+        icon = icons[props.regiment.type];
         iconOpacity = `${MIN_OPACITY + (100 - MIN_OPACITY) * (props.regiment.strength / Regiment.MAX_STRENGTH)}%`;
         let moralePercent: number = 100 * (props.regiment.currentMorale / props.regiment.maxMorale);
         if (moralePercent > 2) {
@@ -46,32 +42,22 @@ function RegimentCell(props: {
         }
         data = {
             index: props.index,
-            targetIndex: props.regiment.targetIndex,
             isAttacker: props.isAttacker,
-            flankingRange: props.regiment.flankingRange()
+            regiment: props.regiment,
         }
     }
     return (
         <td className="cell" 
             style={props.cellStyle} 
             onMouseEnter={data ? () => props.hoverCb(data): undefined} 
-            onMouseLeave={data ? () => props.hoverCb(initData): undefined}
+            onMouseLeave={data ? () => props.hoverCb(undefined): undefined}
         >
-            {props.regiment !== undefined ? (
+            {props.regiment !== undefined && 
                 <div className="cell-grid" >
                     <img src={icon} alt="" style= {{opacity: iconOpacity}}/>
                     <div className="morale" style={{height: barHeight}}/>
-                    <div className="tooltip">
-                        <ul>
-                            <li><strong>{`${props.regiment.type} Regiment`}</strong></li>
-                            <li>{`${props.regiment.unit.name}`}</li>
-                            <li>{`ID: ${props.regiment.id}`}</li>
-                            <li>{`Morale: ${props.regiment.currentMorale.toFixed(2)}/${props.regiment.maxMorale.toFixed(2)}`}</li>
-                            <li>{`Strength: ${props.regiment.strength}/${Regiment.MAX_STRENGTH}`}</li>
-                        </ul>
-                    </div>
                 </div>
-            ) : <></> }
+            }
         </td>
     )
 }
@@ -79,7 +65,7 @@ function RegimentCell(props: {
 export default function BattleGrid(props: {results:[ArmySnapshot, ArmySnapshot][]}) {
     const maxDay: number = Math.max(props.results.length - 1, 0);
     const [day, setDay] = useState(maxDay); 
-    const [focusedData, setFocusedData] = useState(initData);
+    const [focusedData, setFocusedData] = useState<RegimentData | undefined>(undefined);
     const [animated, setAnimated] = useState(true);
     const animationId = useRef(setTimeout(() => {}))
     const animationLoops = useRef(0)
@@ -107,22 +93,25 @@ export default function BattleGrid(props: {results:[ArmySnapshot, ArmySnapshot][
     }
 
     const getCellStyle = (index: number, isAttacker: boolean): React.CSSProperties => {
-        let style: React.CSSProperties;
-        if (focusedData.index === undefined || isAttacker === focusedData.isAttacker || Math.abs(index - focusedData.index) > focusedData.flankingRange) {
-            style = {}
-        } else if (index === focusedData.targetIndex) {
-            style = {
-                outline: "none",
-                borderColor: "red",
-                borderStyle: "double",
-                boxShadow: "0 0 12px red"
-            }
-        } else {
-            style = {
-                outline: "none",
-                borderColor: "#80aacc",
-                borderRightStyle: "solid",
-                boxShadow: "0 0 6px #80aacc",
+        let style: React.CSSProperties = {};
+        if (focusedData !== undefined && focusedData.isAttacker !== isAttacker) {
+            if (index === focusedData.regiment.targetIndex) {
+                style = {
+                    outline: "none",
+                    borderColor: "red",
+                    borderStyle: "double",
+                    boxShadow: "0 0 8px red",
+                    transform: "translate3d(0, 0, 5)"
+                }
+            } else if (Math.abs(index - focusedData.index) <= focusedData.regiment.flankingRange()) {
+                style = {
+                    outline: "none",
+                    borderColor: "#6090cc",
+                    borderRightStyle: "solid",
+                    borderTopStyle: "double",
+                    boxShadow: "0 0 4px #80aacc",
+                    transform: "translate3d(0, 0, 2)"
+                }
             }
         }
         return style;
@@ -137,25 +126,57 @@ export default function BattleGrid(props: {results:[ArmySnapshot, ArmySnapshot][
         return row ?? new Array(20).fill(undefined)
     }
 
+    const [coords, setCoords] = useState({x: 0, y: 0})
+    const [tooltipHeight, setTooltipHeight] = useState(0);
+    const ref = useRef<HTMLDivElement>(null);
+    const mouseMoveHandler: MouseEventHandler<HTMLTableElement> = (event) => {
+        setCoords({x: event.clientX, y: event.clientY});
+    }
+
+    const getFloatingTooltipStyle = (): React.CSSProperties => {
+        return {
+            top: coords.y - (focusedData?.isAttacker ? tooltipHeight : 0),
+            display: focusedData?.index !== undefined ? "inline": "none",
+            position: "fixed",
+            left: coords.x,
+        }
+    }
+
+    useLayoutEffect(() => {
+        setTooltipHeight(ref.current?.clientHeight ?? 0);
+    }, [])
+
     return (
         <div className="battle-grid">
+            <div className="floating-tooltip" ref={ref} style={getFloatingTooltipStyle()}>
+                <ul>
+                    <li><strong>{`${focusedData?.regiment.type} Regiment`}</strong></li>
+                    <li>{`${focusedData?.regiment.unit.name}`}</li>
+                    <li>{`ID: ${focusedData?.regiment.id}`}</li>
+                    <li>{`Morale: ${focusedData?.regiment.currentMorale.toFixed(2)}/${focusedData?.regiment.maxMorale.toFixed(2)}`}</li>
+                    <li>{`Strength: ${focusedData?.regiment.strength}/${Regiment.MAX_STRENGTH}`}</li>
+                </ul>
+            </div>
             <div className="selector-panel">
-                <button disabled={day === 0} onClick={() => setDay(day - 1)}>&#60;</button>
-                <input 
-                    type="range" 
-                    min={0}
-                    max={maxDay} 
-                    step={1} 
-                    value={day}
-                    disabled={props.results.length === 0}
-                    onChange={(event)=> setDay(parseInt(event.target.value))}
-                />
-                <button 
-                    disabled={day === maxDay}
-                    onClick={() => setDay(day + 1)}>
-                    &#62;
-                </button>
                 <p>Day {day}</p>
+                <div>
+                    <button disabled={day === 0} onClick={() => setDay(day - 1)}>&#60;</button>
+                    <input 
+                        type="range" 
+                        min={0}
+                        max={maxDay} 
+                        step={1} 
+                        value={day}
+                        disabled={props.results.length === 0}
+                        onChange={(event)=> setDay(parseInt(event.target.value))}
+                    />
+                    <button 
+                        disabled={day === maxDay}
+                        onClick={() => setDay(day + 1)}>
+                        &#62;
+                    </button>
+                </div>
+                
                 <label htmlFor="animated-checkbox">Animate?</label>
 
                 <input 
@@ -165,7 +186,7 @@ export default function BattleGrid(props: {results:[ArmySnapshot, ArmySnapshot][
                     onChange={e => setAnimated(e.target.checked)}
                 />
             </div>  
-            <table>
+            <table onMouseMove={mouseMoveHandler}>
                 <tbody>
                     <tr>
                         {getBack(true).map((regiment, index) => (

@@ -4,6 +4,10 @@
     text-align: center;
 }
 
+.battle-grid .selector-panel input {
+    width: auto;
+}
+
 .battle-grid table {
     table-layout: fixed;
     border-spacing: 0px;
@@ -11,49 +15,46 @@
 }
 
 .battle-grid table .grid-gap {
-    height: 15px;
+    height: 60px;
 }
 
 .battle-grid tr .cell{
     border: 1px solid #444444;
     padding: 0;
-    background-color: white;
-    height: 40px;
-    width: 40px;
+    height: 32px;
+    width: 32px;
 }
+
 .battle-grid tr .cell:not(:last-child){
     border-right-style: none;
 }
+
+
 .battle-grid .cell-grid {
-    display: grid;
     position: relative;
 } 
 
-.battle-grid img {
+.battle-grid .cell-grid img {
     display: block;
     margin: 0;
     padding: 0;
     padding: 0;
     line-height: 0;
-    z-index: 1;
+    height: 32px;
+    width: 32px;
  }
 
- .battle-grid .cell, .battle-grid .regiment-placeholder {
-    width: 2.5vw;
-    height: 2.5vw;
- }
-
-.battle-grid tr td .morale {
+.battle-grid .cell-grid .morale {
     width: 100%;
     background-color: #ffc966;
     position: absolute;
     bottom: 0;
+    z-index: -1;
 }
 
-.battle-grid .tooltip {
-    display: none;
+
+.battle-grid .floating-tooltip {
     width: auto;
-    position: absolute;
     background-color: rgba(60, 60, 60, 0.5);
     border: 1px solid black;
     color: white;
@@ -63,14 +64,11 @@
     text-align: left;
     user-select: none;
     font-size: small;
+    pointer-events: none;
     z-index: 15;
 }
 
-.battle-grid .cell:hover .tooltip {
-    display: block;
-}
-
-.battle-grid .tooltip ul {
+.battle-grid .floating-tooltip ul {
     list-style: none;
     padding: 0;
     margin: 0;
