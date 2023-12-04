@@ -60,27 +60,15 @@ const TacticsPanel = (props: {
         baseTactics: number,
         setter: (type: Modifier, value: number) => void,
 }): JSX.Element => {
-    const [bonusTactics, setBonusTactics] = useState(0);
-
-    const totalTactics = (bonus?: number, discipline?: number) => {
-        const base = (props.baseTactics + (bonus ?? bonusTactics))
-        return base * toMultiplier(discipline ?? props.discipline);
+    const totalTactics = () => {
+        return props.baseTactics * toMultiplier(props.discipline);
     }
-
-    useEffect(() => props.setter(Modifiers.TACTICS, totalTactics()),
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-        [props.baseTactics, props.discipline])
 
     const handleInput: ChangeEventHandler<HTMLInputElement> = (e) => {
         const name: Modifier = e.target.name as Modifier
         const value: number = (e.target.value === "") ? 0 : parseFloat(e.target.value);
         if (!isNaN(value)) {
-            if (name === Modifiers.DISCIPLINE) {
-                props.setter(Modifiers.DISCIPLINE, value);
-            } else if (name === Modifiers.TACTICS) {
-                props.setter(name, totalTactics(value));
-                setBonusTactics(value);
-            }
+            props.setter(name, value);
         }
         e.target.value = "";
     }
@@ -91,18 +79,6 @@ const TacticsPanel = (props: {
 
             <span className={GlobalCSSClasses.TWO_COL_SPAN}>Base Tactics:</span>
             <span className={GlobalCSSClasses.CALC_DISPLAY}>{props.baseTactics}</span>
-
-            <span className={GlobalCSSClasses.TWO_COL_SPAN}>Bonus Tactics</span>
-            <input 
-                id="bonus-tactics"
-                className="army-modifier-input" 
-                type="number" 
-                min={0}
-                step={0.1} 
-                name={Modifiers.TACTICS} 
-                onChange={handleInput} 
-                value={bonusTactics}
-            />
 
             <span className={GlobalCSSClasses.TWO_COL_SPAN}>Discipline:</span>
             <div>
@@ -120,7 +96,7 @@ const TacticsPanel = (props: {
             </div>
 
             <span className={GlobalCSSClasses.TWO_COL_SPAN}>Total Tactics:</span>
-            <span className={GlobalCSSClasses.CALC_DISPLAY}>{totalTactics(bonusTactics).toFixed(2)}</span>
+            <span className={GlobalCSSClasses.CALC_DISPLAY}>{totalTactics().toFixed(2)}</span>
         </div>
     )
 }

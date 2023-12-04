@@ -35,7 +35,6 @@ export class DamageModifiers {
             infantry: this.modifiers.infantryCombatAbility,
             cavalry: this.modifiers.cavalryCombatAbility,
             artillery: this.modifiers.artilleryCombatAbility,
-
         }
     }
 
@@ -61,9 +60,14 @@ export class DamageModifiers {
     get moraleDefenseMultiplier() {
         return this.modifiers.moraleDamageReceived
     }
-    get tactics() {
-        return this.modifiers.tactics
-    };
+
+    get bonusTactics() {
+        return this.modifiers.bonusTactics;
+    }
+
+    get discipline() {
+        return this.modifiers.discipline;
+    }
 }
 
 export function toMultiplier(percentValue: number): number {

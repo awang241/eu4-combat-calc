@@ -1,25 +1,22 @@
-import React, { useMemo, useReducer } from 'react';
+import React, { useReducer } from 'react';
 import { useState } from 'react';
 import Army from './model/Army';
-
-import ArmyModifiersPanel from './components/setup/ArmyModifiersPanel';
-import RegimentsPanel from './components/setup/RegimentsPanel';
 import BattleGrid from './components/BattleGrid';
 
 import { parseTechs, parseUnits } from './util/Loader';
 import './App.css';
 
 import ArmySnapshot from './types/ArmySnapshot';
-import { TechGroup } from './enum/TechGroups';
-import Unit from './types/Unit';
+import TechGroups from './enum/TechGroups';
+import Unit, { blankUnit } from './types/Unit';
 import { Tech, TechState, defaultTechState } from './types/Tech';
-import TechPanel from './components/setup/TechPanel';
 import { defaultRegimentsState, regimentsReducer } from "./state/RegimentsState";
 import Combat from './model/Combat';
 import { createEnumRecord } from './util/StringEnumUtils';
 import Modifiers, { Modifier } from './enum/Modifiers';
 import { UnitType } from './enum/UnitTypes';
 import ArmySetupPanel from './components/setup/ArmySetup';
+import { ArmyState, armyStateReducer } from './state/ArmyState';
 
 declare global {
   interface Array<T> {
@@ -43,32 +40,44 @@ function getUnitsAtTech(state: TechState): Unit[] {
   return source.filter(unit => (unit.techLevel <= state.level)).sort((a, b) => b.techLevel - a.techLevel);
 }
 
+function defaultArmyState(): ArmyState {
+  const unitData: Record<UnitType, [Unit, number]> = {
+    infantry: [blankUnit("infantry"), 1],
+    cavalry: [blankUnit("cavalry"), 0],
+    artillery: [blankUnit("artillery"), 0]
+  };
+  const defaultTechLevel = 3
+  return {
+    ...createEnumRecord(0, Modifiers),
+    ...unitData,
+    techLevel: defaultTechLevel,
+    techGroup: TechGroups.WESTERN,
+    morale: techs[defaultTechLevel].morale
+  }
+}
+
+function createArmyFromState(state: ArmyState) {
+    const units: Record<UnitType, [Unit, number]> = {infantry: state.infantry, cavalry: state.cavalry, artillery: state.artillery};
+    const modifiers: Partial<Record<Modifier, number>> = {};
+    const tech = techs[state.techLevel];
+    for (const modifier of Object.values(Modifiers)) {
+      modifiers[modifier] = state[modifier];
+    }
+    return new Army(units, modifiers, tech);
+}
+
 export default function App() {
   const [results, setResults] = useState<[ArmySnapshot, ArmySnapshot][]>([]);
-  const [attackerModifiers, setAttackerModifiers] = useState(createEnumRecord(0, Modifiers));
-  const [defenderModifiers, setDefenderModifiers] = useState(createEnumRecord(0, Modifiers));
-  const [attackerTech, setAttackerTech] = useState(defaultTechState);
-  const [defenderTech, setDefenderTech] = useState(defaultTechState);
-  const [attackerRegState, attackerRegsDispatch] = useReducer(regimentsReducer, undefined, defaultRegimentsState)
-  const [defenderRegState, defenderRegsDispatch] = useReducer(regimentsReducer, undefined, defaultRegimentsState)
+  const [attackerState, attackerDispatch] = useReducer(armyStateReducer, undefined, defaultArmyState);
+  const [defenderState, defenderDispatch] = useReducer(armyStateReducer, undefined, defaultArmyState)
 
-  const attackerUnits = useMemo(() => getUnitsAtTech(attackerTech), [attackerTech]);
-  const defenderUnits = useMemo(() => getUnitsAtTech(defenderTech), [defenderTech]);
 
-  const mapToModifiers = (abilitiesByType: Record<UnitType, number>) => {
-    return {
-      [Modifiers.INFANTRY_COMBAT_ABILITY]: abilitiesByType.infantry,
-      [Modifiers.CAVALRY_COMBAT_ABILITY]: abilitiesByType.cavalry,
-      [Modifiers.ARTILLERY_COMBAT_ABILITY]: abilitiesByType.artillery
-    }
-  }
+
 
   const handleSubmit = (event: React.MouseEvent<HTMLElement>) => {
-    const attackerModifier: Record<Modifier, number> = {...attackerModifiers, ...mapToModifiers(attackerRegState.abilities)};
-    const defenderModifier: Record<Modifier, number> = {...defenderModifiers, ...mapToModifiers(defenderRegState.abilities)};
-    const army1 = new Army(attackerRegState.units, attackerRegState.counts, attackerModifier, techs[attackerTech.level]);
-    const army2 = new Army(defenderRegState.units, defenderRegState.counts, defenderModifier, techs[defenderTech.level]);
-    const combat = new Combat(army1, army2);
+    const attacker = createArmyFromState(attackerState);
+    const defender = createArmyFromState(defenderState);
+    const combat = new Combat(attacker, defender);
     combat.run();
     setResults(combat.dailyResults);
   }
@@ -83,8 +92,8 @@ export default function App() {
       <h2 className="column-heading">Defender</h2>
 
       <div id="setup">
-        <ArmySetupPanel techs={techs} units={units}/>
-        <ArmySetupPanel techs={techs} units={units}/>        
+        <ArmySetupPanel techs={techs} units={units} state={attackerState} dispatch={attackerDispatch}/>
+        <ArmySetupPanel techs={techs} units={units} state={defenderState} dispatch={defenderDispatch}/>
       </div>
       <h2 className='full-width'>Day-By-Day Casualties</h2>
       <table id="casualty-table" className='full-width'>

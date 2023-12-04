@@ -34,24 +34,21 @@ export default class Army {
         artillery: [],
     };
 
-
     /**
      * Create a new Army object with the given number of infantry regiments.
      * @param regsState The count and unit template for each regiment type.
      * @param modifiers The army-level modifiers (morale, discipline, etc...) for this army.
      */
-    constructor(units: {[type in UnitType]: Unit}, counts: {[type in UnitType]: number}, modifiers: Record<Modifier, number>, tech: Tech) {
+    constructor(units: Record<UnitType, [Unit, number]>, modifiers: Partial<Record<Modifier, number>>, tech: Tech) {
+        const morale = modifiers.morale ?? tech.morale
         for (const type of Object.values(UnitTypes)) {
-            const regType: UnitType = type;
-            if (units[regType] !== blankUnit(regType)) {
-                for (let i = 0; i < counts[regType]; i++) {
-                    this.regiments[regType].push(new Regiment(modifiers.morale, units[regType]))
-                }
+            const [unit, count] = units[type];
+            if (unit.name !== blankUnit(type).name) {
+                this.regiments[type] = new Array(count).fill(undefined).map(_ => new Regiment(morale, unit));
             }
         }
-        
         this.modifiers = new DamageModifiers(tech, modifiers);
-        this.tech = {...tech} as const;
+        this.tech = {...tech};
     }
 
     /**
@@ -286,7 +283,10 @@ export default class Army {
 
     get maxWidth(): number {return this.tech.width};
     get morale(): number {return this.modifiers.morale};
-    get tactics(): number {return this.modifiers.tactics}
+    get tactics(): number {
+        return (this.tech.tactics + this.modifiers.bonusTactics) * this.modifiers.discipline;
+    };
+
     get allRegiments(): Regiment[] {
         return ([] as Regiment[]).concat(...Object.values(this.regiments))
     };

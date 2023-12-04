@@ -1,3 +1,5 @@
+import { UnitType } from "./UnitTypes";
+
 const Modifiers = {
     DISCIPLINE: "discipline",
     MORALE: "morale",
@@ -10,12 +12,21 @@ const Modifiers = {
     INFANTRY_COMBAT_ABILITY: "infantryCombatAbility",
     CAVALRY_COMBAT_ABILITY: "cavalryCombatAbility",
     ARTILLERY_COMBAT_ABILITY: "artilleryCombatAbility",
-    TACTICS: "tactics",
+    BONUS_TACTICS: "bonusTactics",
 } as const;
 
 export type Modifier = typeof Modifiers[keyof typeof Modifiers];
 export default Modifiers as Record<keyof typeof Modifiers, Modifier>;
 
+export function combatAbility(type: UnitType): Modifier {
+    if (type === "infantry") {
+        return "infantryCombatAbility";
+    } else if (type === "cavalry") {
+        return "cavalryCombatAbility";
+    } else {
+        return "artilleryCombatAbility";
+    }
+}
 
 export function isModifier(name: string) {
     return Object.values(Modifiers).some(modifier => modifier === name);
