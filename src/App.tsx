@@ -3,20 +3,18 @@ import { useState } from 'react';
 import Army from './model/Army';
 import BattleGrid from './components/BattleGrid';
 
-import { parseTechs, parseUnits } from './util/Loader';
 import './App.css';
 
 import ArmySnapshot from './types/ArmySnapshot';
 import TechGroups from './enum/TechGroups';
 import Unit, { blankUnit } from './types/Unit';
-import { Tech, TechState, defaultTechState } from './types/Tech';
-import { defaultRegimentsState, regimentsReducer } from "./state/RegimentsState";
 import Combat from './model/Combat';
 import { createEnumRecord } from './util/StringEnumUtils';
 import Modifiers, { Modifier } from './enum/Modifiers';
 import { UnitType } from './enum/UnitTypes';
 import ArmySetupPanel from './components/setup/ArmySetup';
 import { ArmyState, armyStateReducer } from './state/ArmyState';
+import GLOBAL_SETUP_STATE from './state/GlobalSetupState';
 
 declare global {
   interface Array<T> {
@@ -31,14 +29,7 @@ declare global {
   }
 }
 
-const [units, artilleryUnits] = parseUnits();
-const techs: Tech[] = parseTechs();
-
-function getUnitsAtTech(state: TechState): Unit[] {
-  const source: Unit[] = units.get(state.group) ?? [];
-  source.push(...artilleryUnits);
-  return source.filter(unit => (unit.techLevel <= state.level)).sort((a, b) => b.techLevel - a.techLevel);
-}
+const {techs} = GLOBAL_SETUP_STATE;
 
 function defaultArmyState(): ArmyState {
   const unitData: Record<UnitType, [Unit, number]> = {
@@ -69,10 +60,7 @@ function createArmyFromState(state: ArmyState) {
 export default function App() {
   const [results, setResults] = useState<[ArmySnapshot, ArmySnapshot][]>([]);
   const [attackerState, attackerDispatch] = useReducer(armyStateReducer, undefined, defaultArmyState);
-  const [defenderState, defenderDispatch] = useReducer(armyStateReducer, undefined, defaultArmyState)
-
-
-
+  const [defenderState, defenderDispatch] = useReducer(armyStateReducer, undefined, defaultArmyState);
 
   const handleSubmit = (event: React.MouseEvent<HTMLElement>) => {
     const attacker = createArmyFromState(attackerState);
@@ -92,8 +80,8 @@ export default function App() {
       <h2 className="column-heading">Defender</h2>
 
       <div id="setup">
-        <ArmySetupPanel techs={techs} units={units} state={attackerState} dispatch={attackerDispatch}/>
-        <ArmySetupPanel techs={techs} units={units} state={defenderState} dispatch={defenderDispatch}/>
+        <ArmySetupPanel state={attackerState} dispatch={attackerDispatch}/>
+        <ArmySetupPanel state={defenderState} dispatch={defenderDispatch}/>
       </div>
       <h2 className='full-width'>Day-By-Day Casualties</h2>
       <table id="casualty-table" className='full-width'>

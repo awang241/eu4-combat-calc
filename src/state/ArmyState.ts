@@ -24,10 +24,6 @@ export type Action = {
     value: number | TechGroup,
 };
 
-export type RegimentsState = {
-
-}
-
 export type TechState = {
     techLevel: number,
     techGroup: TechGroup,

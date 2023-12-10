@@ -1,6 +1,6 @@
 import UnitTypes, { UnitType } from "../../enum/UnitTypes";
 import { DamageTable } from "../../types/DamageTable";
-import { Tech, TechState } from "../../types/Tech"
+import { Tech } from "../../types/Tech"
 import TechGroups, { TechGroup } from "../../enum/TechGroups";
 import { GlobalCSSClasses as CSSClasses } from "../../enum/GlobalCSSClasses";
 
@@ -8,6 +8,7 @@ import fireIcon from "../../assets/fire.png"
 import shockIcon from "../../assets/shock.png"
 
 import "./TechPanel.css";
+import { Action } from "../../state/ArmyState";
 
 
 function DamagesRow(props: {
@@ -26,16 +27,16 @@ function DamagesRow(props: {
 function SelectorPanel(props: {  
         group: TechGroup,
         level: number,
-        setter: (fn: ((state: TechState) => TechState)) => unknown;
+        setter: React.Dispatch<Action>;
 }) {
     const handleInput = (event: React.ChangeEvent<HTMLInputElement>) => {
         let newLevel: number;
         if (event.target.value === "") {
-            props.setter((state) => ({...state, level: 0}));
+            props.setter({actionType: "setTechState", value: 0})
         } else {
             newLevel = parseInt(event.target.value);
             if (!isNaN(newLevel) && newLevel >= 0 && newLevel <= 32) {
-                props.setter((state) => ({...state, level: newLevel}));
+                props.setter({actionType: "setTechState", value: newLevel})
             }
         }
         event.target.value = "";
@@ -44,9 +45,7 @@ function SelectorPanel(props: {
     const handleSelect = (event: React.ChangeEvent<HTMLSelectElement>) => {
         const group: TechGroup | undefined = TechGroups.byDescription(event.target.value);
         if (group !== undefined) {
-            props.setter((state) => {
-                return {...state, group};
-            })
+            props.setter({actionType: "setTechState", value: group})
         }
     }
     
@@ -132,7 +131,7 @@ export default function TechPanel(props: {
         className?: string,
         group: TechGroup,
         tech: Tech,
-        updater: (fn: ((state: TechState) => TechState)) => unknown;
+        updater: React.Dispatch<Action>;
 }) { 
     return (
     <div className={`${props.className} tech-panel`}>
