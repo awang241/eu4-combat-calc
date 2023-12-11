@@ -7,6 +7,7 @@ import TechPanel from "./TechPanel";
 import "./ArmySetup.css";
 import { Action, ArmyState } from "../../state/ArmyState";
 import GLOBAL_SETUP_STATE from "../../state/GlobalSetupState";
+import LeaderDicePanel from "./LeaderDicePanel";
 const {techs, units} = GLOBAL_SETUP_STATE;
 
 export default function ArmySetupPanel(props: {
@@ -24,6 +25,10 @@ export default function ArmySetupPanel(props: {
     
     return (
         <div className="army-setup">
+            <LeaderDicePanel 
+                state={props.state} 
+                dispatch={props.dispatch}
+            />
             <div id="regiment-modifiers" className='collapsing-panel'>
                 <h3 className='full-width'>Regiments and Regiment Modifiers</h3>
                 <RegimentsPanel 

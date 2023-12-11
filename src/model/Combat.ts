@@ -1,6 +1,7 @@
 import Army from "./Army";
 import ArmySnapshot from "../types/ArmySnapshot";
 import Regiment from "./Regiment";
+import { Leader } from "../types/Leader";
 
 
 type Casualties = {strength: number, morale: number};
@@ -28,13 +29,14 @@ export default class Combat {
     private calculateCasualties(regiment: Regiment, regimentInAttackingArmy: boolean): Casualties{
         const [regimentArmy, targetArmy] = regimentInAttackingArmy ? [this.attacker, this.defender] : [this.defender, this.attacker];
         const casualties: Casualties = {strength: 0, morale: 0};
+        const armyPips = regimentArmy.roll + this.leaderPhasePips(regimentInAttackingArmy);
         if (regiment.targetIndex !== undefined) {
             const target = targetArmy.atFront(regiment.targetIndex)
             if (target === undefined) {
                 throw Error("Regiment target cannot be set to an empty space.")
             }
-            const strengthPips = regimentArmy.roll + regiment.getStrengthOffencePips(this.isFirePhase) - target.getStrengthDefencePips(this.isFirePhase);
-            const moralePips = regimentArmy.roll + regiment.getMoraleOffencePips(this.isFirePhase) - target.getMoraleDefencePips(this.isFirePhase);
+            const strengthPips = armyPips + regiment.getStrengthOffencePips(this.isFirePhase) - target.getStrengthDefencePips(this.isFirePhase);
+            const moralePips = armyPips + regiment.getMoraleOffencePips(this.isFirePhase) - target.getMoraleDefencePips(this.isFirePhase);
             const commonMults = this.roundMultiplier * (regiment.strength / Regiment.MAX_STRENGTH) / targetArmy.tactics;
             const strengthMults = commonMults * regimentArmy.strengthMultipliers(regiment.type, this.isFirePhase) * targetArmy.phaseDefenseMultiplier(this.isFirePhase);
             const moraleMults = commonMults * regimentArmy.moraleMultipliers(regiment.type, this.isFirePhase) * targetArmy.moraleDefenseMultiplier();
@@ -109,5 +111,11 @@ export default class Combat {
 
     private get isFirePhase(): boolean {
         return (this.day - 1) % 6 < 3;
+    }
+
+    private leaderPhasePips(forAttacker: boolean): number {
+        const key: keyof Leader = this.isFirePhase ? "fire" : "shock";
+        const difference = (this.attacker.leader[key] - this.defender.leader[key]) * (forAttacker ? 1 : -1);
+        return Math.max(0, difference);
     }
 }

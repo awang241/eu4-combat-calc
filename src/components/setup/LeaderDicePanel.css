@@ -1,0 +1,22 @@
+.leader-dice-panel {
+    display: grid;
+    grid-column: 1 / span 6;
+    grid-template-columns: subgrid;
+}
+
+.leader-dice-panel .leader-subpanel{
+    display: grid;
+    grid-column: 1 / span 6;
+    grid-template-columns: subgrid;
+}
+
+
+.leader-dice-panel .leader-subpanel h5{
+    grid-column: 1 / -1;
+}
+
+/* .leader-dice-panel .leader-subpanel input,
+.leader-dice-panel .leader-subpanel span {
+    grid-column: span 1;
+} */
+

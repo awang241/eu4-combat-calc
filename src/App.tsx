@@ -15,6 +15,7 @@ import { UnitType } from './enum/UnitTypes';
 import ArmySetupPanel from './components/setup/ArmySetup';
 import { ArmyState, armyStateReducer } from './state/ArmyState';
 import GLOBAL_SETUP_STATE from './state/GlobalSetupState';
+import { Leader } from './types/Leader';
 
 declare global {
   interface Array<T> {
@@ -37,13 +38,15 @@ function defaultArmyState(): ArmyState {
     cavalry: [blankUnit("cavalry"), 0],
     artillery: [blankUnit("artillery"), 0]
   };
+  const leader: Leader = {fire: 0, shock: 0, maneuver: 0}
   const defaultTechLevel = 3
   return {
     ...createEnumRecord(0, Modifiers),
     ...unitData,
     techLevel: defaultTechLevel,
     techGroup: TechGroups.WESTERN,
-    morale: techs[defaultTechLevel].morale
+    morale: techs[defaultTechLevel].morale,
+    leader,
   }
 }
 
@@ -51,10 +54,11 @@ function createArmyFromState(state: ArmyState) {
     const units: Record<UnitType, [Unit, number]> = {infantry: state.infantry, cavalry: state.cavalry, artillery: state.artillery};
     const modifiers: Partial<Record<Modifier, number>> = {};
     const tech = techs[state.techLevel];
+    const leader = {...state.leader}
     for (const modifier of Object.values(Modifiers)) {
       modifiers[modifier] = state[modifier];
     }
-    return new Army(units, modifiers, tech);
+    return new Army(units, modifiers, tech, leader);
 }
 
 export default function App() {

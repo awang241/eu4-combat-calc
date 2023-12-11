@@ -6,6 +6,7 @@ import UnitTypes, { UnitType } from "../enum/UnitTypes";
 import Row from "./Row";
 import Unit, { blankUnit } from "../types/Unit";
 import { Modifier } from "../enum/Modifiers";
+import { Leader } from "../types/Leader";
 
 const BACK_ROW_MORALE_DAMAGE_FACTOR = 0.4;
 const BASE_BACKROW_REINFORCE_LIMIT = 2;
@@ -19,8 +20,9 @@ export default class Army {
     private static readonly MORALE_DAMAGES_INDEX: number = 1;
 
     roll = 5;
-    private modifiers: DamageModifiers;
+    private modifiers: DamageModifiers; 
     private tech: Tech;
+    private _leader: Leader;
     private front: Row = new Row(0);
     private back: Row = new Row(0);
     private reserves: Record<UnitType, Regiment[]> = {
@@ -39,7 +41,7 @@ export default class Army {
      * @param regsState The count and unit template for each regiment type.
      * @param modifiers The army-level modifiers (morale, discipline, etc...) for this army.
      */
-    constructor(units: Record<UnitType, [Unit, number]>, modifiers: Partial<Record<Modifier, number>>, tech: Tech) {
+    constructor(units: Record<UnitType, [Unit, number]>, modifiers: Partial<Record<Modifier, number>>, tech: Tech, leader: Leader) {
         const morale = modifiers.morale ?? tech.morale
         for (const type of Object.values(UnitTypes)) {
             const [unit, count] = units[type];
@@ -49,6 +51,7 @@ export default class Army {
         }
         this.modifiers = new DamageModifiers(tech, modifiers);
         this.tech = {...tech};
+        this._leader = {...leader};
     }
 
     /**
@@ -280,7 +283,7 @@ export default class Army {
         return this.allRegiments.reduce((prev, curr) => prev + curr.currentMorale, 0);
     }
 
-
+    get leader(): Readonly<Leader> {return this._leader};
     get maxWidth(): number {return this.tech.width};
     get morale(): number {return this.modifiers.morale};
     get tactics(): number {
