@@ -2,9 +2,9 @@ import "./RegimentsPanel.css";
 import UnitTypes, { UnitType } from "../../enum/UnitTypes";
 import Unit, { blankUnit, unitCompare } from "../../types/Unit";
 import {v4 as uuidv4} from 'uuid';
-import { ChangeEvent, ChangeEventHandler, Dispatch, useEffect, useMemo, useState } from "react";
-import { Action, ArmyState } from "../../state/ArmyState";
+import { ChangeEvent, ChangeEventHandler, useEffect, useMemo, useState } from "react";
 import { combatAbility } from "../../enum/Modifiers";
+import { useArmySetupContext } from "./ArmySetupContext";
 
 const USE_LATEST_PREFIX = "Use Latest: ";
 const NONE = "(none)";
@@ -26,10 +26,10 @@ const UnitSelector = (
     props: {
         regType: UnitType, 
         units: Unit[], 
-        dispatch: Dispatch<Action>
     }
 ): JSX.Element => {
     const [selected, setSelected] = useState(USE_LATEST_PREFIX);
+    const {dispatch} = useArmySetupContext();
 
     const options = useMemo(() => {
         const options: string[] = new Array(...props.units).sort(unitCompare()).map(unit => unit.name + ` (${unit.techLevel})`);
@@ -48,7 +48,7 @@ const UnitSelector = (
             }
         }
         if (selectedUnit !== undefined) {
-            props.dispatch({actionType: "setUnitState", value: selectedUnit, unitType: selectedUnit.type});
+            dispatch({type: "units", payload: {[selectedUnit.type]: selectedUnit}});
             setSelected(event.target.value);
         }
     }
@@ -63,7 +63,7 @@ const UnitSelector = (
             updated = getLatestUnit(props.units);
         }
         if (updated !== undefined) {
-            props.dispatch({actionType: "setUnitState", value: updated, unitType: updated.type});
+            dispatch({type: "units", payload: {[updated.type]: updated}});
         }
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [props.units])
@@ -106,23 +106,22 @@ const CombatAbilityInput = (
 }
 
 function RegimentsRow(props: {
-    state: ArmyState,
-    dispatch: Dispatch<Action>,
     type: UnitType,
     units: Unit[],
 }): JSX.Element {
+    const {state, dispatch} = useArmySetupContext();
 
     const handleCountInput = (e: ChangeEvent<HTMLInputElement>): void => {
         let result = parseInt(e.target.value);
         if (!isNaN(result)) {
-            props.dispatch({actionType: "setUnitState", value: result, unitType: props.type});
+            dispatch({type: "regimentCounts", payload: {[props.type]: result}});
         }
     }
 
     const handleAbilityInput = (e: ChangeEvent<HTMLInputElement>): void => {
         let result = parseFloat(e.target.value);
         if (!isNaN(result)) {
-            props.dispatch({actionType: "setModifier", value: [combatAbility(props.type), result]});
+            dispatch({type: "modifiers", payload: {[combatAbility(props.type)]: result}});
         }
     }
 
@@ -132,17 +131,16 @@ function RegimentsRow(props: {
             <UnitSelector 
                 units={props.units} 
                 regType={props.type} 
-                dispatch={props.dispatch}
             />
             <input 
                 type="number" 
                 disabled={props.units.length === 0}
-                value= {props.state[props.type][1]}
+                value= {state.regimentCounts[props.type]}
                 min={0}
                 onChange={handleCountInput}
             />
             <CombatAbilityInput 
-                value={props.state[combatAbility(props.type)]} 
+                value={state.modifiers[combatAbility(props.type)]} 
                 handler={handleAbilityInput} 
             />
         </div>
@@ -152,8 +150,6 @@ function RegimentsRow(props: {
 
 export default function RegimentsPanel(props: {
             className?: string,
-            state: ArmyState,
-            dispatch: Dispatch<Action>,
             units: Unit[],
         }) {
     const {infantry, cavalry, artillery} = useMemo(() => {
@@ -172,23 +168,17 @@ export default function RegimentsPanel(props: {
             <h5>Regiments:</h5>
             <h5>Combat Ability(%):</h5>
 
-            <RegimentsRow 
-                state={props.state} 
-                dispatch={props.dispatch} 
+            <RegimentsRow
                 units={infantry} 
                 type="infantry" 
             />
 
             <RegimentsRow 
-                state={props.state} 
-                dispatch={props.dispatch} 
                 units={cavalry} 
                 type="cavalry"
             />
 
             <RegimentsRow 
-                state={props.state} 
-                dispatch={props.dispatch} 
                 units={artillery} 
                 type="artillery" 
             />
