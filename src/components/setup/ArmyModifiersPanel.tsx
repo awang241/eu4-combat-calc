@@ -4,7 +4,7 @@ import Modifiers, { Modifier, isModifier } from "../../enum/Modifiers";
 import { Tech } from "../../types/Tech";
 import { ChangeEventHandler, useEffect, useState } from "react";
 import { GlobalCSSClasses } from "../../enum/GlobalCSSClasses";
-import { useArmySetupContext } from "./ArmySetupContext";
+import { Action } from "../../state/ArmyState";
 
 const MoralePanel = (props: {
         baseMorale: number, 
@@ -102,10 +102,14 @@ const TacticsPanel = (props: {
     )
 }
 
-export default function ArmyModifiersPanel(props: {tech: Tech, className?: string}) { 
-    const {state, dispatch} = useArmySetupContext();
+export default function ArmyModifiersPanel(props: {
+            modifiers: Record<Modifier, number>,
+            tech: Tech,
+            className?: string,
+            callback: React.Dispatch<Action>,
+        }) { 
     const setModifier = (name: Modifier, value: number) => {
-        dispatch({type: "modifiers", payload:{[name]: value}});
+        props.callback({actionType: "setModifier", value: [name, value]});
     }
 
     const handleModifierInput = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -120,7 +124,7 @@ export default function ArmyModifiersPanel(props: {tech: Tech, className?: strin
         <div className={`${props.className} army-modifiers-panel`}>
             <MoralePanel baseMorale={props.tech.morale} setter={setModifier}/>
             <TacticsPanel 
-                discipline={state.modifiers.discipline} 
+                discipline={props.modifiers.discipline} 
                 baseTactics={props.tech.tactics}
                 setter={setModifier}
             />
@@ -136,7 +140,7 @@ export default function ArmyModifiersPanel(props: {tech: Tech, className?: strin
                         min={0}
                         name={Modifiers.FIRE_DAMAGE} 
                         onChange={handleModifierInput} 
-                        value={state.modifiers.fireDamage ?? 0}/>
+                        value={props.modifiers.fireDamage ?? 0}/>
                     <label>%</label>
                 </div>
                 <div>
@@ -147,7 +151,7 @@ export default function ArmyModifiersPanel(props: {tech: Tech, className?: strin
                         max={0} 
                         name={Modifiers.FIRE_DAMAGE_RECEIVED} 
                         onChange={handleModifierInput} 
-                        value={state.modifiers.fireDamageReceived ?? 0}
+                        value={props.modifiers.fireDamageReceived ?? 0}
                     />
                     <label>%</label>
                 </div>
@@ -160,7 +164,7 @@ export default function ArmyModifiersPanel(props: {tech: Tech, className?: strin
                         min={0}
                         name={Modifiers.SHOCK_DAMAGE} 
                         onChange={handleModifierInput} 
-                        value={state.modifiers.shockDamage ?? 0}
+                        value={props.modifiers.shockDamage ?? 0}
                     />
                     <label>%</label>
                 </div>
@@ -172,7 +176,7 @@ export default function ArmyModifiersPanel(props: {tech: Tech, className?: strin
                         max={0}
                         name={Modifiers.SHOCK_DAMAGE_RECEIVED} 
                         onChange={handleModifierInput} 
-                        value={state.modifiers.shockDamageReceived ?? 0}
+                        value={props.modifiers.shockDamageReceived ?? 0}
                     />
                     <label>%</label>
                 </div>
@@ -186,7 +190,7 @@ export default function ArmyModifiersPanel(props: {tech: Tech, className?: strin
                         step={0} 
                         name={Modifiers.MORALE_DAMAGE} 
                         onChange={handleModifierInput} 
-                        value={state.modifiers.moraleDamage ?? 0}/>
+                        value={props.modifiers.moraleDamage ?? 0}/>
                     <label>%</label>
                 </div>
                 <div>
@@ -196,7 +200,7 @@ export default function ArmyModifiersPanel(props: {tech: Tech, className?: strin
                         max={0}
                         name={Modifiers.MORALE_DAMAGE_RECEIVED} 
                         onChange={handleModifierInput} 
-                        value={state.modifiers.moraleDamageReceived ?? 0}
+                        value={props.modifiers.moraleDamageReceived ?? 0}
                     />
                     <label>%</label>
                 </div>

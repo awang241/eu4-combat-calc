@@ -11,7 +11,7 @@ import Unit, { blankUnit } from './types/Unit';
 import Combat from './model/Combat';
 import { createEnumRecord } from './util/StringEnumUtils';
 import Modifiers, { Modifier } from './enum/Modifiers';
-import UnitTypes, { UnitType } from './enum/UnitTypes';
+import { UnitType } from './enum/UnitTypes';
 import ArmySetupPanel from './components/setup/ArmySetup';
 import { ArmyState, armyStateReducer } from './state/ArmyState';
 import GLOBAL_SETUP_STATE from './state/GlobalSetupState';
@@ -33,33 +33,32 @@ declare global {
 const {techs} = GLOBAL_SETUP_STATE;
 
 function defaultArmyState(): ArmyState {
-  const units: Record<UnitType, Unit> = {
-    infantry: blankUnit("infantry"),
-    cavalry: blankUnit("cavalry"),
-    artillery: blankUnit("artillery"),
+  const unitData: Record<UnitType, [Unit, number]> = {
+    infantry: [blankUnit("infantry"), 1],
+    cavalry: [blankUnit("cavalry"), 0],
+    artillery: [blankUnit("artillery"), 0]
   };
-  const regimentCounts = {...createEnumRecord(0, UnitTypes), infantry: 1}
-  const defaultTechLevel = 3
-  const modifiers = {...createEnumRecord(0, Modifiers), morale: techs[defaultTechLevel].morale};
   const leader: Leader = {fire: 0, shock: 0, maneuver: 0}
-
+  const defaultTechLevel = 3
   return {
-    modifiers,
-    units,
-    regimentCounts,
+    ...createEnumRecord(0, Modifiers),
+    ...unitData,
+    techLevel: defaultTechLevel,
+    techGroup: TechGroups.WESTERN,
+    morale: techs[defaultTechLevel].morale,
     leader,
-    tech: {level: defaultTechLevel, group: TechGroups.WESTERN},
   }
 }
 
 function createArmyFromState(state: ArmyState) {
+    const units: Record<UnitType, [Unit, number]> = {infantry: state.infantry, cavalry: state.cavalry, artillery: state.artillery};
     const modifiers: Partial<Record<Modifier, number>> = {};
-    const tech = techs[state.tech.level];
+    const tech = techs[state.techLevel];
     const leader = {...state.leader}
     for (const modifier of Object.values(Modifiers)) {
-      modifiers[modifier] = state.modifiers[modifier];
+      modifiers[modifier] = state[modifier];
     }
-    return new Army(state.units, state.regimentCounts, modifiers, tech, leader);
+    return new Army(units, modifiers, tech, leader);
 }
 
 export default function App() {

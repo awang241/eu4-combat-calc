@@ -1,14 +1,16 @@
 import { ChangeEvent } from "react";
+import { Action, ArmyState } from "../../state/ArmyState";
 import "./LeaderDicePanel.css";
 import { Leader } from "../../types/Leader";
-import { useArmySetupContext } from "./ArmySetupContext";
 
-export default function LeaderDicePanel() {
-    const {state, dispatch} = useArmySetupContext();
+export default function LeaderDicePanel(props: {
+    state: ArmyState,
+    dispatch: React.Dispatch<Action>,
+}) {
     const inputChangeHandler = (e: ChangeEvent<HTMLInputElement>, key: keyof Leader): void => {
         const intValue = parseInt(e.target.value);
         if (!isNaN(intValue) && intValue >= 0 && intValue <= 6) {
-            dispatch({type: "leader", payload: {[key]: intValue}});
+            props.dispatch({actionType: "setLeader", value: [key, intValue]});
         }
     }
     return (
@@ -20,7 +22,7 @@ export default function LeaderDicePanel() {
                     type="number"
                     min={0}
                     max={6}
-                    value={state.leader.fire}
+                    value={props.state.leader.fire}
                     onChange={e => inputChangeHandler(e, "fire")}
                 />
 
@@ -29,7 +31,7 @@ export default function LeaderDicePanel() {
                     type="number"
                     min={0}
                     max={6}
-                    value={state.leader.shock}
+                    value={props.state.leader.shock}
                     onChange={e => inputChangeHandler(e, "shock")}
                 />
                 
@@ -38,8 +40,9 @@ export default function LeaderDicePanel() {
                     type="number"
                     min={0}
                     max={6}
-                    value={state.leader.maneuver}
+                    value={props.state.leader.maneuver}
                     onChange={e => inputChangeHandler(e, "maneuver")}
+
                 />
             </div>
         </div>

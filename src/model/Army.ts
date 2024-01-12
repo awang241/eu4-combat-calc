@@ -41,11 +41,10 @@ export default class Army {
      * @param regsState The count and unit template for each regiment type.
      * @param modifiers The army-level modifiers (morale, discipline, etc...) for this army.
      */
-    constructor(units: Record<UnitType, Unit>, regCounts: Record<UnitType, number>, modifiers: Partial<Record<Modifier, number>>, tech: Tech, leader: Leader) {
+    constructor(units: Record<UnitType, [Unit, number]>, modifiers: Partial<Record<Modifier, number>>, tech: Tech, leader: Leader) {
         const morale = modifiers.morale ?? tech.morale
         for (const type of Object.values(UnitTypes)) {
-            const unit = units[type];
-            const count = regCounts[type];
+            const [unit, count] = units[type];
             if (unit.name !== blankUnit(type).name) {
                 this.regiments[type] = new Array(count).fill(undefined).map(_ => new Regiment(morale, unit));
             }

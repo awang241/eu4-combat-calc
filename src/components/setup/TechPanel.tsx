@@ -8,7 +8,8 @@ import fireIcon from "../../assets/fire.png"
 import shockIcon from "../../assets/shock.png"
 
 import "./TechPanel.css";
-import { useArmySetupContext } from "./ArmySetupContext";
+import { Action } from "../../state/ArmyState";
+
 
 function DamagesRow(props: {
         damages: {fire: number, shock: number},
@@ -23,24 +24,28 @@ function DamagesRow(props: {
     )
 }
 
-function SelectorPanel() {
-    const {state, dispatch} = useArmySetupContext()
+function SelectorPanel(props: {  
+        group: TechGroup,
+        level: number,
+        setter: React.Dispatch<Action>;
+}) {
     const handleInput = (event: React.ChangeEvent<HTMLInputElement>) => {
         let newLevel: number;
         if (event.target.value === "") {
-            dispatch({type: "tech", payload: {level: 0}})
+            props.setter({actionType: "setTechState", value: 0})
         } else {
             newLevel = parseInt(event.target.value);
             if (!isNaN(newLevel) && newLevel >= 0 && newLevel <= 32) {
-                dispatch({type: "tech", payload: {level: newLevel}})
+                props.setter({actionType: "setTechState", value: newLevel})
             }
         }
+        event.target.value = "";
     }
 
     const handleSelect = (event: React.ChangeEvent<HTMLSelectElement>) => {
         const group: TechGroup | undefined = TechGroups.byDescription(event.target.value);
         if (group !== undefined) {
-            dispatch({type: "tech", payload: {group}})
+            props.setter({actionType: "setTechState", value: group})
         }
     }
     
@@ -53,11 +58,11 @@ function SelectorPanel() {
                 min={0}
                 max={32}
                 step={1}
-                value={state.tech.level}
+                value={props.level}
                 onChange={handleInput}
             />
             <span>Tech Group:</span>
-            <select className={CSSClasses.TWO_COL_SPAN} onChange={handleSelect} value={state.tech.group.description}>
+            <select className={CSSClasses.TWO_COL_SPAN} onChange={handleSelect} value={props.group.description}>
                 {TechGroups.values.map(group => {
                         return (
                             <option key={group.propName} value={group.description}>
@@ -124,11 +129,13 @@ function DamagePanel(props: {multipliers: DamageTable}) {
 
 export default function TechPanel(props: {  
         className?: string,
+        group: TechGroup,
         tech: Tech,
+        updater: React.Dispatch<Action>;
 }) { 
     return (
     <div className={`${props.className} tech-panel`}>
-        <SelectorPanel/>
+        <SelectorPanel group={props.group} level={props.tech.level} setter={props.updater}/>
         <ValuesPanel tech={props.tech}/>
         <DamagePanel multipliers={props.tech.damages}/>
     </div>)
