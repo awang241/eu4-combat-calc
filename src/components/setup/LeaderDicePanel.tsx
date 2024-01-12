@@ -1,16 +1,16 @@
 import { ChangeEvent } from "react";
-import { Action, ArmyState } from "../../state/ArmyState";
 import "./LeaderDicePanel.css";
 import { Leader } from "../../types/Leader";
+import { ArmyState, ArmyStateDispatch } from "../../state/ArmyState";
 
 export default function LeaderDicePanel(props: {
     state: ArmyState,
-    dispatch: React.Dispatch<Action>,
+    dispatch: ArmyStateDispatch,
 }) {
     const inputChangeHandler = (e: ChangeEvent<HTMLInputElement>, key: keyof Leader): void => {
         const intValue = parseInt(e.target.value);
         if (!isNaN(intValue) && intValue >= 0 && intValue <= 6) {
-            props.dispatch({actionType: "setLeader", value: [key, intValue]});
+            props.dispatch({type: "leader", payload: {[key]: intValue} });
         }
     }
     return (

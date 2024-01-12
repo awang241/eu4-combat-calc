@@ -8,7 +8,7 @@ import fireIcon from "../../assets/fire.png"
 import shockIcon from "../../assets/shock.png"
 
 import "./TechPanel.css";
-import { Action } from "../../state/ArmyState";
+import { ArmyStateDispatch } from "../../state/ArmyState";
 
 
 function DamagesRow(props: {
@@ -24,28 +24,27 @@ function DamagesRow(props: {
     )
 }
 
-function SelectorPanel(props: {  
+function SelectorPanel(props: {
         group: TechGroup,
         level: number,
-        setter: React.Dispatch<Action>;
+        setter: ArmyStateDispatch;
 }) {
     const handleInput = (event: React.ChangeEvent<HTMLInputElement>) => {
         let newLevel: number;
         if (event.target.value === "") {
-            props.setter({actionType: "setTechState", value: 0})
+            props.setter({type: "tech", payload: {level: 0} })
         } else {
             newLevel = parseInt(event.target.value);
             if (!isNaN(newLevel) && newLevel >= 0 && newLevel <= 32) {
-                props.setter({actionType: "setTechState", value: newLevel})
+                props.setter({type: "tech", payload: {level: newLevel} })
             }
         }
-        event.target.value = "";
     }
 
     const handleSelect = (event: React.ChangeEvent<HTMLSelectElement>) => {
         const group: TechGroup | undefined = TechGroups.byDescription(event.target.value);
         if (group !== undefined) {
-            props.setter({actionType: "setTechState", value: group})
+            props.setter({type: "tech", payload: {group}})
         }
     }
     
@@ -131,12 +130,13 @@ export default function TechPanel(props: {
         className?: string,
         group: TechGroup,
         tech: Tech,
-        updater: React.Dispatch<Action>;
+        updater: ArmyStateDispatch;
 }) { 
     return (
-    <div className={`${props.className} tech-panel`}>
-        <SelectorPanel group={props.group} level={props.tech.level} setter={props.updater}/>
-        <ValuesPanel tech={props.tech}/>
-        <DamagePanel multipliers={props.tech.damages}/>
-    </div>)
+        <div className={`${props.className} tech-panel`}>
+            <SelectorPanel group={props.group} level={props.tech.level} setter={props.updater}/>
+            <ValuesPanel tech={props.tech}/>
+            <DamagePanel multipliers={props.tech.damages}/>
+        </div>
+    )
 }

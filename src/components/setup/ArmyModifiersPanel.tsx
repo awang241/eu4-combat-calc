@@ -4,7 +4,7 @@ import Modifiers, { Modifier, isModifier } from "../../enum/Modifiers";
 import { Tech } from "../../types/Tech";
 import { ChangeEventHandler, useEffect, useState } from "react";
 import { GlobalCSSClasses } from "../../enum/GlobalCSSClasses";
-import { Action } from "../../state/ArmyState";
+import { ArmyStateDispatch } from "../../state/ArmyState";
 
 const MoralePanel = (props: {
         baseMorale: number, 
@@ -106,10 +106,10 @@ export default function ArmyModifiersPanel(props: {
             modifiers: Record<Modifier, number>,
             tech: Tech,
             className?: string,
-            callback: React.Dispatch<Action>,
-        }) { 
+            dispatch: ArmyStateDispatch,
+        }) {
     const setModifier = (name: Modifier, value: number) => {
-        props.callback({actionType: "setModifier", value: [name, value]});
+        props.dispatch({type: "tech", payload: {[name]: value}});
     }
 
     const handleModifierInput = (event: React.ChangeEvent<HTMLInputElement>) => {

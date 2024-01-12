@@ -2,9 +2,9 @@ import "./RegimentsPanel.css";
 import UnitTypes, { UnitType } from "../../enum/UnitTypes";
 import Unit, { blankUnit, unitCompare } from "../../types/Unit";
 import {v4 as uuidv4} from 'uuid';
-import { ChangeEvent, ChangeEventHandler, Dispatch, useEffect, useMemo, useState } from "react";
-import { Action, ArmyState } from "../../state/ArmyState";
+import { ChangeEvent, ChangeEventHandler, useEffect, useMemo, useState } from "react";
 import { combatAbility } from "../../enum/Modifiers";
+import { ArmyState, ArmyStateDispatch } from "../../state/ArmyState";
 
 const USE_LATEST_PREFIX = "Use Latest: ";
 const NONE = "(none)";
@@ -25,48 +25,54 @@ function getLatestUnit(unitsList: Unit[]): Unit | undefined {
 const UnitSelector = (
     props: {
         regType: UnitType, 
-        units: Unit[], 
-        dispatch: Dispatch<Action>
+        availableUnits: Unit[],
+        currentUnit: Unit,
+        dispatch: ArmyStateDispatch
     }
 ): JSX.Element => {
     const [selected, setSelected] = useState(USE_LATEST_PREFIX);
-
+    
     const options = useMemo(() => {
-        const options: string[] = new Array(...props.units).sort(unitCompare()).map(unit => unit.name + ` (${unit.techLevel})`);
+        const options: string[] = new Array(...props.availableUnits).sort(unitCompare()).map(unit => unit.name + ` (${unit.techLevel})`);
         options.unshift(options.length === 0 ? NONE: USE_LATEST_PREFIX);
         return options;
-    }, [props.units])
+    }, [props.availableUnits])
 
     const handleSelectUnit = (event: ChangeEvent<HTMLSelectElement>): void => {
         let selectedUnit: Unit | undefined = undefined;
         const value = event.target.value
         if (value === USE_LATEST_PREFIX) {
-            selectedUnit = getLatestUnit(props.units);
+            selectedUnit = getLatestUnit(props.availableUnits);
         } else {
             if (value !== NONE) {
-                selectedUnit = props.units.find(unit => value.startsWith(unit.name));
+                selectedUnit = props.availableUnits.find(unit => value.startsWith(unit.name));
             }
         }
         if (selectedUnit !== undefined) {
-            props.dispatch({actionType: "setUnitState", value: selectedUnit, unitType: selectedUnit.type});
+            props.dispatch({type: "units", payload: {[selectedUnit.type]: selectedUnit} });
             setSelected(event.target.value);
         }
     }
 
     useEffect(() => {
         let updated: Unit | undefined;
-        if (props.units.length === 0) {
+        if (props.availableUnits.length === 0 && selected !== NONE) {
             setSelected(NONE);
             updated = blankUnit(props.regType);
-        } else if (selected === USE_LATEST_PREFIX || !props.units.some(unit => selected.startsWith(unit.name))) {
+        } else if (selected === USE_LATEST_PREFIX) {
+            const latestUnit = getLatestUnit(props.availableUnits);
+            if (latestUnit !== props.currentUnit) {
+                updated = latestUnit;
+            }
+        } else if (!props.availableUnits.includes(props.currentUnit)) {
             setSelected(USE_LATEST_PREFIX);
-            updated = getLatestUnit(props.units);
+            updated = getLatestUnit(props.availableUnits);
         }
         if (updated !== undefined) {
-            props.dispatch({actionType: "setUnitState", value: updated, unitType: updated.type});
+            props.dispatch({type: "units", payload: {[updated.type]: updated} });
         }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [props.units])
+    }, [props.availableUnits])
     
 
     return (
@@ -107,22 +113,22 @@ const CombatAbilityInput = (
 
 function RegimentsRow(props: {
     state: ArmyState,
-    dispatch: Dispatch<Action>,
+    dispatch: ArmyStateDispatch,
     type: UnitType,
-    units: Unit[],
+    availableUnits: Unit[],
 }): JSX.Element {
-
+    
     const handleCountInput = (e: ChangeEvent<HTMLInputElement>): void => {
         let result = parseInt(e.target.value);
         if (!isNaN(result)) {
-            props.dispatch({actionType: "setUnitState", value: result, unitType: props.type});
+            props.dispatch({type: "units", payload: {[props.type]: result} });
         }
     }
 
     const handleAbilityInput = (e: ChangeEvent<HTMLInputElement>): void => {
         let result = parseFloat(e.target.value);
         if (!isNaN(result)) {
-            props.dispatch({actionType: "setModifier", value: [combatAbility(props.type), result]});
+            props.dispatch({type: "modifiers", payload: {[combatAbility(props.type)]: result} });
         }
     }
 
@@ -130,19 +136,20 @@ function RegimentsRow(props: {
         <div className="regiments-row">
             <span>{`${props.type[0].toUpperCase()}${props.type.slice(1)}:`}</span>
             <UnitSelector 
-                units={props.units} 
-                regType={props.type} 
+                availableUnits={props.availableUnits}
+                currentUnit={props.state.units[props.type]}
+                regType={props.type}
                 dispatch={props.dispatch}
             />
             <input 
                 type="number" 
-                disabled={props.units.length === 0}
-                value= {props.state[props.type][1]}
+                disabled={props.availableUnits.length === 0}
+                value= {props.state.regimentCounts[props.type]}
                 min={0}
                 onChange={handleCountInput}
             />
             <CombatAbilityInput 
-                value={props.state[combatAbility(props.type)]} 
+                value={props.state.modifiers[combatAbility(props.type)]} 
                 handler={handleAbilityInput} 
             />
         </div>
@@ -153,7 +160,7 @@ function RegimentsRow(props: {
 export default function RegimentsPanel(props: {
             className?: string,
             state: ArmyState,
-            dispatch: Dispatch<Action>,
+            dispatch: ArmyStateDispatch,
             units: Unit[],
         }) {
     const {infantry, cavalry, artillery} = useMemo(() => {
@@ -172,24 +179,24 @@ export default function RegimentsPanel(props: {
             <h5>Regiments:</h5>
             <h5>Combat Ability(%):</h5>
 
-            <RegimentsRow 
+            <RegimentsRow
                 state={props.state} 
                 dispatch={props.dispatch} 
-                units={infantry} 
+                availableUnits={infantry} 
                 type="infantry" 
             />
 
             <RegimentsRow 
                 state={props.state} 
                 dispatch={props.dispatch} 
-                units={cavalry} 
+                availableUnits={cavalry} 
                 type="cavalry"
             />
 
             <RegimentsRow 
                 state={props.state} 
                 dispatch={props.dispatch} 
-                units={artillery} 
+                availableUnits={artillery} 
                 type="artillery" 
             />
         </div>
