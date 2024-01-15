@@ -121,7 +121,7 @@ function RegimentsRow(props: {
     const handleCountInput = (e: ChangeEvent<HTMLInputElement>): void => {
         let result = parseInt(e.target.value);
         if (!isNaN(result)) {
-            props.dispatch({type: "units", payload: {[props.type]: result} });
+            props.dispatch({type: "regimentCounts", payload: {[props.type]: result} });
         }
     }
 
