@@ -1,4 +1,4 @@
-import React, { useReducer } from 'react';
+import React, { ChangeEvent, ChangeEventHandler, MouseEventHandler, useReducer } from 'react';
 import { useState } from 'react';
 import Army from './model/Army';
 import BattleGrid from './components/BattleGrid';
@@ -16,6 +16,7 @@ import ArmySetupPanel from './components/setup/ArmySetup';
 import { ArmyState, armyStateReducer } from './state/ArmyState';
 import GLOBAL_SETUP_STATE from './state/GlobalSetupState';
 import { Leader } from './types/Leader';
+import Terrains from './enum/Terrain';
 
 declare global {
   interface Array<T> {
@@ -64,15 +65,20 @@ function createArmyFromState(state: ArmyState) {
 
 export default function App() {
   const [results, setResults] = useState<[ArmySnapshot, ArmySnapshot][]>([]);
+  const [terrain, setTerrain] = useState(Terrains.GRASSLANDS);
   const [attackerState, attackerDispatch] = useReducer(armyStateReducer, undefined, defaultArmyState);
   const [defenderState, defenderDispatch] = useReducer(armyStateReducer, undefined, defaultArmyState);
 
   const handleSubmit = (event: React.MouseEvent<HTMLElement>) => {
     const attacker = createArmyFromState(attackerState);
     const defender = createArmyFromState(defenderState);
-    const combat = new Combat(attacker, defender);
+    const combat = new Combat(attacker, defender, terrain);
     combat.run();
     setResults(combat.dailyResults);
+  }
+  const handleTerrainSelect: ChangeEventHandler<HTMLSelectElement> = (event) => {
+    const selected = Terrains.values.find(terrain => terrain.description === event.target.value); 
+    if (selected !== undefined) setTerrain(selected);
   }
 
   return (
@@ -80,7 +86,11 @@ export default function App() {
       <div className="full-width">
         <BattleGrid results={results}/>
         <input type='button' value={"Go!"} onClick={handleSubmit}/>
+        <select onChange={handleTerrainSelect} value={terrain.description}>
+          {Terrains.values.map(terrain => <option>{terrain.description}</option>)}
+        </select>
       </div>
+      
       <h2 className="column-heading">Attacker</h2>
       <h2 className="column-heading">Defender</h2>
 

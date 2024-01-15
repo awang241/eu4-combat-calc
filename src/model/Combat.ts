@@ -2,6 +2,7 @@ import Army from "./Army";
 import ArmySnapshot from "../types/ArmySnapshot";
 import Regiment from "./Regiment";
 import { Leader } from "../types/Leader";
+import Terrains, { Terrain } from "../enum/Terrain";
 
 
 type Casualties = {strength: number, morale: number};
@@ -10,16 +11,16 @@ export default class Combat {
     static readonly LOOP_LIMIT = 100;
     readonly attacker: Army;
     readonly defender: Army;
-    readonly terrain: string;
+    readonly terrain: Terrain;
     day: number = 0;
     width: number;
     private _results: [ArmySnapshot, ArmySnapshot][] = [];
     
-    constructor(attacker: Army, defender: Army, terrain?: string) {
+    constructor(attacker: Army, defender: Army, terrain: Terrain = Terrains.GRASSLANDS) {
         this.attacker = attacker;
         this.defender = defender;
         this.width = Math.max(this.attacker.maxWidth, this.defender.maxWidth);
-        this.terrain = terrain ?? "";
+        this.terrain = terrain;
     }
 
     private addDailyResult(){
@@ -29,7 +30,7 @@ export default class Combat {
     private calculateCasualties(regiment: Regiment, regimentInAttackingArmy: boolean): Casualties{
         const [regimentArmy, targetArmy] = regimentInAttackingArmy ? [this.attacker, this.defender] : [this.defender, this.attacker];
         const casualties: Casualties = {strength: 0, morale: 0};
-        const armyPips = regimentArmy.roll + this.leaderPhasePips(regimentInAttackingArmy);
+        const armyPips = regimentArmy.roll + this.armyPips(regimentInAttackingArmy);
         if (regiment.targetIndex !== undefined) {
             const target = targetArmy.atFront(regiment.targetIndex)
             if (target === undefined) {
@@ -113,9 +114,12 @@ export default class Combat {
         return (this.day - 1) % 6 < 3;
     }
 
-    private leaderPhasePips(forAttacker: boolean): number {
+    private armyPips(forAttacker: boolean): number {
+        const army = forAttacker ? this.attacker : this.defender;
         const key: keyof Leader = this.isFirePhase ? "fire" : "shock";
         const difference = (this.attacker.leader[key] - this.defender.leader[key]) * (forAttacker ? 1 : -1);
-        return Math.max(0, difference);
+        const leaderPips = Math.max(0, difference);
+        const useTerrainPenalty = forAttacker && this.attacker.leader.maneuver <= this.defender.leader.maneuver;
+        return leaderPips + army.roll + (useTerrainPenalty ? this.terrain.attackerPenalty : 0);
     }
 }
