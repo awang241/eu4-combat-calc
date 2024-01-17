@@ -1,4 +1,4 @@
-import React, { ChangeEvent, ChangeEventHandler, MouseEventHandler, useReducer } from 'react';
+import React, { ChangeEventHandler, useReducer } from 'react';
 import { useState } from 'react';
 import Army from './model/Army';
 import BattleGrid from './components/BattleGrid';
@@ -60,7 +60,7 @@ function createArmyFromState(state: ArmyState) {
     for (const modifier of Object.values(Modifiers)) {
       modifiers[modifier] = state.modifiers[modifier];
     }
-    return new Army(state.units, state.regimentCounts, modifiers, tech, leader);
+    return new Army(state.units, state.regimentCounts, modifiers, tech, state.tech.group, leader);
 }
 
 export default function App() {

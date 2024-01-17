@@ -6,6 +6,7 @@ import cavIcon from "../assets/cavalry.png";
 import artIcon from "../assets/artillery.png";
 import ArmySnapshot from "../types/ArmySnapshot";
 import { MouseEventHandler, useEffect, useLayoutEffect, useRef, useState } from "react";
+import { GlobalCSSClasses } from "../enum/GlobalCSSClasses";
 
 type RegimentData = {
     index: number,
@@ -62,13 +63,41 @@ function RegimentCell(props: {
     )
 }
 
+function ArmyInfoPanel(props: {armyData: ArmySnapshot} ) {
+    return (
+        <div className="army-info-panel">
+            <span>Infantry:</span>
+            <span className={GlobalCSSClasses.CALC_DISPLAY}>{props.armyData.currentStrengthOfType("infantry")}</span>
+            
+            <span>Cavalry</span>
+            <span className={GlobalCSSClasses.CALC_DISPLAY}>{props.armyData.currentStrengthOfType("cavalry")}</span>
+
+            <span>Artillery</span>
+            <span className={GlobalCSSClasses.CALC_DISPLAY}>{props.armyData.currentStrengthOfType("artillery")}</span>
+
+            <span>Morale:</span>
+            <span className={GlobalCSSClasses.CALC_DISPLAY}>{props.armyData.currentMorale.toFixed(2)}</span>
+            
+            <span>Tech</span>
+            <span className={GlobalCSSClasses.CALC_DISPLAY}>{props.armyData.currentStrengthOfType("cavalry")}</span>
+
+            <span>Artillery</span>
+            <span className={GlobalCSSClasses.CALC_DISPLAY}>{props.armyData.currentStrengthOfType("artillery")}</span>
+
+        </div>
+    )
+}
+
 export default function BattleGrid(props: {results:[ArmySnapshot, ArmySnapshot][]}) {
     const maxDay: number = Math.max(props.results.length - 1, 0);
     const [day, setDay] = useState(maxDay); 
     const [focusedData, setFocusedData] = useState<RegimentData | undefined>(undefined);
     const [animated, setAnimated] = useState(true);
-    const animationId = useRef(setTimeout(() => {}))
-    const animationLoops = useRef(0)
+    const animationId = useRef(setTimeout(() => {}));
+    const animationLoops = useRef(0);
+
+    const resultsAreLoaded = day >= 0 && day <= maxDay;
+
 
     useEffect(() => {
         runThroughDays()
@@ -186,6 +215,9 @@ export default function BattleGrid(props: {results:[ArmySnapshot, ArmySnapshot][
                     onChange={e => setAnimated(e.target.checked)}
                 />
             </div>  
+            { resultsAreLoaded && 
+                <ArmyInfoPanel armyData={props.results[day][0]}/>
+            }
             <table onMouseMove={mouseMoveHandler}>
                 <tbody>
                     <tr>
@@ -241,6 +273,9 @@ export default function BattleGrid(props: {results:[ArmySnapshot, ArmySnapshot][
                     </tr>
                 </tbody>
             </table>
+            { resultsAreLoaded && 
+                <ArmyInfoPanel armyData={props.results[day][1]}/>
+            }
         </div>
     )
 }

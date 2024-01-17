@@ -7,6 +7,7 @@ import Row from "./Row";
 import Unit, { blankUnit } from "../types/Unit";
 import { Modifier } from "../enum/Modifiers";
 import { Leader } from "../types/Leader";
+import { TechGroup } from "../enum/TechGroups";
 
 const BACK_ROW_MORALE_DAMAGE_FACTOR = 0.4;
 const BASE_BACKROW_REINFORCE_LIMIT = 2;
@@ -22,6 +23,7 @@ export default class Army {
     roll = 5;
     private modifiers: DamageModifiers; 
     private tech: Tech;
+    private _techGroup: TechGroup;
     private _leader: Leader;
     private front: Row = new Row(0);
     private back: Row = new Row(0);
@@ -41,7 +43,7 @@ export default class Army {
      * @param regsState The count and unit template for each regiment type.
      * @param modifiers The army-level modifiers (morale, discipline, etc...) for this army.
      */
-    constructor(units: Record<UnitType, Unit>, regCounts: Record<UnitType, number>, modifiers: Partial<Record<Modifier, number>>, tech: Tech, leader: Leader) {
+    constructor(units: Record<UnitType, Unit>, regCounts: Record<UnitType, number>, modifiers: Partial<Record<Modifier, number>>, tech: Tech, techGroup: TechGroup, leader: Leader) {
         const morale = modifiers.morale ?? tech.morale
         for (const type of Object.values(UnitTypes)) {
             const unit = units[type];
@@ -53,6 +55,7 @@ export default class Army {
         this.modifiers = new DamageModifiers(tech, modifiers);
         this.tech = {...tech};
         this._leader = {...leader};
+        this._techGroup = techGroup;
     }
 
     /**
@@ -291,6 +294,10 @@ export default class Army {
         return (this.tech.tactics + this.modifiers.bonusTactics) * this.modifiers.discipline;
     };
 
+    get techGroup(): TechGroup {
+        return this._techGroup;
+    }
+
     get allRegiments(): Regiment[] {
         return ([] as Regiment[]).concat(...Object.values(this.regiments))
     };
@@ -302,5 +309,4 @@ export default class Army {
     get allReserves(): Regiment[] {
         return ([] as Regiment[]).concat(...Object.values(this.reserves))
     }
-
 }

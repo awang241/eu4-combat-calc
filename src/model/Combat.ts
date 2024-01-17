@@ -3,6 +3,7 @@ import ArmySnapshot from "../types/ArmySnapshot";
 import Regiment from "./Regiment";
 import { Leader } from "../types/Leader";
 import Terrains, { Terrain } from "../enum/Terrain";
+import TechGroups from "../enum/TechGroups";
 
 
 type Casualties = {strength: number, morale: number};
@@ -39,7 +40,8 @@ export default class Combat {
             const strengthPips = armyPips + regiment.getStrengthOffencePips(this.isFirePhase) - target.getStrengthDefencePips(this.isFirePhase);
             const moralePips = armyPips + regiment.getMoraleOffencePips(this.isFirePhase) - target.getMoraleDefencePips(this.isFirePhase);
             const commonMults = this.roundMultiplier * (regiment.strength / Regiment.MAX_STRENGTH) / targetArmy.tactics;
-            const strengthMults = commonMults * regimentArmy.strengthMultipliers(regiment.type, this.isFirePhase) * targetArmy.phaseDefenseMultiplier(this.isFirePhase);
+            let hordeTerrainMultiplier = regimentArmy.techGroup === TechGroups.NOMADIC ? this.terrain.hordeTerrainModifier : 1;
+            const strengthMults = commonMults * regimentArmy.strengthMultipliers(regiment.type, this.isFirePhase) * targetArmy.phaseDefenseMultiplier(this.isFirePhase) * hordeTerrainMultiplier;
             const moraleMults = commonMults * regimentArmy.moraleMultipliers(regiment.type, this.isFirePhase) * targetArmy.moraleDefenseMultiplier();
             
             casualties.strength = Math.floor((15 + 5 * strengthPips) * strengthMults);

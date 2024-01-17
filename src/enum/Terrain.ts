@@ -5,8 +5,8 @@ export class Terrain extends EnumValue {
         super(name);
     }
 
-    get isFlat(): boolean {
-        return this._isFlat;
+    get hordeTerrainModifier() {
+        return this._isFlat ? 1.25 : 0.75;
     }
 
     get attackerPenalty(): number {
