@@ -31,7 +31,7 @@ export default class Combat {
     private calculateCasualties(regiment: Regiment, regimentInAttackingArmy: boolean): Casualties{
         const [regimentArmy, targetArmy] = regimentInAttackingArmy ? [this.attacker, this.defender] : [this.defender, this.attacker];
         const casualties: Casualties = {strength: 0, morale: 0};
-        const armyPips = regimentArmy.roll + this.armyPips(regimentInAttackingArmy);
+        const armyPips = this.armyPips(regimentInAttackingArmy);
         if (regiment.targetIndex !== undefined) {
             const target = targetArmy.atFront(regiment.targetIndex)
             if (target === undefined) {

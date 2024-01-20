@@ -6,7 +6,6 @@ import cavIcon from "../assets/cavalry.png";
 import artIcon from "../assets/artillery.png";
 import ArmySnapshot from "../types/ArmySnapshot";
 import { MouseEventHandler, useEffect, useLayoutEffect, useRef, useState } from "react";
-import { GlobalCSSClasses } from "../enum/GlobalCSSClasses";
 
 type RegimentData = {
     index: number,
@@ -66,24 +65,26 @@ function RegimentCell(props: {
 function ArmyInfoPanel(props: {armyData: ArmySnapshot} ) {
     return (
         <div className="army-info-panel">
-            <span>Infantry:</span>
-            <span className={GlobalCSSClasses.CALC_DISPLAY}>{props.armyData.currentStrengthOfType("infantry")}</span>
-            
-            <span>Cavalry</span>
-            <span className={GlobalCSSClasses.CALC_DISPLAY}>{props.armyData.currentStrengthOfType("cavalry")}</span>
+            <div className="info-column">
+                <span>Infantry:</span>
+                <span>{props.armyData.currentStrengthOfType("infantry")}</span>
+                
+                <span>Cavalry</span>
+                <span>{props.armyData.currentStrengthOfType("cavalry")}</span>
 
-            <span>Artillery</span>
-            <span className={GlobalCSSClasses.CALC_DISPLAY}>{props.armyData.currentStrengthOfType("artillery")}</span>
+                <span>Artillery</span>
+                <span>{props.armyData.currentStrengthOfType("artillery")}</span>
+            </div>
+            <div className="info-column">
+                <span>Morale:</span>
+                <span>{props.armyData.currentMorale.toFixed(2)}</span>
+                
+                <span>Tech</span>
+                <span>{props.armyData.techLevel}</span>
 
-            <span>Morale:</span>
-            <span className={GlobalCSSClasses.CALC_DISPLAY}>{props.armyData.currentMorale.toFixed(2)}</span>
-            
-            <span>Tech</span>
-            <span className={GlobalCSSClasses.CALC_DISPLAY}>{props.armyData.currentStrengthOfType("cavalry")}</span>
-
-            <span>Artillery</span>
-            <span className={GlobalCSSClasses.CALC_DISPLAY}>{props.armyData.currentStrengthOfType("artillery")}</span>
-
+                <span>Tactics</span>
+                <span>{props.armyData.tactics}</span>
+            </div>
         </div>
     )
 }
@@ -96,7 +97,7 @@ export default function BattleGrid(props: {results:[ArmySnapshot, ArmySnapshot][
     const animationId = useRef(setTimeout(() => {}));
     const animationLoops = useRef(0);
 
-    const resultsAreLoaded = day >= 0 && day <= maxDay;
+    const resultsAreLoaded = day >= 0 && day < props.results.length;
 
 
     useEffect(() => {

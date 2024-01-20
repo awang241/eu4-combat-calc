@@ -76,5 +76,16 @@
 
 .battle-grid .army-info-panel {
     display: grid;
-    grid-template-columns: repeat(6, 1fr);
+    grid-template-columns: repeat(4, 1fr);
+    width: 50%;
+    margin: auto;
+    border: 1px solid black;
+    padding: 5px;
+}
+
+.battle-grid .army-info-panel .info-column {
+    display: grid;
+    grid-column: span 2;
+    grid-template-columns: subgrid;
+    padding: 0 10px;
 }

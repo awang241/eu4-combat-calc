@@ -146,7 +146,7 @@ export default class Army {
     }
 
     getSnapshot(): ArmySnapshot {
-        return new ArmySnapshot(this.front, this.back, this.allReserves, this.allRegiments);
+        return new ArmySnapshot(this.front, this.back, this.allReserves, this.allRegiments, this.tech.level, this.tactics);
     }
 
     /**
@@ -309,4 +309,5 @@ export default class Army {
     get allReserves(): Regiment[] {
         return ([] as Regiment[]).concat(...Object.values(this.reserves))
     }
+
 }

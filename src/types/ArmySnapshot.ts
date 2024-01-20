@@ -15,6 +15,8 @@ export default class ArmySnapshot{
     maxStrength: number = 0;
     currentMorale: number = 0;
     maxMorale: number = 0;
+    techLevel: number;
+    tactics: number;
 
     _currentStrengths = {
         [UnitTypes.INFANTRY]: {...STRENGTHS_TEMPLATE},
@@ -23,10 +25,12 @@ export default class ArmySnapshot{
     };
 
 
-    constructor(front: Row, back: Row, reserves: Regiment[], regiments: Regiment[]) {
+    constructor(front: Row, back: Row, reserves: Regiment[], regiments: Regiment[], techLevel: number, tactics: number) {
         this.front = front.createSnapshot();
         this.back = back.createSnapshot();
         this.reserves = reserves.map(val => val.unmodifiableCopy());
+        this.techLevel = techLevel;
+        this.tactics = tactics;
         regiments.forEach((regiment) => {
             let status: keyof typeof STRENGTHS_TEMPLATE;
             if (this.front.includes(regiment) || this.back.includes(regiment)) {
