@@ -6,6 +6,7 @@ import cavIcon from "../assets/cavalry.png";
 import artIcon from "../assets/artillery.png";
 import ArmySnapshot from "../types/ArmySnapshot";
 import { MouseEventHandler, useEffect, useLayoutEffect, useRef, useState } from "react";
+import Terrains, { Terrain } from "../enum/Terrain";
 
 type RegimentData = {
     index: number,
@@ -89,7 +90,10 @@ function ArmyInfoPanel(props: {armyData: ArmySnapshot} ) {
     )
 }
 
-export default function BattleGrid(props: {results:[ArmySnapshot, ArmySnapshot][]}) {
+export default function BattleGrid(props: {
+        results:[ArmySnapshot, ArmySnapshot][],
+        terrain?: Terrain,
+}) {
     const maxDay: number = Math.max(props.results.length - 1, 0);
     const [day, setDay] = useState(maxDay); 
     const [focusedData, setFocusedData] = useState<RegimentData | undefined>(undefined);
@@ -246,7 +250,15 @@ export default function BattleGrid(props: {results:[ArmySnapshot, ArmySnapshot][
                             )
                         )}
                     </tr>
-                    <tr className="grid-gap"/>
+                    <tr className="grid-gap" >
+                        <td colSpan={getFront(true).length} style={{
+                                backgroundImage: `url(${(props.terrain ?? Terrains.GLACIAL).imageString}`,
+                                backgroundRepeat: "no-repeat",
+                                backgroundSize: "100% 100%",
+                                opacity: 0.5
+                            }}
+                        />
+                    </tr>
                     <tr>
                         {getFront(false).map((regiment, index) => (
                             <RegimentCell 

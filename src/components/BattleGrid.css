@@ -14,10 +14,6 @@
     margin: auto;
 }
 
-.battle-grid table .grid-gap {
-    height: 60px;
-}
-
 .battle-grid tr .cell{
     border: 1px solid #444444;
     padding: 0;
@@ -27,6 +23,10 @@
 
 .battle-grid tr .cell:not(:last-child){
     border-right-style: none;
+}
+
+.battle-grid .grid-gap {
+    height: 100px;
 }
 
 

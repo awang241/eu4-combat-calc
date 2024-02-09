@@ -84,7 +84,7 @@ export default function App() {
   return (
     <div id="columns" className='App'>
       <div className="full-width">
-        <BattleGrid results={results}/>
+        <BattleGrid results={results} terrain={terrain}/>
         <input type='button' value={"Go!"} onClick={handleSubmit}/>
         <select onChange={handleTerrainSelect} value={terrain.description}>
           {Terrains.values.map(terrain => <option>{terrain.description}</option>)}
