@@ -39,7 +39,8 @@ export default class Combat {
             }
             const strengthPips = armyPips + regiment.getStrengthOffencePips(this.isFirePhase) - target.getStrengthDefencePips(this.isFirePhase);
             const moralePips = armyPips + regiment.getMoraleOffencePips(this.isFirePhase) - target.getMoraleDefencePips(this.isFirePhase);
-            const commonMults = this.roundMultiplier * (regiment.strength / Regiment.MAX_STRENGTH) / targetArmy.tactics;
+            const effectiveTactics = targetArmy.tactics * (target.type === "cavalry" ? targetArmy.cavalryTacticsMultiplier : 1);
+            const commonMults = this.roundMultiplier * (regiment.strength / Regiment.MAX_STRENGTH) / effectiveTactics;
             let hordeTerrainMultiplier = regimentArmy.techGroup === TechGroups.NOMADIC ? this.terrain.hordeTerrainModifier : 1;
             const strengthMults = commonMults * regimentArmy.strengthMultipliers(regiment.type, this.isFirePhase) * targetArmy.phaseDefenseMultiplier(this.isFirePhase) * hordeTerrainMultiplier;
             const moraleMults = commonMults * regimentArmy.moraleMultipliers(regiment.type, this.isFirePhase) * targetArmy.moraleDefenseMultiplier();

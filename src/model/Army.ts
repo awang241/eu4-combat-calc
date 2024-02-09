@@ -7,7 +7,7 @@ import Row from "./Row";
 import Unit, { blankUnit } from "../types/Unit";
 import { Modifier } from "../enum/Modifiers";
 import { Leader } from "../types/Leader";
-import { TechGroup } from "../enum/TechGroups";
+import TechGroups, { TechGroup } from "../enum/TechGroups";
 
 const BACK_ROW_MORALE_DAMAGE_FACTOR = 0.4;
 const BASE_BACKROW_REINFORCE_LIMIT = 2;
@@ -308,6 +308,17 @@ export default class Army {
 
     get allReserves(): Regiment[] {
         return ([] as Regiment[]).concat(...Object.values(this.reserves))
+    }
+
+    get currentCavalryRatio() { return this.front.currentCavalryRatio; }
+
+    get cavalryRatioLimit() {
+        return this._techGroup === TechGroups.NOMADIC ? 0.75 : 0.5;
+    }
+
+    get cavalryTacticsMultiplier() {
+        const excessCavalryPenalty = Math.max(0, this.currentCavalryRatio - this.cavalryRatioLimit);
+        return 1 - excessCavalryPenalty;
     }
 
 }

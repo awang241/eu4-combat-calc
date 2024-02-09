@@ -232,6 +232,20 @@ export default class Row {
         return Math.floor(this.row.length / 2)
     }
 
+    get currentCavalryRatio(): number {
+        let totalStrength = 0;
+        let cavStrength = 0;
+        this.row.forEach(regiment => {
+            if (regiment !== undefined){
+                totalStrength += regiment.strength;
+                if (regiment.type === "cavalry") {
+                    cavStrength += regiment.strength;
+                }
+            }
+        })
+        return cavStrength / totalStrength;
+    }
+
     get length(): number {
         return this.row.length;
     }
