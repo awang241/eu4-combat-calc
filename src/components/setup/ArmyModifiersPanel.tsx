@@ -16,9 +16,11 @@ const MoralePanel = (props: {
         return props.baseMorale * toMultiplier(bonusPercent ?? bonusMoralePercent)
     }
 
-    useEffect(() => props.setter(Modifiers.MORALE, totalMorale()),
+    useEffect(() => {
+        props.setter(Modifiers.MORALE, totalMorale());
         // eslint-disable-next-line react-hooks/exhaustive-deps
-        [props.baseMorale])
+    }, [props.baseMorale])
+        
 
     const handleInput: ChangeEventHandler<HTMLInputElement> = (e) => {
         const value: number = (e.target.value === "") ? 0 : parseFloat(e.target.value);
@@ -109,7 +111,7 @@ export default function ArmyModifiersPanel(props: {
             dispatch: ArmyStateDispatch,
         }) {
     const setModifier = (name: Modifier, value: number) => {
-        props.dispatch({type: "tech", payload: {[name]: value}});
+        props.dispatch({type: "modifiers", payload: {[name]: value}});
     }
 
     const handleModifierInput = (event: React.ChangeEvent<HTMLInputElement>) => {

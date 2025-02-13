@@ -89,3 +89,17 @@
     grid-template-columns: subgrid;
     padding: 0 10px;
 }
+
+.battle-grid .army-info-panel .roll-modifier-display {
+    display: flex;
+    grid-column: 1 span 4;
+    grid-row: 2;
+    margin: 10px;
+}
+
+.battle-grid .army-info-panel .roll-modifier-card {
+    width: 40px;
+    height: 60px;
+    border: 1px solid black;
+    text-align: center;
+}

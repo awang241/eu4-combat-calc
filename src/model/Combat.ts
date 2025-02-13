@@ -4,6 +4,7 @@ import Regiment from "./Regiment";
 import { Leader } from "../types/Leader";
 import Terrains, { Terrain } from "../enum/Terrain";
 import TechGroups from "../enum/TechGroups";
+import { RollModifiers } from "../types/RollModifiers";
 
 
 type Casualties = {strength: number, morale: number};
@@ -13,15 +14,19 @@ export default class Combat {
     readonly attacker: Army;
     readonly defender: Army;
     readonly terrain: Terrain;
+    readonly crossingPenalty: number;
     day: number = 0;
     width: number;
+    rollsEnabled: boolean = false;
     private _results: [ArmySnapshot, ArmySnapshot][] = [];
     
-    constructor(attacker: Army, defender: Army, terrain: Terrain = Terrains.GRASSLANDS) {
+    constructor(attacker: Army, defender: Army, terrain: Terrain = Terrains.GRASSLANDS, rollsEnabled = false, crossingPenalty = 0) {
         this.attacker = attacker;
         this.defender = defender;
         this.width = Math.max(this.attacker.maxWidth, this.defender.maxWidth);
         this.terrain = terrain;
+        this.crossingPenalty = crossingPenalty
+        this.rollsEnabled = rollsEnabled;
     }
 
     private addDailyResult(){
@@ -80,6 +85,7 @@ export default class Combat {
     }
 
     run(): void {
+        this.updateRolls();
         this.attacker.deploy(this.width, this.defender.numInfantryAndCavalry());
         this.defender.deploy(this.width, this.attacker.numInfantryAndCavalry());
         let setTargets = true;
@@ -89,10 +95,22 @@ export default class Combat {
         }
     }
 
+    private updateRolls(): void {
+        if (this.rollsEnabled) {
+            this.attacker.roll = Math.floor(10 * Math.random());
+            this.defender.roll = Math.floor(10 * Math.random());
+        } else {
+            this.attacker.roll = 5;
+            this.defender.roll = 5;
+        }
+    }
+
     private runNextDay(setTargets: boolean): boolean {
+        const oldPhase = this.isFirePhase;
         this.day++;
-        this.attacker.roll = 5;
-        this.defender.roll = 5;
+        if (this.isFirePhase !== oldPhase) {
+            this.updateRolls();
+        }
 
         if (setTargets) {
             this.attacker.setTargets(this.defender);
@@ -105,8 +123,46 @@ export default class Combat {
         return (isDefenderUpdated || isAttackerUpdated)
     }
 
+    private rollModifiers(forAttacker: boolean): RollModifiers {
+        let modifiers: RollModifiers = {
+            terrainModifier: 0,
+            crossingPenalty: 0,
+            leaderFireBonus: 0,
+            leaderShockBonus: 0
+        }
+        modifiers.leaderFireBonus = forAttacker ? Math.max(0, this.attacker.leader.fire - this.defender.leader.fire) :
+                                                Math.max(0, this.defender.leader.fire - this.attacker.leader.fire)
+        modifiers.leaderShockBonus = forAttacker ? Math.max(0, this.attacker.leader.shock - this.defender.leader.shock) :
+                                                Math.max(0, this.defender.leader.shock - this.attacker.leader.shock)
+        if (forAttacker) {
+            modifiers.crossingPenalty = this.attacker.leader.maneuver <= this.defender.leader.maneuver ? this.crossingPenalty : 0;
+            modifiers.terrainModifier = this.terrain.attackerPenalty;
+        }
+        return modifiers;
+    }
+
+    get attackerRollModifiers() {
+        return this.rollModifiers(true);
+    }
+    get defenderRollModifiers() {
+        return this.rollModifiers(false);
+    }
+
     get dailyResults(): [ArmySnapshot, ArmySnapshot][] {
         return this._results.slice();
+    }
+
+    get length(): number {
+        return this._results.length;
+    }
+
+    get finalResult(): [ArmySnapshot, ArmySnapshot] {
+        const finalResult = this._results.at(-1);
+        if (finalResult) {
+            return finalResult;
+        } else {
+            throw new Error("Could not retrieve last result for combat  ");
+        }
     }
 
     private get roundMultiplier(): number {
@@ -118,11 +174,16 @@ export default class Combat {
     }
 
     private armyPips(forAttacker: boolean): number {
+        let totalPips = 0;
         const army = forAttacker ? this.attacker : this.defender;
         const key: keyof Leader = this.isFirePhase ? "fire" : "shock";
         const difference = (this.attacker.leader[key] - this.defender.leader[key]) * (forAttacker ? 1 : -1);
         const leaderPips = Math.max(0, difference);
-        const useTerrainPenalty = forAttacker && this.attacker.leader.maneuver <= this.defender.leader.maneuver;
-        return leaderPips + army.roll + (useTerrainPenalty ? this.terrain.attackerPenalty : 0);
+        totalPips = leaderPips + army.roll;
+        if (forAttacker) {
+            totalPips += this.terrain.attackerPenalty;
+            totalPips += (this.attacker.leader.maneuver <= this.defender.leader.maneuver) ? this.crossingPenalty : 0;
+        }
+        return totalPips;
     }
 }

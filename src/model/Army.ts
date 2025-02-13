@@ -146,7 +146,7 @@ export default class Army {
     }
 
     getSnapshot(): ArmySnapshot {
-        return new ArmySnapshot(this.front, this.back, this.allReserves, this.allRegiments, this.tech.level, this.tactics);
+        return new ArmySnapshot(this.front, this.back, this.allReserves, this.allRegiments, this.tech.level, this.tactics, this.roll);
     }
 
     /**

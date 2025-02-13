@@ -7,12 +7,15 @@ import artIcon from "../assets/artillery.png";
 import ArmySnapshot from "../types/ArmySnapshot";
 import { MouseEventHandler, useEffect, useLayoutEffect, useRef, useState } from "react";
 import Terrains, { Terrain } from "../enum/Terrain";
+import { RollModifiers } from "../types/RollModifiers";
 
 type RegimentData = {
     index: number,
     isAttacker: boolean,
     regiment: Regiment,
 }
+
+
 
 const MIN_OPACITY: number = 5;
 const icons = {
@@ -63,9 +66,43 @@ function RegimentCell(props: {
     )
 }
 
-function ArmyInfoPanel(props: {armyData: ArmySnapshot} ) {
+function ArmyInfoPanel(props: {
+    armyData: ArmySnapshot,
+    isFirePhase: boolean
+    rollsAtTop?: boolean,
+    rollModifiers?: RollModifiers,
+}) {
+    const rollModifierDisplay = (
+        <div className="roll-modifier-display">
+            <div className="roll-modifier-card">
+                    <span>Dice: {props.armyData.roll}</span>
+            </div>
+            {props.rollModifiers?.leaderFireBonus !== 0 && props.isFirePhase &&
+                <div className="roll-modifier-card">
+                    <span>Leader: {props.rollModifiers?.leaderFireBonus}</span>
+                </div>
+            }
+            {props.rollModifiers?.leaderShockBonus !== 0&& !props.isFirePhase &&
+                <div className="roll-modifier-card">
+                    <span>Leader: {props.rollModifiers?.leaderShockBonus}</span>
+                </div>
+            }
+            {props.rollModifiers?.terrainModifier !== 0 &&
+                <div className="roll-modifier-card">
+                    <span>Terrain: {props.rollModifiers?.terrainModifier}</span>
+                </div>
+            }
+            {props.rollModifiers?.crossingPenalty !== 0 &&
+                <div className="roll-modifier-card">
+                    <span>Crossing: {props.rollModifiers?.crossingPenalty}</span>
+                </div>
+            }
+        </div>
+    )
+    
     return (
         <div className="army-info-panel">
+            {(props.rollsAtTop ?? false) ? rollModifierDisplay : <></>}
             <div className="info-column">
                 <span>Infantry:</span>
                 <span>{props.armyData.currentStrengthOfType("infantry")}</span>
@@ -86,6 +123,7 @@ function ArmyInfoPanel(props: {armyData: ArmySnapshot} ) {
                 <span>Tactics</span>
                 <span>{props.armyData.tactics}</span>
             </div>
+            {!(props.rollsAtTop ?? false) ? rollModifierDisplay : <></>}
         </div>
     )
 }
@@ -93,6 +131,8 @@ function ArmyInfoPanel(props: {armyData: ArmySnapshot} ) {
 export default function BattleGrid(props: {
         results:[ArmySnapshot, ArmySnapshot][],
         terrain?: Terrain,
+        attackerRollModifiers?: RollModifiers,
+        defenderRollModifiers?: RollModifiers
 }) {
     const maxDay: number = Math.max(props.results.length - 1, 0);
     const [day, setDay] = useState(maxDay); 
@@ -100,14 +140,16 @@ export default function BattleGrid(props: {
     const [animated, setAnimated] = useState(true);
     const animationId = useRef(setTimeout(() => {}));
     const animationLoops = useRef(0);
-
     const resultsAreLoaded = day >= 0 && day < props.results.length;
-
 
     useEffect(() => {
         runThroughDays()
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [props.results]);
+
+    const isFirePhase = () => {
+        return (day - 1) % 6 < 3;
+    }
 
     const runThroughDays = () => {
         setDay(0);
@@ -221,7 +263,11 @@ export default function BattleGrid(props: {
                 />
             </div>  
             { resultsAreLoaded && 
-                <ArmyInfoPanel armyData={props.results[day][0]}/>
+                <ArmyInfoPanel 
+                    armyData={props.results[day][0] }
+                    isFirePhase={isFirePhase()}
+                    rollModifiers={props.attackerRollModifiers}
+                />
             }
             <table onMouseMove={mouseMoveHandler}>
                 <tbody>
@@ -287,7 +333,12 @@ export default function BattleGrid(props: {
                 </tbody>
             </table>
             { resultsAreLoaded && 
-                <ArmyInfoPanel armyData={props.results[day][1]}/>
+                <ArmyInfoPanel 
+                    armyData={props.results[day][1]} 
+                    isFirePhase={isFirePhase()}
+                    rollsAtTop={true}
+                    rollModifiers={props.defenderRollModifiers}
+                />
             }
         </div>
     )

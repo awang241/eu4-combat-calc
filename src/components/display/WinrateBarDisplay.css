@@ -1,0 +1,27 @@
+.winrate-bar-display {
+
+}
+
+.winrate-bar-display .bar {
+    margin: auto;
+    width: 90%;
+    height: 30px;
+    border-radius: 15px;
+    background-color: lightgray;
+    display: flex;
+}
+
+.winrate-bar-display .bar > .bar-section:first-child {
+    border-top-left-radius: 15px;
+    border-bottom-left-radius: 15px;
+}
+
+.winrate-bar-display .bar > .bar-section:last-child {
+    border-top-right-radius: 15px;
+    border-bottom-right-radius: 15px;
+}
+
+.winrate-bar-display .bar > .bar-section {
+    height: 100%;
+}
+

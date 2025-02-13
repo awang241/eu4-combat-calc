@@ -17,6 +17,7 @@ export default class ArmySnapshot{
     maxMorale: number = 0;
     techLevel: number;
     tactics: number;
+    roll: number;
 
     _currentStrengths = {
         [UnitTypes.INFANTRY]: {...STRENGTHS_TEMPLATE},
@@ -25,7 +26,7 @@ export default class ArmySnapshot{
     };
 
 
-    constructor(front: Row, back: Row, reserves: Regiment[], regiments: Regiment[], techLevel: number, tactics: number) {
+    constructor(front: Row, back: Row, reserves: Regiment[], regiments: Regiment[], techLevel: number, tactics: number, roll: number) {
         this.front = front.createSnapshot();
         this.back = back.createSnapshot();
         this.reserves = reserves.map(val => val.unmodifiableCopy());
@@ -49,6 +50,7 @@ export default class ArmySnapshot{
             const subtotals = this._currentStrengths[type];
             this._currentStrengths[type].total = subtotals.deployed + subtotals.reserve + subtotals.retreated;
         }
+        this.roll = roll;
     }
 
     get currentStrength(): number {
